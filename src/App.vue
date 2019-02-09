@@ -30,9 +30,8 @@ export default {
       linkedin: "https://linkedin.com/in/white-chang",
       menu_display: false,
       menu: {
-        "/": "Home",
-        "/resume/en": "Resume(English)",
-        "/resume/zh-tw": "Resume(Chinese)"
+        "/en": "English",
+        "/zh-tw": "繁體中文"
       }
     }
   },
