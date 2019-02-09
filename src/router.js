@@ -14,7 +14,7 @@ export default new Router({
       component: ResumeEn
     },
     {
-      path: '/resume/en',
+      path: '/en',
       name: 'resume-en',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
@@ -22,7 +22,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/ResumeEn.vue')
     },
     {
-      path: '/resume/zh-tw',
+      path: '/zh-tw',
       name: 'resume-zh-tw',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
