@@ -132,6 +132,8 @@ export default {
         right: 20px;
         width: 50px;
         padding: 0;
+        transform-origin: top right;
+        transition: .4s ease-in;
 
         &.full {
           position: fixed;
@@ -141,6 +143,7 @@ export default {
           left: 0;
           padding: 40px;
           background-color: #55555555;
+          transform-origin: top right;
 
           div {
             position: relative;
@@ -163,6 +166,7 @@ export default {
         padding: 10px;
         border: 2px solid;
         box-shadow: 1px 1px 5px;
+
         @media (max-width: 767px) {
           width: 100%;
           padding: 0;
@@ -172,6 +176,7 @@ export default {
           width: 150px;
           margin: 0 auto;
           border-radius: 10px;
+          
           @media (max-width: 767px) {
             width: 100%;
             border-radius: 0px;

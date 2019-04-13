@@ -172,7 +172,7 @@ export default {
         },
         {
           id: "exp-4",
-          company: "Open-Life Corp.",
+          company: "Fashion Intelligence Co, Ltd (Open-Life)",
           position: "Software Engineer",
           start: "Nov. 2011",
           end: "Oct. 2013",
