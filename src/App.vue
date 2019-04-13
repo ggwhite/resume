@@ -1,9 +1,9 @@
 <template>
   <div id="app" @click="closeMenu">
-    <div id="nav" class="container-fluid">
+    <div id="nav" class="container-fluid" :class="{open:menu_display}">
       <div class="menu">
         <a class="fa fa-bars" @click.stop.prevent="toggleMenu"></a>
-        <section v-show="menu_display" class="mobile animated fadeInDown" ref="menu">
+        <section v-show="menu_display" class="mobile" ref="menu">
           <router-link v-for="(text, url) in menu" :key="url" :to="url">{{ text }}</router-link>
         </section>
         <section class="desktop">
@@ -88,6 +88,11 @@ a {
   height: 40px;
   padding: 10px;
   margin-bottom: 10px;
+  overflow: hidden;
+  &.open {
+    height: 120px;
+  }
+  transition: .4s;
 
   @media (min-width: 768px) {
     height: 400px;
@@ -101,18 +106,28 @@ a {
 
   &:after {
     content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: #555;
     background-image: url(assets/bg.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 0 85%;
-    opacity: 0.05;
-    position: absolute;
-    top: 0;
-    left: 0;
+    opacity: 0.3;
+    animation: anim 15s linear infinite;
     z-index: -1;
-    width: 100%;
-    height: 100%;
+  }
+
+  @keyframes anim {
+    50% {
+        transform: scale(2);
+    }
+    100% {
+        transform: scale(1);
+    }
   }
 
   .menu {
@@ -162,7 +177,7 @@ a {
         position: absolute;
         top: 40px;
         left: 0;
-        background-color: #FAFAFA;
+        // background-color: #FAFAFA;
         width: 100%;
         z-index: 999;
       }
