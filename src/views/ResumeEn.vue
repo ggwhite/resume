@@ -42,19 +42,6 @@
       </project>
     </section>
 
-    <section>
-      <p class="title">
-        <b>Education</b>
-      </p>
-      <education v-for="edu in education" 
-        :key="edu.id" 
-        :degree="edu.degree"
-        :school="edu.school"
-        :start="edu.start"
-        :end="edu.end">
-      </education>
-    </section>
-
     <profile
       :photo="profile.photo"
       :email="profile.email" 
@@ -100,14 +87,14 @@ export default {
         linkedin: "https://linkedin.com/in/white-chang",
         photo: Photo,
         programming: {
-          "Golang": ["Gin", "Gorilla"], 
+          "Golang": ["Gin", "Gorilla", "gRPC"], 
           "Java": ["Spring", "Quartz"],
           "Javascript & Node.js": ["Vue.js", "jQuery"],
           "PHP": ["Phalcon", "Yii", "CodeIgniter"],
           "HTML & CSS": ["Bootstrap", "Less.js"],
         },
         tools: {
-          "DevOps": ["Docker", "Jenkins", "Ansible"],
+          "DevOps": ["Kubernetes", "Docker", "Jenkins", "Ansible"],
           "Data Store": ["Memcached", "Redis", "Elasticsearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
           "Message Queue": ["Kafka"],
           "Testing": ["Postman", "JMeter"],
@@ -115,52 +102,69 @@ export default {
         }
       },
       summary: [
-        "7+ years experience as a backend engineer.",
+        "10+ years experience as a backend engineer.",
         "Ability to solve problems efficiently.",
         "Possessing all-round analysis and programming skills.",
         "Methodical yet creative and having a proven ability for effective problem-solving.",
       ],
       experience: [
         {
-          id: "exp-1",
-          company: "WistronITS Corp. Stationed: Taiwan Mobile",
-          position: "Senior Backend Engineer",
-          start: "Sep. 2016",
+          id: "Tyche",
+          company: "Tyche Tech Co, Ltd",
+          position: "Senior Server Engineer",
+          start: "Jan. 2021",
           end: "Present",
           description: {
-            "Led 2 engineers, Developed Backend server": {
-              "Developed micro-service, provided RESTful API web service": [
-                "OpenId Service (Golang, Google APIs)",
-                "Product Service (Java, SpringBoot, Golang, SQL Server, Memcached)",
-                "Payment Service (Golang, SQL Server, Memcached)",
-                "Stock Service (Golang, SQL Server, Memcached)",
-                "Kafka Forwarder (Golang, Kafka)",
-              ],
-              "Maintained Invoice & Receipt Process System (Java, Spring, JBoss, Oracle)": ""
-            },
-            "Developed Frontend components": "Developed Vue.js components for the CMS team, increased development efficiency (Vue.js, Webpack)",
-            "Built-up automated test / static-analysis / deploy mechanism": "",
-            "Created dev environments and tools with Docker": [
-              "Jenkins Server: Auto build Maven, NPM project and publish to Nexus Server",
-              "Nexus Server: Managed private Maven repository and NPM registry",
-              "Gitbook Demo: Wrote development documents with Gitbook",
-              "Vue Components Demo",
-              "Tomcat Server",
-            ]
+            "Developed Gaming Serves ... (Golang)": [
+              "Poker, Slot, PachiSlot game logic (TCP/Web Socket)",
+              "CLI tools to access game servers (gRPC)",
+            ],
+            "Infrastructure & DevOps": [
+              "Designed & maintained Game Servers helm chart scripts (for DEV, QA env)",
+              "Setup services for development on kubernetes: GitLab Runner, Docker Registry, Minio",
+              "Designed deploy script for Game Servers on linux server (Bash Script)",
+            ],
           },
         },
         {
-          id: "exp-2",
+          id: "Terpro",
+          company: "Terpro Mobile Co, Ltd",
+          position: "Senior Server Engineer",
+          start: "Jun. 2019",
+          end: "Dec. 2020",
+          description: {
+            "Developed Gaming Serves ... (Golang)": "",
+            "Designed & maintained Game Servers helm chart scripts (for DEV, QA env)": "",
+          },
+        },
+        {
+          id: "WistronITS",
+          company: "WistronITS Corp. Stationed: Taiwan Mobile",
+          position: "Senior Backend Engineer",
+          start: "Sep. 2016",
+          end: "May 2019",
+          description: {
+            "Led 2 engineers, Developed Backend server": [
+              "Developed micro-service, provided RESTful API web service (Golang, Java)",
+              "Maintained Invoice & Receipt Process System (Java, Spring, JBoss, Oracle)",
+            ],
+            "Developed Frontend components (Vue.js, Webpack)": "",
+            "Built-up automated test / static-analysis / deploy mechanism": "",
+            "Created dev environments and tools with Docker": "",
+          },
+        },
+        {
+          id: "Kangda",
           company: "Kangda Info Corp.",
           position: "Software Engineer",
           start: "Jul. 2015",
           end: "Aug. 2016",
           description: {
-            "Developed project for MOST(Ministry of Science and Technology, R.O.C.) Department": ""
+            "Developed project for MOST(Ministry of Science and Technology, R.O.C.)": ""
           },
         },
         {
-          id: "exp-3",
+          id: "BenQ",
           company: "BenQ Corp.",
           position: "Software Engineer",
           start: "Nov. 2013",
@@ -171,7 +175,7 @@ export default {
           },
         },
         {
-          id: "exp-4",
+          id: "Open-Life",
           company: "Fashion Intelligence Co, Ltd (Open-Life)",
           position: "Software Engineer",
           start: "Nov. 2011",
@@ -184,13 +188,22 @@ export default {
       ],
       project: [
         {
-          id: "project-1",
-          name: "Muxin CarePro CMS",
+          id: "Yapro",
+          name: "Yapro car tax refund management (2 members)",
+          start: "Jan. 2021",
+          end: "Mar. 2021",
+          description: [
+            "Created RestAPI Server, base on Golang",
+            "Created AWS Services, use ECS, RDS",
+          ],
+        },
+        {
+          id: "CarePro",
+          name: "Muxin CarePro CMS (5 members)",
           start: "Nov. 2013",
           end: "Mar. 2015",
           description: [
-            "5 members team work.",
-            "Created Server, Linode account, base on CentOS, Apache, PHP, Postgres SQL."
+            "Created Server, Linode account, base on CentOS, Apache, PHP, Postgres SQL"
           ],
         }
       ],

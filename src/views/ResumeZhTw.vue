@@ -42,19 +42,6 @@
       </project>
     </section>
 
-    <section>
-      <p class="title">
-        <b>教育程度</b>
-      </p>
-      <education v-for="edu in education" 
-        :key="edu.id" 
-        :degree="edu.degree"
-        :school="edu.school"
-        :start="edu.start"
-        :end="edu.end">
-      </education>
-    </section>
-
     <profile
       :photo="profile.photo"
       :email="profile.email" 
@@ -99,14 +86,14 @@ export default {
         linkedin: "https://linkedin.com/in/white-chang",
         photo: Photo,
         programming: {
-          "Golang": ["Gin", "Gorilla"], 
+          "Golang": ["Gin", "Gorilla", "gRPC"], 
           "Java": ["Spring", "Quartz"],
           "Javascript & Node.js": ["Vue.js", "jQuery"],
           "PHP": ["Phalcon", "Yii", "CodeIgniter"],
           "HTML & CSS": ["Bootstrap", "Less.js"],
         },
         tools: {
-          "DevOps": ["Docker", "Jenkins", "Ansible"],
+          "DevOps": ["Kubernetes", "Docker", "Jenkins", "Ansible"],
           "Data Store": ["Memcached", "Redis", "Elasticsearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
           "Message Queue": ["Kafka"],
           "Testing": ["Postman", "JMeter"],
@@ -114,38 +101,55 @@ export default {
         }
       },
       summary: [
-        "7年以上後端工程師經歷",
+        "10年以上後端工程師經歷",
         "能夠有效地解決問題",
         "擁有全面的分析和編程技巧",
         "有條不紊，富有創造力，具有有效解決問題的能力",
       ],
       experience: [
         {
+          id: "Tyche",
+          company: "大極科技(TycheTech)",
+          position: "資深後端服務工程師",
+          start: "2021/01",
+          end: "現在",
+          description: {
+            "開發各項遊戲服務器 ... (Golang)": [
+              "棋牌, 老虎機, 柏青斯洛 遊戲開發 (TCP/Web Socket)",
+              "查詢/控制 遊戲服務器的指令工具 (gRPC)",
+            ],
+            "Infrastructure & DevOps": [
+              "建立遊戲服務器 helm chart 腳本 (for DEV, QA env)",
+              "在Kubernetes Cluster內架設開發用工具: GitLab Runner, Docker Registry, Minio",
+              "開發 Linux Server 部署遊戲服務器的腳本 (Bash Script)",
+            ],
+          },
+        },
+        {
+          id: "Terpro",
+          company: "專羿行動(Terpro)",
+          position: "資深後端服務工程師",
+          start: "2019/06",
+          end: "2020/12",
+          description: {
+            "開發各項遊戲服務器 ... (Golang)": "",
+            "建立遊戲服務器 helm chart 腳本 (for DEV, QA env)": "",
+          },
+        },
+        {
           id: "exp-1",
           company: "緯創軟體(WistronITS) 駐點: 台灣大哥大",
           position: "資深後端工程師",
           start: "2016/09",
-          end: "現在",
+          end: "2019/05",
           description: {
-            "領導2名工程師, 開發後端服務": {
-              "開發 micro-service, 提供 RESTful API 服務": [
-                "OpenId Service (Golang, Google APIs)",
-                "Product Service (Java, SpringBoot, Golang, SQL Server, Memcached)",
-                "Payment Service (Golang, SQL Server, Memcached)",
-                "Stock Service (Golang, SQL Server, Memcached)",
-                "Kafka Forwarder (Golang, Kafka)",
-              ],
-              "維護『發票暨單據處理系統』 (Java, Spring, JBoss, Oracle)": ""
-            },
-            "開發前端組件": "開發 Vue.js 組件給後台開發人員, 為此提高開發效率 (Vue.js, Webpack)",
+            "領導2名工程師, 開發後端服務": [
+              "開發 micro-service, 提供 RESTful API 服務 (Golang, Java)",
+              "維護『發票暨單據處理系統』 (Java, Spring, JBoss, Oracle)",
+            ],
+            "開發前端組件 (Vue.js, Webpack)": "",
             "建立自動化的 測試 / 靜態分析 / 部署 機制": "",
-            "建立開發用的環境及工具(使用Docker)": [
-              "Jenkins Server: 自動建置 Maven 及 NPM 專案, 且自動部署至 Nexus Server",
-              "Nexus Server: 管理私有 Maven 及 NPM 資源庫",
-              "Gitbook 文件展示: 以 Gitbook 撰寫說明文件, 並轉成HTML部署至開發機",
-              "Vue 組件範例展示",
-              "Tomcat Server",
-            ]
+            "建立開發用的環境及工具(使用Docker)": "",
           },
         },
         {
@@ -183,13 +187,22 @@ export default {
       ],
       project: [
         {
-          id: "project-1",
-          name: "沐欣照護 後台管理系統",
+          id: "Yapro",
+          name: "中古車退稅資料登陸系統(2人)",
+          start: "Jan. 2021",
+          end: "Mar. 2021",
+          description: [
+            "架設 RestAPI Server, (Golang)",
+            "使用 AWS 服務, ECS, RDS",
+          ],
+        },
+        {
+          id: "CarePro",
+          name: "沐欣照護 後台管理系統(5人)",
           start: "2013/11",
           end: "2015/03",
           description: [
-            "5人團隊",
-            "架設伺服器, Apache, PHP, Postgres SQL."
+            "架設伺服器, Apache, PHP, Postgres SQL"
           ],
         }
       ],
