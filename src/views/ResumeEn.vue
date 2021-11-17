@@ -77,7 +77,7 @@ export default {
   },
   data: function(){
     return {
-      pdf: "https://ggwhite.github.io/resume/aaa-Resume.en.pdf",
+      pdf: "resume/WhiteChang-Resume.en.pdf",
       profile: {
         name: "White Chang",
         position: "Senior Backend Engineer",
