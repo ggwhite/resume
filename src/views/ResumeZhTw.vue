@@ -76,7 +76,7 @@ export default {
   },
   data: function(){
     return {
-      pdf: "resume/WhiteChang-Resume.zh-tw.pdf",
+      pdf: "/resume/WhiteChang-Resume.zh-tw.pdf",
       profile: {
         name: "張育誠 (White)",
         position: "資深後端工程師",
