@@ -1,17 +1,13 @@
 <template>
   <div class="resume container">
-    <main-head
-      :name="profile.name" 
-      :position="profile.position"
-      :pdf="pdf">
+    <main-head :name="profile.name" :position="profile.position" :pdf="pdf">
     </main-head>
 
     <section>
       <p class="title">
         <b>摘要</b>
       </p>
-      <summary-qualification 
-        :summary="summary">
+      <summary-qualification :summary="summary">
       </summary-qualification>
     </section>
 
@@ -19,13 +15,8 @@
       <p class="title">
         <b>工作經歷</b>
       </p>
-      <experience v-for="exp in experience" 
-        :key="exp.id" 
-        :company="exp.company"
-        :position="exp.position"
-        :start="exp.start"
-        :end="exp.end"
-        :description="exp.description">
+      <experience v-for="exp in experience" :key="exp.id" :company="exp.company" :position="exp.position"
+        :start="exp.start" :end="exp.end" :description="exp.description">
       </experience>
     </section>
 
@@ -33,23 +24,12 @@
       <p class="title">
         <b>外包接案</b>
       </p>
-      <project v-for="p in project" 
-        :key="p.id" 
-        :name="p.name"
-        :start="p.start"
-        :end="p.end"
-        :description="p.description">
+      <project v-for="p in project" :key="p.id" :name="p.name" :start="p.start" :end="p.end" :description="p.description">
       </project>
     </section>
 
-    <profile
-      :photo="profile.photo"
-      :email="profile.email" 
-      :phone="profile.phone" 
-      :github="profile.github"
-      :linkedin="profile.linkedin"
-      :programming="profile.programming"
-      :tools="profile.tools">
+    <profile :photo="profile.photo" :email="profile.email" :phone="profile.phone" :github="profile.github"
+      :linkedin="profile.linkedin" :programming="profile.programming" :tools="profile.tools">
     </profile>
 
   </div>
@@ -74,7 +54,7 @@ export default {
     Project,
     Education
   },
-  data: function(){
+  data: function () {
     return {
       pdf: "/resume/WhiteChang-Resume.zh-tw.pdf",
       profile: {
@@ -86,16 +66,16 @@ export default {
         linkedin: "https://linkedin.com/in/white-chang",
         photo: Photo,
         programming: {
-          "Golang": ["Gin", "Gorilla", "gRPC"], 
-          "Java": ["Spring", "Quartz"],
-          "Javascript & Node.js": ["Vue.js", "jQuery"],
-          "PHP": ["Phalcon", "Yii", "CodeIgniter"],
-          "HTML & CSS": ["Bootstrap", "Less.js"],
+          "Golang": ["Gin", "Dig", "Cobra", "Viper", "gRPC"],
+          "Java": ["Spring", "Spring Boot"],
+          "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScrip", "jQuery"],
+          "PHP": ["Laravel"],
+          "HTML & CSS": ["Tailwind CSS", "Bootstrap"],
         },
         tools: {
-          "DevOps": ["Kubernetes", "Docker", "Jenkins", "Ansible"],
-          "Data Store": ["Memcached", "Redis", "Elasticsearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
-          "Message Queue": ["Kafka"],
+          "DevOps": ["Kubernetes", "Docker", "GitLab CI/CD", "Helm"],
+          "Data Store": ["Redis", "MongoDB", "ElasticSearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
+          "Message Queue": ["RabbitMQ"],
           "Testing": ["Postman", "JMeter"],
           "Other": ["Git", "Logstash", "Kibana"],
         }
@@ -114,9 +94,10 @@ export default {
           start: "2021/01",
           end: "現在",
           description: {
-            "開發各項遊戲服務器 ... (Golang)": [
-              "棋牌, 老虎機, 柏青斯洛 遊戲開發 (TCP/Web Socket)",
-              "查詢/控制 遊戲服務器的指令工具 (gRPC)",
+            "維護及開發遊戲服務器與後台管理系統專案": [
+              "專案C: 遊戲服務器(Lua, skynet), 後台(Java, Spring, layui), CI/CD(GitLab, SSH)",
+              "專案B: 遊戲服務器(Lua), 後台(PHP, Laravel), CI/CD(GitLab, SSH)",
+              "專案A: 遊戲服務器(Golang), 後台(.Net), CI/CD(GitLab, Kubernetes, Helm)",
             ],
             "Infrastructure & DevOps": [
               "建立遊戲服務器 helm chart 腳本 (for DEV, QA env)",
@@ -137,7 +118,7 @@ export default {
           },
         },
         {
-          id: "exp-1",
+          id: "WistronITS",
           company: "緯創軟體(WistronITS) 駐點: 台灣大哥大",
           position: "資深後端工程師",
           start: "2016/09",
@@ -145,7 +126,7 @@ export default {
           description: {
             "領導2名工程師, 開發後端服務": [
               "開發 micro-service, 提供 RESTful API 服務 (Golang, Java)",
-              "維護『發票暨單據處理系統』 (Java, Spring, JBoss, Oracle)",
+              "維護『發票暨單據處理系統』 (Java, Spring, JBoss, Oracle)",
             ],
             "開發前端組件 (Vue.js, Webpack)": "",
             "建立自動化的 測試 / 靜態分析 / 部署 機制": "",
@@ -153,7 +134,7 @@ export default {
           },
         },
         {
-          id: "exp-2",
+          id: "Kangda",
           company: "康大資訊",
           position: "軟體工程師",
           start: "2015/06",
@@ -163,7 +144,7 @@ export default {
           },
         },
         {
-          id: "exp-3",
+          id: "BenQ",
           company: "明基電通(BenQ)",
           position: "軟體工程師",
           start: "2013/11",
@@ -174,14 +155,13 @@ export default {
           },
         },
         {
-          id: "exp-4",
+          id: "Open-Life",
           company: "智慧時尚(Open-Life)",
           position: "軟體工程師",
           start: "2011/11",
           end: "2013/10",
           description: {
             "開發及維護後台管理系統 (PHP, Yii, Postgres)": "",
-            "開發活動網站 (PHP)": "",
           },
         }
       ],
@@ -221,26 +201,25 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .resume {
   position: relative;
 
   @media (min-width: 768px) {
     display: grid;
     grid-template-areas: "head profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile";
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile";
     grid-auto-columns: 1fr 265px;
   }
-  
+
   .title {
     border-bottom: 1px solid #AAA;
     margin-bottom: 5px;
@@ -298,5 +277,4 @@ export default {
   }
 
 }
-
 </style>
