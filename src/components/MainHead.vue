@@ -11,23 +11,22 @@
 
 <script>
 export default {
-    name: "main-head",
-    props: {
-      name: String,
-      position: String,
-      pdf: String,
-    }
+  name: "main-head",
+  props: {
+    name: String,
+    position: String,
+    pdf: String,
+  }
 }
 </script>
 
 <style lang="less" scoped>
-
 .main-head {
   position: relative;
   display: grid;
 
   @media (min-width: 768px) {
-    display: block; 
+    display: block;
   }
 
   b {
@@ -37,6 +36,7 @@ export default {
   .name {
     font-size: 150%;
     font-weight: bold;
+
     @media (min-width: 768px) {
       font-size: 300%;
     }
@@ -46,6 +46,7 @@ export default {
     font-size: 130%;
     font-weight: bold;
     color: #888;
+
     @media (min-width: 768px) {
       font-size: 150%;
     }
@@ -64,7 +65,7 @@ export default {
     }
 
     @media (min-width: 768px) {
-      display: block;
+      // display: block;
       position: absolute;
       right: 30px;
       bottom: -40px;
@@ -72,6 +73,5 @@ export default {
   }
 
 }
-
 </style>
 

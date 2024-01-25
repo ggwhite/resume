@@ -1,17 +1,13 @@
 <template>
   <div class="resume container">
-    <main-head
-      :name="profile.name" 
-      :position="profile.position"
-      :pdf="pdf">
+    <main-head :name="profile.name" :position="profile.position" :pdf="pdf">
     </main-head>
 
     <section>
       <p class="title">
         <b>Summary of Qualifications</b>
       </p>
-      <summary-qualification 
-        :summary="summary">
+      <summary-qualification :summary="summary">
       </summary-qualification>
     </section>
 
@@ -19,13 +15,8 @@
       <p class="title">
         <b>Employment History</b>
       </p>
-      <experience v-for="exp in experience" 
-        :key="exp.id" 
-        :company="exp.company"
-        :position="exp.position"
-        :start="exp.start"
-        :end="exp.end"
-        :description="exp.description">
+      <experience v-for="exp in experience" :key="exp.id" :company="exp.company" :position="exp.position"
+        :start="exp.start" :end="exp.end" :description="exp.description">
       </experience>
     </section>
 
@@ -33,23 +24,12 @@
       <p class="title">
         <b>Piecework Project</b>
       </p>
-      <project v-for="p in project" 
-        :key="p.id" 
-        :name="p.name"
-        :start="p.start"
-        :end="p.end"
-        :description="p.description">
+      <project v-for="p in project" :key="p.id" :name="p.name" :start="p.start" :end="p.end" :description="p.description">
       </project>
     </section>
 
-    <profile
-      :photo="profile.photo"
-      :email="profile.email" 
-      :phone="profile.phone" 
-      :github="profile.github"
-      :linkedin="profile.linkedin"
-      :programming="profile.programming"
-      :tools="profile.tools">
+    <profile :photo="profile.photo" :email="profile.email" :phone="profile.phone" :github="profile.github"
+      :linkedin="profile.linkedin" :programming="profile.programming" :tools="profile.tools">
     </profile>
 
   </div>
@@ -75,7 +55,7 @@ export default {
     Project,
     Education
   },
-  data: function(){
+  data: function () {
     return {
       pdf: "/resume/WhiteChang-Resume.en.pdf",
       profile: {
@@ -87,16 +67,16 @@ export default {
         linkedin: "https://linkedin.com/in/white-chang",
         photo: Photo,
         programming: {
-          "Golang": ["Gin", "Gorilla", "gRPC"], 
-          "Java": ["Spring", "Quartz"],
-          "Javascript & Node.js": ["Vue.js", "jQuery"],
-          "PHP": ["Phalcon", "Yii", "CodeIgniter"],
-          "HTML & CSS": ["Bootstrap", "Less.js"],
+          "Golang": ["Gin", "Dig", "Cobra", "Viper", "gRPC"],
+          "Java": ["Spring", "Spring Boot"],
+          "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScrip", "jQuery"],
+          "PHP": ["Laravel"],
+          "HTML & CSS": ["Tailwind CSS", "Bootstrap"],
         },
         tools: {
-          "DevOps": ["Kubernetes", "Docker", "Jenkins", "Ansible"],
-          "Data Store": ["Memcached", "Redis", "Elasticsearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
-          "Message Queue": ["Kafka"],
+          "DevOps": ["Kubernetes", "Docker", "GitLab CI/CD", "Helm"],
+          "Data Store": ["Redis", "MongoDB", "ElasticSearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
+          "Message Queue": ["RabbitMQ"],
           "Testing": ["Postman", "JMeter"],
           "Other": ["Git", "Logstash", "Kibana"],
         }
@@ -115,9 +95,10 @@ export default {
           start: "Jan. 2021",
           end: "Present",
           description: {
-            "Developed Gaming Serves ... (Golang)": [
-              "Poker, Slot, PachiSlot game logic (TCP/Web Socket)",
-              "CLI tools to access game servers (gRPC)",
+            "Maintained & Developed Gaming Serves & Backend Management Projects": [
+              "ProjectC: Servers(Lua, skynet), Backend(Java, Spring, layui), CI/CD(GitLab, SSH)",
+              "ProjectB: Servers(Lua), Backend(PHP, Laravel), CI/CD(GitLab, SSH)",
+              "ProjectA: Servers(Golang), Backend(.Net), CI/CD(GitLab, Kubernetes, Helm)",
             ],
             "Infrastructure & DevOps": [
               "Designed & maintained Game Servers helm chart scripts (for DEV, QA env)",
@@ -146,7 +127,7 @@ export default {
           description: {
             "Led 2 engineers, Developed Backend server": [
               "Developed micro-service, provided RESTful API web service (Golang, Java)",
-              "Maintained Invoice & Receipt Process System (Java, Spring, JBoss, Oracle)",
+              "Maintained Invoice & Receipt Process System (Java, Spring, JBoss, Oracle)",
             ],
             "Developed Frontend components (Vue.js, Webpack)": "",
             "Built-up automated test / static-analysis / deploy mechanism": "",
@@ -182,7 +163,6 @@ export default {
           end: "Oct. 2013",
           description: {
             "Developed and maintained CMS (PHP, Yii, Postgres)": "",
-            "Developed event site (PHP)": "",
           },
         }
       ],
@@ -222,26 +202,25 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .resume {
   position: relative;
 
   @media (min-width: 768px) {
     display: grid;
     grid-template-areas: "head profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile"
-                         ". profile";
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile"
+      ". profile";
     grid-auto-columns: 1fr 265px;
   }
-  
+
   .title {
     border-bottom: 1px solid #AAA;
     margin-bottom: 5px;
@@ -299,5 +278,4 @@ export default {
   }
 
 }
-
 </style>
