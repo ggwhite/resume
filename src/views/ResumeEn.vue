@@ -68,24 +68,26 @@ export default {
         photo: Photo,
         programming: {
           "Golang": ["Gin", "Dig", "Cobra", "Viper", "gRPC"],
-          "Java": ["Spring", "Spring Boot"],
-          "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScrip", "jQuery"],
+          "Java": ["Spring", "Spring Boot", "MyBatis"],
+          "Lua": ["Skynet"],
+          "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScript", "jQuery"],
           "PHP": ["Laravel"],
           "HTML & CSS": ["Tailwind CSS", "Bootstrap"],
         },
         tools: {
-          "DevOps": ["Kubernetes", "Docker", "GitLab CI/CD", "Helm"],
-          "Data Store": ["Redis", "MongoDB", "ElasticSearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
+          "DevOps": ["Kubernetes", "Docker", "GitLab CI/CD", "Helm", "Harbor"],
+          "Data Store": ["Redis", "MongoDB", "MySQL", "PostgreSQL", "Oracle"],
           "Message Queue": ["RabbitMQ"],
           "Testing": ["Postman", "JMeter"],
-          "Other": ["Git", "Logstash", "Kibana"],
+          "AI Tools": ["Claude Code", "GitHub Copilot"],
+          "Other": ["Git"],
         }
       },
       summary: [
-        "10+ years experience as a backend engineer.",
-        "Ability to solve problems efficiently.",
-        "Possessing all-round analysis and programming skills.",
-        "Methodical yet creative and having a proven ability for effective problem-solving.",
+        "10+ years experience as a backend engineer, specializing in game server architecture (Lua/Skynet/Golang/Java).",
+        "Hands-on experience in MongoDB performance tuning and Redis architecture optimization for large-scale data.",
+        "Proficient in Kubernetes, Docker, and GitLab CI/CD; experienced in hybrid cloud/on-premise deployments.",
+        "Experienced in AI-assisted development workflows (Claude Code, GitHub Copilot).",
       ],
       experience: [
         {
@@ -95,15 +97,31 @@ export default {
           start: "Jan. 2021",
           end: "Present",
           description: {
-            "Maintained & Developed Gaming Serves & Backend Management Projects": [
-              "ProjectC: Servers(Lua, skynet), Backend(Java, Spring, layui), CI/CD(GitLab, SSH)",
-              "ProjectB: Servers(Lua), Backend(PHP, Laravel), CI/CD(GitLab, SSH)",
-              "ProjectA: Servers(Golang), Backend(.Net), CI/CD(GitLab, Kubernetes, Helm)",
+            "Maintained & Developed Gaming Servers & Backend Management Projects": [
+              "Project C: Servers(Lua, Skynet), Backend(Java, Spring Boot, MyBatis), CI/CD(GitLab, SSH)",
+              "Project B: Servers(Lua), Backend(PHP, Laravel), CI/CD(GitLab, SSH)",
+              "Project A: Servers(Golang), Backend(.Net), CI/CD(GitLab, Kubernetes, Helm)",
+            ],
+            "MongoDB Performance Optimization": [
+              "Diagnosed full-collection scan on ~2.7M records/day",
+              "Designed compound indexes; implemented Lua scheduler to pre-build daily indexes automatically",
+            ],
+            "Redis Architecture Optimization": [
+              "Refactored key structure to Hash (rid as field), eliminated excessive SCAN operations",
+            ],
+            "Security Hardening": [
+              "Traced Redis data tampering to PHP vendor directory vulnerability",
+              "Implemented AES encryption + checksum verification to detect unauthorized modification",
+            ],
+            "CI/CD Pipeline": [
+              "Automated Docker image builds to Harbor registry via GitLab CI/CD",
+              "Remote Docker Compose deployment via SSH for dev environments",
             ],
             "Infrastructure & DevOps": [
-              "Designed & maintained Game Servers helm chart scripts (for DEV, QA env)",
-              "Setup services for development on kubernetes: GitLab Runner, Docker Registry, Minio",
-              "Designed deploy script for Game Servers on linux server (Bash Script)",
+              "Built Helm charts, set up GitLab Runner, developed Linux server deploy scripts",
+            ],
+            "Mentoring": [
+              "Led junior engineers, guided test case writing, established team testing habits",
             ],
           },
         },
@@ -114,8 +132,13 @@ export default {
           start: "Jun. 2019",
           end: "Dec. 2020",
           description: {
-            "Developed Gaming Serves ... (Golang)": "",
-            "Designed & maintained Game Servers helm chart scripts (for DEV, QA env)": "",
+            "Slot Game Core Framework (Golang)": [
+              "Encapsulated shared mechanics: FreeGame, Lightning, PickGame",
+              "New games reuse the framework directly, significantly reducing development cycle",
+            ],
+            "Kubernetes Deployment": [
+              "Designed and maintained Helm chart deployment scripts",
+            ],
           },
         },
         {
@@ -125,12 +148,15 @@ export default {
           start: "Sep. 2016",
           end: "May 2019",
           description: {
-            "Led 2 engineers, Developed Backend server": [
-              "Developed micro-service, provided RESTful API web service (Golang, Java)",
+            "Led 2 engineers — Micro-service RESTful API (Golang / Java)": [
+              "Pair programming to support team growth",
+              "Developed micro-service RESTful API (Golang, Java)",
               "Maintained Invoice & Receipt Process System (Java, Spring, JBoss, Oracle)",
             ],
+            "Test Automation": [
+              "Wrote test cases integrated into CI/CD pipeline, auto-executed via mvn test",
+            ],
             "Developed Frontend components (Vue.js, Webpack)": "",
-            "Built-up automated test / static-analysis / deploy mechanism": "",
             "Created dev environments and tools with Docker": "",
           },
         },
@@ -168,12 +194,24 @@ export default {
       ],
       project: [
         {
+          id: "PGS",
+          name: "PGS Game Server (solo)",
+          start: "Dec. 2022",
+          end: "Apr. 2023",
+          description: [
+            "Designed & developed 3 games and a dashboard website as a solo developer",
+            "Game Server (Golang, TCP/WebSocket, gRPC)",
+            "API Server (Golang, Gin, gRPC)",
+            "Web Dashboard (Vue.js, Nuxt3, TailwindCSS)",
+          ],
+        },
+        {
           id: "Yapro",
           name: "Yapro car tax refund management (2 members)",
           start: "Jan. 2021",
           end: "Mar. 2021",
           description: [
-            "Created RestAPI Server, base on Golang",
+            "Created RestAPI Server (Golang)",
             "Created AWS Services, use ECS, RDS",
           ],
         },
