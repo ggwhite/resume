@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/fontawesome'
 import './plugins/bootstrap-vue'
