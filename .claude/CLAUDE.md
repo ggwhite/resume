@@ -12,9 +12,18 @@ Repo: git@github.com:ggwhite/resume.git
 
 ## 指令
 ```bash
-npm run serve   # 開發模式，預設 http://localhost:8080
-npm run build   # 打包輸出至 dist/
+npm run serve                                  # 開發模式，預設 http://localhost:8080
+NODE_OPTIONS=--openssl-legacy-provider npm run build   # 打包輸出至 docs/
 ```
+
+> Node.js 17+ 需要加 `NODE_OPTIONS=--openssl-legacy-provider`，否則 webpack 4 會報 ERR_OSSL_EVP_UNSUPPORTED。
+
+## 部署流程
+1. `NODE_OPTIONS=--openssl-legacy-provider npm run build`
+2. `git add docs/`
+3. `git commit && git push`
+
+GitHub Pages 從 `master` branch 的 `/docs` 資料夾提供服務。
 
 ## 目錄結構
 ```
