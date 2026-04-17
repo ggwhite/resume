@@ -67,70 +67,96 @@ export default {
         photo: Photo,
         programming: {
           "Golang": ["Gin", "Dig", "Cobra", "Viper", "gRPC"],
-          "Java": ["Spring", "Spring Boot"],
-          "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScrip", "jQuery"],
+          "Java": ["Spring", "Spring Boot", "MyBatis"],
+          "Lua": ["Skynet"],
+          "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScript", "jQuery"],
           "PHP": ["Laravel"],
           "HTML & CSS": ["Tailwind CSS", "Bootstrap"],
         },
         tools: {
-          "DevOps": ["Kubernetes", "Docker", "GitLab CI/CD", "Helm"],
-          "Data Store": ["Redis", "MongoDB", "ElasticSearch", "SQL Server", "Oracle", "Postgres", "MySQL"],
+          "DevOps": ["Kubernetes", "Docker", "GitLab CI/CD", "Helm", "Harbor"],
+          "Data Store": ["Redis", "MongoDB", "MySQL", "PostgreSQL", "Oracle"],
           "Message Queue": ["RabbitMQ"],
           "Testing": ["Postman", "JMeter"],
-          "Other": ["Git", "Logstash", "Kibana"],
+          "AI 工具": ["Claude Code", "GitHub Copilot"],
+          "Other": ["Git"],
         }
       },
       summary: [
-        "10年以上後端工程師經歷",
-        "能夠有效地解決問題",
-        "擁有全面的分析和編程技巧",
-        "有條不紊，富有創造力，具有有效解決問題的能力",
+        "10 年以上後端工程師經歷，專精遊戲服務器架構（Lua/Skynet/Golang/Java）",
+        "具備 MongoDB 效能優化、Redis 架構設計實戰經驗，解決大規模資料查詢效能問題",
+        "熟悉 Kubernetes、Docker、GitLab CI/CD 等 DevOps 工具，具雲端與本地混合部署經驗",
+        "具備 AI 輔助開發工作流程經驗（Claude Code、GitHub Copilot）",
       ],
       experience: [
         {
           id: "Tyche",
-          company: "大極科技(TycheTech)",
+          company: "大極科技 (TycheTech)",
           position: "資深後端服務工程師",
           start: "2021/01",
           end: "現在",
           description: {
-            "維護及開發遊戲服務器與後台管理系統專案": [
-              "專案C: 遊戲服務器(Lua, skynet), 後台(Java, Spring, layui), CI/CD(GitLab, SSH)",
-              "專案B: 遊戲服務器(Lua), 後台(PHP, Laravel), CI/CD(GitLab, SSH)",
-              "專案A: 遊戲服務器(Golang), 後台(.Net), CI/CD(GitLab, Kubernetes, Helm)",
+            "維護及開發遊戲服務器與後台管理系統": [
+              "專案 C：遊戲服務器 (Lua, Skynet)、後台 (Java, Spring Boot, MyBatis)、CI/CD (GitLab, SSH)",
+              "專案 B：遊戲服務器 (Lua)、後台 (PHP, Laravel)、CI/CD (GitLab, SSH)",
+              "專案 A：遊戲服務器 (Golang)、後台 (.Net)、CI/CD (GitLab, Kubernetes, Helm)",
+            ],
+            "MongoDB 效能優化": [
+              "診斷全集合掃描問題（每日約 270 萬筆資料）",
+              "設計複合索引，實作 Lua Server 排程自動預建每日索引",
+            ],
+            "Redis 架構優化": [
+              "將 key 結構改為 Hash（rid 作為 field），避免大量 SCAN 操作，提升查詢效率",
+            ],
+            "資安強化": [
+              "調查 Redis 資料遭竄改事件，發現 PHP vendor 目錄漏洞",
+              "實作 AES 加密與 Checksum 驗證機制，確保異常竄改可被即時偵測",
+            ],
+            "CI/CD Pipeline": [
+              "自動化建置 Docker Image 上傳至 Harbor Registry",
+              "透過 SSH 遠端操作 Docker Compose 完成開發環境部署",
             ],
             "Infrastructure & DevOps": [
-              "建立遊戲服務器 helm chart 腳本 (for DEV, QA env)",
-              "在Kubernetes Cluster內架設開發用工具: GitLab Runner, Docker Registry, Minio",
-              "開發 Linux Server 部署遊戲服務器的腳本 (Bash Script)",
+              "建立 Helm Chart、架設 GitLab Runner、開發部署腳本",
+            ],
+            "人才培育": [
+              "帶領新進工程師，指導撰寫 test case，建立測試習慣",
             ],
           },
         },
         {
           id: "Terpro",
-          company: "專羿行動(Terpro)",
+          company: "專羿行動 (Terpro)",
           position: "資深後端服務工程師",
           start: "2019/06",
           end: "2020/12",
           description: {
-            "開發各項遊戲服務器 ... (Golang)": "",
-            "建立遊戲服務器 helm chart 腳本 (for DEV, QA env)": "",
+            "老虎機遊戲底層框架 (Golang)": [
+              "封裝 FreeGame、Lightning、PickGame 等共用機制",
+              "新遊戲開發可直接複用，大幅縮短開發週期",
+            ],
+            "Kubernetes 部署": [
+              "設計並維護 Helm Chart 部署腳本",
+            ],
           },
         },
         {
           id: "WistronITS",
-          company: "緯創軟體(WistronITS) 駐點: 台灣大哥大",
+          company: "緯創軟體 (WistronITS) 駐點：台灣大哥大",
           position: "資深後端工程師",
           start: "2016/09",
           end: "2019/05",
           description: {
-            "領導2名工程師, 開發後端服務": [
-              "開發 micro-service, 提供 RESTful API 服務 (Golang, Java)",
-              "維護『發票暨單據處理系統』 (Java, Spring, JBoss, Oracle)",
+            "領導 2 名工程師 — Micro-service RESTful API (Golang / Java)": [
+              "Pair Programming 協助成員成長",
+              "開發 micro-service RESTful API (Golang, Java)",
+              "維護『發票暨單據處理系統』(Java, Spring, JBoss, Oracle)",
+            ],
+            "測試自動化": [
+              "撰寫 Test Case 整合至 CI/CD Pipeline，透過 mvn test 自動執行",
             ],
             "開發前端組件 (Vue.js, Webpack)": "",
-            "建立自動化的 測試 / 靜態分析 / 部署 機制": "",
-            "建立開發用的環境及工具(使用Docker)": "",
+            "建立開發環境及工具 (Docker)": "",
           },
         },
         {
@@ -167,22 +193,34 @@ export default {
       ],
       project: [
         {
-          id: "Yapro",
-          name: "中古車退稅資料登陸系統(2人)",
-          start: "Jan. 2021",
-          end: "Mar. 2021",
+          id: "PGS",
+          name: "PGS 遊戲服務器（獨立開發）",
+          start: "2022/12",
+          end: "2023/04",
           description: [
-            "架設 RestAPI Server, (Golang)",
-            "使用 AWS 服務, ECS, RDS",
+            "獨立開發 3 款遊戲與後台管理網站",
+            "遊戲服務器（Golang、TCP/WebSocket、gRPC）",
+            "API 服務器（Golang、Gin、gRPC）",
+            "後台網站（Vue.js、Nuxt3、TailwindCSS）",
+          ],
+        },
+        {
+          id: "Yapro",
+          name: "中古車退稅資料登錄系統（2 人）",
+          start: "2021/01",
+          end: "2021/03",
+          description: [
+            "架設 RestAPI Server（Golang）",
+            "使用 AWS 服務（ECS、RDS）",
           ],
         },
         {
           id: "CarePro",
-          name: "沐欣照護 後台管理系統(5人)",
+          name: "沐欣照護後台管理系統（5 人）",
           start: "2013/11",
           end: "2015/03",
           description: [
-            "架設伺服器, Apache, PHP, Postgres SQL"
+            "架設伺服器（Linode、CentOS、Apache、PHP、PostgreSQL）",
           ],
         }
       ],
