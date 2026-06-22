@@ -103,25 +103,6 @@ export default {
     printResume() {
       window.print()
     },
-    async downloadPdf() {
-      const html2pdf = (await import('html2pdf.js')).default
-      const element = this.$refs.resumeEl
-      const filename = this.locale === 'zh-tw'
-        ? 'WhiteChang-Resume-zh-tw.pdf'
-        : 'WhiteChang-Resume-en.pdf'
-
-      html2pdf()
-        .from(element)
-        .set({
-          margin: [10, 8],
-          filename,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-        })
-        .save()
-    },
   },
 }
 </script>
