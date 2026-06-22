@@ -1,51 +1,52 @@
 <template>
-  <div ref="resumeEl" class="max-w-6xl mx-auto px-4 relative md:grid md:grid-cols-[1fr_265px] md:gap-x-4">
+  <div ref="resumeEl" class="max-w-6xl mx-auto px-4 md:flex md:gap-4">
 
-    <MainHead :name="profile.name" :position="profile.position"
-              class="md:col-start-1" />
+    <div class="flex-1 min-w-0">
+      <MainHead :name="profile.name" :position="profile.position" />
 
-    <section class="md:col-start-1 mb-4">
-      <h2 class="text-base md:text-lg font-bold border-b border-gray-400 mb-1 md:mb-2.5 md:mr-8">
-        {{ labels.summary }}
-      </h2>
-      <SummaryQualification :summary="summary" />
-    </section>
+      <section class="mb-4">
+        <h2 class="text-base md:text-lg font-bold border-b border-gray-400 mb-1 md:mb-2.5">
+          {{ labels.summary }}
+        </h2>
+        <SummaryQualification :summary="summary" />
+      </section>
 
-    <section class="md:col-start-1 mb-4">
-      <h2 class="text-base md:text-lg font-bold border-b border-gray-400 mb-1 md:mb-2.5 md:mr-8">
-        {{ labels.experience }}
-      </h2>
-      <Experience v-for="exp in experience" :key="exp.id"
-                  :company="exp.company" :position="exp.position"
-                  :start="exp.start" :end="exp.end" :description="exp.description" />
-    </section>
+      <section class="mb-4">
+        <h2 class="text-base md:text-lg font-bold border-b border-gray-400 mb-1 md:mb-2.5">
+          {{ labels.experience }}
+        </h2>
+        <Experience v-for="exp in experience" :key="exp.id"
+                    :company="exp.company" :position="exp.position"
+                    :start="exp.start" :end="exp.end" :description="exp.description" />
+      </section>
 
-    <section class="md:col-start-1 mb-4">
-      <h2 class="text-base md:text-lg font-bold border-b border-gray-400 mb-1 md:mb-2.5 md:mr-8">
-        {{ labels.project }}
-      </h2>
-      <Project v-for="p in project" :key="p.id"
-               :name="p.name" :start="p.start" :end="p.end" :description="p.description" />
-    </section>
+      <section class="mb-4">
+        <h2 class="text-base md:text-lg font-bold border-b border-gray-400 mb-1 md:mb-2.5">
+          {{ labels.project }}
+        </h2>
+        <Project v-for="p in project" :key="p.id"
+                 :name="p.name" :start="p.start" :end="p.end" :description="p.description" />
+      </section>
+
+      <div class="flex gap-3 mt-4 mb-8 print:hidden">
+        <button @click="printResume"
+                class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 flex items-center gap-2 text-sm">
+          <Printer :size="16" />
+          {{ labels.print || 'Print / Save PDF' }}
+        </button>
+        <button @click="downloadPdf"
+                class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-100 flex items-center gap-2 text-sm">
+          <Download :size="16" />
+          {{ labels.download || 'Download PDF' }}
+        </button>
+      </div>
+    </div>
 
     <Profile :photo="profile.photo" :email="profile.email" :phone="profile.phone"
              :github="profile.github" :linkedin="profile.linkedin"
              :programming="profile.programming" :tools="profile.tools"
              :labels="profileLabels"
-             class="md:col-start-2 md:row-start-1 md:row-end-[-1]" />
-
-    <div class="md:col-start-1 flex gap-3 mt-4 mb-8 print:hidden">
-      <button @click="printResume"
-              class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 flex items-center gap-2 text-sm">
-        <Printer :size="16" />
-        {{ labels.print || 'Print / Save PDF' }}
-      </button>
-      <button @click="downloadPdf"
-              class="px-4 py-2 border border-gray-600 text-gray-600 rounded hover:bg-gray-100 flex items-center gap-2 text-sm">
-        <Download :size="16" />
-        {{ labels.download || 'Download PDF' }}
-      </button>
-    </div>
+             class="md:w-[265px] md:shrink-0" />
 
   </div>
 </template>

@@ -18,7 +18,96 @@
 
 @media print {
   @page {
-    margin: 10mm;
+    margin: 6mm;
     size: A4;
   }
+}
+
+.pdf-mode {
+  font-size: 8.5px !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  line-height: 1.3 !important;
+}
+
+.pdf-mode header {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  gap: 8px !important;
+  border-bottom-width: 1px !important;
+}
+
+.pdf-mode header img {
+  width: 48px !important;
+  height: 48px !important;
+  ring-width: 1px !important;
+}
+
+.pdf-mode header h1 {
+  font-size: 18px !important;
+}
+
+.pdf-mode header .text-lg {
+  font-size: 12px !important;
+  margin-top: 0 !important;
+}
+
+.pdf-mode header .flex-wrap {
+  margin-top: 4px !important;
+  gap: 6px !important;
+  font-size: 8px !important;
+}
+
+.pdf-mode section {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+.pdf-mode h2 {
+  font-size: 11px !important;
+  margin-bottom: 3px !important;
+}
+
+.pdf-mode h2 span:first-child {
+  height: 10px !important;
+  width: 3px !important;
+}
+
+.pdf-mode h3 {
+  font-size: 9px !important;
+}
+
+.pdf-mode p,
+.pdf-mode li,
+.pdf-mode span {
+  font-size: inherit !important;
+}
+
+.pdf-mode .grid {
+  gap: 4px !important;
+}
+
+.pdf-mode .grid > div {
+  padding: 4px 6px !important;
+}
+
+.pdf-mode .space-y-3 > * + * {
+  margin-top: 4px !important;
+}
+
+.pdf-mode .space-y-2 > * + * {
+  margin-top: 3px !important;
+}
+
+.pdf-mode ul.space-y-2 {
+  margin-top: 0 !important;
+}
+
+.pdf-mode button,
+.pdf-mode .print\:hidden {
+  display: none !important;
+}
+
+.pdf-mode .border-b {
+  border-bottom-width: 1px !important;
 }

@@ -9,8 +9,42 @@ export default {
     personalInfo: "Personal Info",
     programming: "Programming",
     tools: "Tools",
+    education: "Education",
+    competencies: "Core Competencies",
+    aiWorkflow: "AI-Augmented Development",
     print: "Print / Save PDF",
     download: "Download PDF",
+  },
+  about: "Senior backend engineer with 10+ years building game server systems at scale. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. My workflow is AI-first: I use Claude Code as my primary development tool, supplemented by Codex, for architecture design, code review, and rapid development across any tech stack.",
+  competencies: [
+    {
+      title: "Game Server Architecture",
+      description: "Designed multi-server systems (Gate/Lobby/Game) and built reusable game frameworks that significantly cut development cycles for new titles.",
+      tech: "Lua/Skynet, Golang, TCP/WebSocket, gRPC",
+    },
+    {
+      title: "Database & Cache Optimization",
+      description: "Diagnosed full-collection scans on ~2.7M records/day and designed compound indexes. Restructured Redis key architecture to eliminate excessive SCAN operations.",
+      tech: "MongoDB, Redis, MySQL, PostgreSQL",
+    },
+    {
+      title: "DevOps & CI/CD",
+      description: "Automated Docker image builds to Harbor registry, designed Helm chart deployments on Kubernetes, set up GitLab Runners and remote SSH deployments.",
+      tech: "Kubernetes, Docker, Helm, GitLab CI/CD",
+    },
+    {
+      title: "Security & Data Integrity",
+      description: "Investigated Redis data tampering incidents, traced attack vectors to vendor directory vulnerabilities, implemented AES encryption + checksum verification.",
+    },
+  ],
+  aiWorkflow: {
+    intro: "AI is not a tool I list on my resume — it's how I work. Specific technologies matter less when AI enables rapid adaptation to any stack.",
+    points: [
+      "Daily workflow: architecture design, code generation, debugging, and code review through Claude Code, with Codex as supplement",
+      "Cross-stack delivery: 10+ years of hands-on experience across Golang, Java, Lua, JavaScript — combined with AI, enables rapid context-switching and delivery across stacks",
+      "Built this resume site (Vue 3 + Vite + Tailwind CSS) entirely through AI-assisted development",
+      "Use AI to accelerate team mentoring — guided junior engineers with AI-assisted code review and test case writing",
+    ],
   },
   profile: {
     name: "White Chang",
@@ -22,7 +56,7 @@ export default {
       "Data Store": ["Redis", "MongoDB", "MySQL", "PostgreSQL", "Oracle"],
       "Message Queue": ["RabbitMQ"],
       "Testing": ["Postman", "JMeter"],
-      "AI Tools": ["Claude Code", "GitHub Copilot"],
+      "AI Tools": ["Claude Code", "Codex"],
       "Other": ["Git"],
     },
   },
@@ -30,7 +64,7 @@ export default {
     "10+ years experience as a backend engineer, specializing in game server architecture (Lua/Skynet/Golang/Java).",
     "Hands-on experience in MongoDB performance tuning and Redis architecture optimization for large-scale data.",
     "Proficient in Kubernetes, Docker, and GitLab CI/CD; experienced in hybrid cloud/on-premise deployments.",
-    "Experienced in AI-assisted development workflows (Claude Code, GitHub Copilot).",
+    "Experienced in AI-assisted development workflows (Claude Code, Codex).",
   ],
   experience: [
     {
@@ -82,6 +116,9 @@ export default {
         "Kubernetes Deployment": [
           "Designed and maintained Helm chart deployment scripts",
         ],
+        "Demo Website (Golang, Vue.js)": [
+          "Developed entry-point website for game servers",
+        ],
       },
     },
     {
@@ -93,14 +130,21 @@ export default {
       description: {
         "Led 2 engineers — Micro-service RESTful API (Golang / Java)": [
           "Pair programming to support team growth",
-          "Developed micro-service RESTful API (Golang, Java)",
+          "OpenId Service (Golang, Google APIs)",
+          "Product Service, Payment Service, Stock Service (Golang, MSSQL, Memcached)",
+          "Kafka Forwarder (Golang, Kafka)",
           "Maintained Invoice & Receipt Process System (Java, Spring, JBoss, Oracle)",
         ],
         "Test Automation": [
           "Wrote test cases integrated into CI/CD pipeline, auto-executed via mvn test",
         ],
-        "Developed Frontend components (Vue.js, Webpack)": "",
-        "Created dev environments and tools with Docker": "",
+        "Frontend Components (Vue.js)": [
+          "Developed Vue.js components for CMS team",
+        ],
+        "Dev Environment & Tooling (Docker)": [
+          "Jenkins: auto build Maven/NPM projects, publish to Nexus",
+          "Nexus: private Maven repository and NPM registry",
+        ],
       },
     },
     {
@@ -132,6 +176,7 @@ export default {
       end: "Oct. 2013",
       description: {
         "Developed and maintained CMS (PHP, Yii, Postgres)": "",
+        "Developed event site (PHP)": "",
       },
     },
   ],
