@@ -12,12 +12,12 @@
     </header>
 
     <!-- About -->
-    <section class="py-6 border-b border-slate-100">
+    <section class="py-8 border-b border-slate-100">
       <p class="text-slate-600 leading-relaxed text-[15px]">{{ data.about }}</p>
     </section>
 
     <!-- Core Competencies -->
-    <section class="py-6 border-b border-slate-100">
+    <section class="py-8 border-b border-slate-100">
       <h2 class="section-title">{{ labels.competencies }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div v-for="c in data.competencies" :key="c.title"
@@ -30,7 +30,7 @@
     </section>
 
     <!-- AI-Augmented Development -->
-    <section class="py-6 border-b border-slate-100">
+    <section class="py-8 border-b border-slate-100">
       <h2 class="section-title">{{ labels.aiWorkflow }}</h2>
       <p class="text-sm text-slate-500 italic mb-4">{{ data.aiWorkflow.intro }}</p>
       <ul class="space-y-2.5">
@@ -43,7 +43,7 @@
     </section>
 
     <!-- Experience -->
-    <section class="py-6 border-b border-slate-100">
+    <section class="py-8 border-b border-slate-100">
       <h2 class="section-title">{{ labels.experience }}</h2>
       <div class="space-y-1">
         <div v-for="exp in experience" :key="exp.id" class="rounded-lg overflow-hidden">
@@ -77,7 +77,7 @@
     </section>
 
     <!-- Projects -->
-    <section class="py-6 border-b border-slate-100">
+    <section class="py-8 border-b border-slate-100">
       <h2 class="section-title">{{ labels.project }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div v-for="p in project" :key="p.id"
@@ -97,7 +97,7 @@
     </section>
 
     <!-- Education -->
-    <section class="py-6 border-b border-slate-100" v-if="education && education.length">
+    <section class="py-8 border-b border-slate-100" v-if="education && education.length">
       <h2 class="section-title">{{ labels.education }}</h2>
       <div v-for="edu in education" :key="edu.id"
            class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between">
@@ -110,8 +110,8 @@
     </section>
 
     <!-- Download PDF -->
-    <div class="py-6">
-      <a :href="data.pdf" download
+    <div class="py-8">
+      <a :href="pdfUrl" download
          class="px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors
                 inline-flex items-center gap-2 text-sm font-medium shadow-sm no-underline hover:no-underline hover:text-white">
         <Download :size="16" />
@@ -147,6 +147,11 @@ export default {
     experience() { return this.data.experience },
     project() { return this.data.project },
     education() { return this.data.education },
+    pdfUrl() {
+      const base = import.meta.env.BASE_URL
+      const filename = this.locale === 'zh-tw' ? 'WhiteChang-Resume.zh-tw.pdf' : 'WhiteChang-Resume.en.pdf'
+      return `${base}${filename}`
+    },
   },
   methods: {
     toggleExp(id) {
