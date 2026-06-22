@@ -21,10 +21,10 @@
           </router-link>
         </div>
 
-        <div class="hidden md:block">
+        <div class="hidden md:flex md:gap-1">
           <router-link v-for="(text, url) in menu" :key="url" :to="url"
-                       class="inline-block px-4 py-2.5 font-bold hover:border-[3px] hover:border-current hover:px-[13px] hover:py-[7px]"
-                       active-class="!text-emerald-500">
+                       class="inline-block px-4 py-2 font-bold rounded-lg hover:bg-white/20 transition-colors"
+                       active-class="!text-emerald-500 !bg-white/25">
             {{ text }}
           </router-link>
         </div>

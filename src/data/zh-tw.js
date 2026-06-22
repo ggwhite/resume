@@ -9,8 +9,42 @@ export default {
     personalInfo: "個人資訊",
     programming: "程式語言",
     tools: "工具",
+    education: "學歷",
+    competencies: "核心能力",
+    aiWorkflow: "AI 輔助開發",
     print: "列印 / 存為 PDF",
     download: "下載 PDF",
+  },
+  about: "資深後端工程師，10 年以上遊戲服務器架構經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。AI 是我日常工作的核心方式：以 Claude Code 為主力、Codex 為輔，進行架構設計、程式碼審查與跨技術棧的快速開發。",
+  competencies: [
+    {
+      title: "遊戲服務器架構",
+      description: "設計多服務器系統（Gate/Lobby/Game），建立可複用的遊戲框架，大幅縮短新遊戲的開發週期。",
+      tech: "Lua/Skynet, Golang, TCP/WebSocket, gRPC",
+    },
+    {
+      title: "資料庫與快取優化",
+      description: "診斷每日 ~270 萬筆資料的全集合掃描問題並設計複合索引。重構 Redis key 架構，消除大量 SCAN 操作。",
+      tech: "MongoDB, Redis, MySQL, PostgreSQL",
+    },
+    {
+      title: "DevOps & CI/CD",
+      description: "自動化 Docker Image 建置推送至 Harbor，設計 Kubernetes Helm Chart 部署，建置 GitLab Runner 與 SSH 遠端部署。",
+      tech: "Kubernetes, Docker, Helm, GitLab CI/CD",
+    },
+    {
+      title: "資安與資料完整性",
+      description: "調查 Redis 資料竄改事件，追蹤攻擊路徑至 vendor 目錄漏洞，實作 AES 加密 + Checksum 驗證機制。",
+    },
+  ],
+  aiWorkflow: {
+    intro: "AI 不是我履歷上列的一個工具——而是我的工作方式。當 AI 能讓我快速適應任何技術棧時，特定技術的重要性就降低了。",
+    points: [
+      "日常工作流程：以 Claude Code 為主力、Codex 為輔，進行架構設計、程式碼生成、除錯與 code review",
+      "跨技術棧交付：10 年累積 Golang、Java、Lua、JavaScript 實戰經驗，搭配 AI 輔助能快速在不同技術棧間切換交付",
+      "這個履歷網站（Vue 3 + Vite + Tailwind CSS）完全透過 AI 輔助開發完成",
+      "運用 AI 加速團隊培育——透過 AI 輔助的 code review 和 test case 撰寫指導新人",
+    ],
   },
   profile: {
     name: "張育誠 (White)",
@@ -22,7 +56,7 @@ export default {
       "Data Store": ["Redis", "MongoDB", "MySQL", "PostgreSQL", "Oracle"],
       "Message Queue": ["RabbitMQ"],
       "Testing": ["Postman", "JMeter"],
-      "AI 工具": ["Claude Code", "GitHub Copilot"],
+      "AI 工具": ["Claude Code", "Codex"],
       "Other": ["Git"],
     },
   },
@@ -30,7 +64,7 @@ export default {
     "10 年以上後端工程師經歷，專精遊戲服務器架構（Lua/Skynet/Golang/Java）",
     "具備 MongoDB 效能優化、Redis 架構設計實戰經驗，解決大規模資料查詢效能問題",
     "熟悉 Kubernetes、Docker、GitLab CI/CD 等 DevOps 工具，具雲端與本地混合部署經驗",
-    "具備 AI 輔助開發工作流程經驗（Claude Code、GitHub Copilot）",
+    "具備 AI 輔助開發工作流程經驗（Claude Code、Codex）",
   ],
   experience: [
     {
@@ -82,6 +116,9 @@ export default {
         "Kubernetes 部署": [
           "設計並維護 Helm Chart 部署腳本",
         ],
+        "Demo 網站 (Golang, Vue.js)": [
+          "開發遊戲服務器入口網站",
+        ],
       },
     },
     {
@@ -93,14 +130,21 @@ export default {
       description: {
         "領導 2 名工程師 — Micro-service RESTful API (Golang / Java)": [
           "Pair Programming 協助成員成長",
-          "開發 micro-service RESTful API (Golang, Java)",
+          "OpenId Service (Golang, Google APIs)",
+          "Product Service、Payment Service、Stock Service (Golang, MSSQL, Memcached)",
+          "Kafka Forwarder (Golang, Kafka)",
           "維護『發票暨單據處理系統』(Java, Spring, JBoss, Oracle)",
         ],
         "測試自動化": [
           "撰寫 Test Case 整合至 CI/CD Pipeline，透過 mvn test 自動執行",
         ],
-        "開發前端組件 (Vue.js, Webpack)": "",
-        "建立開發環境及工具 (Docker)": "",
+        "前端組件開發 (Vue.js)": [
+          "開發 Vue.js 元件供 CMS 團隊使用",
+        ],
+        "開發環境與工具 (Docker)": [
+          "Jenkins：自動建置 Maven/NPM 專案，發佈至 Nexus",
+          "Nexus：私有 Maven repository 與 NPM registry",
+        ],
       },
     },
     {
@@ -132,6 +176,7 @@ export default {
       end: "2013/10",
       description: {
         "開發及維護後台管理系統 (PHP, Yii, Postgres)": "",
+        "開發活動網站 (PHP)": "",
       },
     },
   ],
