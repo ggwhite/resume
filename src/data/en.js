@@ -98,7 +98,7 @@ export default {
           "Built Helm charts, set up GitLab Runner, developed Linux server deploy scripts",
         ],
         "Mentoring": [
-          "Led junior engineers, guided test case writing, established team testing habits",
+          "Onboarded new graduates through code review and pair programming, guided test case writing",
         ],
       },
     },
@@ -128,8 +128,8 @@ export default {
       start: "Sep. 2016",
       end: "May 2019",
       description: {
-        "Led 2 engineers — Micro-service RESTful API (Golang / Java)": [
-          "Pair programming to support team growth",
+        "Micro-service RESTful API (Golang / Java)": [
+          "Mentored 2 engineers through pair programming and code review",
           "OpenId Service (Golang, Google APIs)",
           "Product Service, Payment Service, Stock Service (Golang, MSSQL, Memcached)",
           "Kafka Forwarder (Golang, Kafka)",
