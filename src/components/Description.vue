@@ -1,17 +1,13 @@
 <template>
-  <div class="description">
-    <div v-if="typeof description === 'string'">
-      {{ description }}
-    </div>
-    <ul v-if="typeof description === 'object' && Array.isArray(description)">
-      <li v-for="(desc, idx) in description" :key="idx">
-        {{ desc }}
-      </li>
+  <div>
+    <template v-if="typeof description === 'string'">{{ description }}</template>
+    <ul v-else-if="Array.isArray(description)" class="pl-5 mb-2 list-disc">
+      <li v-for="(item, i) in description" :key="i" class="mb-1">{{ item }}</li>
     </ul>
-    <ul v-if="typeof description === 'object' && !Array.isArray(description)">
-      <li v-for="(desc, main) in description" :key="main">
-        <label>{{ main }}</label>
-        <description :description="desc"></description>
+    <ul v-else-if="typeof description === 'object'" class="pl-2.5 md:pl-10 mb-2 list-none">
+      <li v-for="(desc, title) in description" :key="title" class="mb-1">
+        <label class="font-bold mb-0.5 block">{{ title }}</label>
+        <Description :description="desc" />
       </li>
     </ul>
   </div>
@@ -19,40 +15,9 @@
 
 <script>
 export default {
-    name: "description",
-    props: {
-      description: String | Object
-    },
+  name: 'Description',
+  props: {
+    description: [String, Object, Array],
+  },
 }
 </script>
-
-<style lang="less" scoped>
-
-.description {
-  
-  @media (min-width: 768px) {
-
-  }
-
-  ul {
-    margin-bottom: 0.5rem;
-    padding-left: 10px;
-    
-    @media (min-width: 768px) {
-      padding-left: 40px;
-    }
-
-    li {
-      margin-bottom: 5px;
-    }
-  }
-
-  label {
-    font-weight: bold;
-    margin-bottom: 0.1rem;
-  }
-
-}
-
-</style>
-

@@ -1,231 +1,66 @@
 <template>
-  <div id="app" @click="closeMenu">
-    <div id="nav" class="container-fluid" :class="{open:menu_display}">
-      <div class="menu">
-        <a class="fa fa-bars" @click.stop.prevent="toggleMenu"></a>
-        <section v-show="menu_display" class="mobile" ref="menu">
-          <router-link v-for="(text, url) in menu" :key="url" :to="url">{{ text }}</router-link>
-        </section>
-        <section class="desktop">
-          <router-link v-for="(text, url) in menu" :key="url" :to="url">{{ text }}</router-link>
-        </section>
+  <div id="app" class="font-['Avenir',Helvetica,Arial,sans-serif] antialiased text-gray-600 pb-5"
+       @click="menuOpen = false">
+
+    <nav class="relative overflow-hidden p-2.5 mb-2.5 md:p-[30px] md:mb-5 md:!h-[400px] transition-all duration-[400ms] print:hidden"
+         :class="menuOpen ? 'h-[120px]' : 'h-10'">
+
+      <div class="absolute inset-0 bg-gray-600 bg-cover bg-no-repeat opacity-30 animate-banner -z-10"
+           :style="{ backgroundImage: `url(${bg})`, backgroundPosition: '0 85%' }"></div>
+
+      <div class="inline-block">
+        <a class="text-xl cursor-pointer md:hidden" @click.stop.prevent="menuOpen = !menuOpen">
+          <Menu :size="20" />
+        </a>
+
+        <div v-show="menuOpen" class="absolute top-10 left-0 w-full z-[999] shadow-md md:hidden bg-white/90">
+          <router-link v-for="(text, url) in menu" :key="url" :to="url"
+                       class="block p-2.5 border-b border-gray-300 last:border-b-0"
+                       @click="menuOpen = false">
+            {{ text }}
+          </router-link>
+        </div>
+
+        <div class="hidden md:block">
+          <router-link v-for="(text, url) in menu" :key="url" :to="url"
+                       class="inline-block px-4 py-2.5 font-bold hover:border-[3px] hover:border-current hover:px-[13px] hover:py-[7px]"
+                       active-class="!text-emerald-500">
+            {{ text }}
+          </router-link>
+        </div>
       </div>
-      <div id="social">
-        <a :href="_email" class="fa fa-envelope"></a>
-        <a :href="github" class="fa fa-github-square" target="_blank"></a>
-        <a :href="linkedin" class="fa fa-linkedin-square" target="_blank"></a>
+
+      <div class="float-right text-xl md:absolute md:bottom-2.5 md:right-8 md:text-2xl">
+        <a :href="'mailto:' + contact.email" class="mx-1 md:mx-2.5"><Mail :size="22" /></a>
+        <a :href="contact.github" target="_blank" class="mx-1 md:mx-2.5"><GithubIcon :size="22" /></a>
+        <a :href="contact.linkedin" target="_blank" class="mx-1 md:mx-2.5"><LinkedinIcon :size="22" /></a>
       </div>
-    </div>
-    <router-view/>
+    </nav>
+
+    <router-view />
   </div>
 </template>
 
 <script>
-export default {
-  name: "app",
-  data: function() {
-    return {
-      email: "eddy6868@msn.com",
-      github: "https://github.com/ggwhite",
-      linkedin: "https://linkedin.com/in/white-chang",
-      menu_display: false,
-      menu: {
-        "/en": "English",
-        "/zh-tw": "繁體中文"
-      }
-    }
-  },
-  methods: {
-    toggleMenu: function(){
-      this.menu_display = !this.menu_display
-    },
-    closeMenu: function(){
-      this.menu_display = false
+import { Mail, Menu } from '@lucide/vue'
+import GithubIcon from '@/components/icons/GithubIcon.vue'
+import LinkedinIcon from '@/components/icons/LinkedinIcon.vue'
+import { contact } from '@/data/shared'
+import bg from '@/assets/bg.jpg'
 
-    },
-  },
-  computed: {
-    _email: function(){
-      return "mailto:" + this.email
+export default {
+  name: 'App',
+  components: { Mail, Menu, GithubIcon, LinkedinIcon },
+  data() {
+    return {
+      contact,
+      bg,
+      menuOpen: false,
+      menu: {
+        '/en': 'English',
+        '/zh-tw': '繁體中文',
+      },
     }
-  }
+  },
 }
 </script>
-
-
-<style lang="less">
-@import '~font-awesome/css/font-awesome.min.css';
-@import '~animate.css/animate.min.css';
-
-
-body {
-  margin: 0;
-  font-size: 0.8rem;
-  
-  @media (min-width: 768px) {
-    font-size: 1rem;
-  }
-}
-
-a {
-  color: #555;
-  &:hover {
-    text-decoration: none;
-    color: #AAA;
-  }
-}
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #555;
-  padding-bottom: 20px;
-}
-
-#nav {
-  position: relative;
-  height: 40px;
-  padding: 10px;
-  margin-bottom: 10px;
-  overflow: hidden;
-  &.open {
-    height: 120px;
-  }
-  transition: .4s;
-
-  @media (min-width: 768px) {
-    height: 400px;
-    padding: 30px;
-    margin-bottom: 20px;
-  }
-
-  @media print {
-    display: none;
-  }
-
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #555;
-    background-image: url(assets/bg.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 0 85%;
-    opacity: 0.3;
-    animation: anim 15s linear infinite;
-    z-index: -1;
-  }
-
-  @keyframes anim {
-    50% {
-        transform: scale(2);
-    }
-    100% {
-        transform: scale(1);
-    }
-  }
-
-  .menu {
-
-    display: inline-block;
-
-    @media (min-width: 768px) {
-
-    }
-
-    a {
-      &.fa-bars {
-        font-size: 150%;
-        @media (min-width: 768px) {
-          display: none;
-        }  
-      }
-    }
-
-    section {
-
-      &.mobile {
-        display: grid;
-        box-shadow: 0 2px 1px #AAA;
-        @media (min-width: 768px) {
-          display: none;
-        }
-
-        a {
-          border-bottom: 1px solid #AAA;
-
-          &:last-child {
-            border-bottom: 0;
-          }
-        }
-
-      }
-
-      &.desktop {
-        display: none;
-        @media (min-width: 768px) {
-          display: block;
-        }
-      }
-
-      @media (max-width: 767px) {
-        position: absolute;
-        top: 40px;
-        left: 0;
-        // background-color: #FAFAFA;
-        width: 100%;
-        z-index: 999;
-      }
-
-      a {
-        padding: 10px;
-
-        @media (min-width: 768px) {
-          display: inline-block;
-          padding: 10px 15px;
-          font-weight: bold;
-        }
-
-        &:hover {
-          @media (min-width: 768px) {
-            padding: 7px 12px;
-            border: 3px solid;
-          }
-        }
-        &.router-link-exact-active {
-          color: #42b983;
-        }
-      }
-      
-    }
-  }
-
-  #social {
-
-    float: right;
-    font-size: 130%;
-
-    @media (min-width: 768px) {
-      position: absolute;
-      bottom: 10px;
-      right: 30px;
-      font-size: 150%;
-    }
-
-    a {
-      margin: 0 5px;
-      @media (min-width: 768px) {
-        margin: 0 10px;
-      }
-    }
-
-  }
-
-}
-
-</style>

@@ -1,64 +1,22 @@
 <template>
-  <div class="project">
-    <div class="name">{{ name }}</div>
-    <div class="period">{{ start }} - {{ end }}</div>
-    <description :description="description"></description>
+  <div class="md:mr-10 md:grid md:grid-cols-[1fr_200px] mb-2">
+    <div class="font-bold">{{ name }}</div>
+    <div class="font-bold mb-1 md:text-right">{{ start }} - {{ end }}</div>
+    <Description :description="description" class="md:col-span-2" />
   </div>
 </template>
 
 <script>
-import Description from '@/components/Description.vue'
+import Description from './Description.vue'
 
 export default {
-    name: "project",
-    props: {
-      name: String,
-      start: String,
-      end: String,
-      description: String | Object
-    },
-    components: {
-      Description
-    }
+  name: 'Project',
+  components: { Description },
+  props: {
+    name: String,
+    start: String,
+    end: String,
+    description: [String, Object, Array],
+  },
 }
 </script>
-
-<style lang="less" scoped>
-
-.project {
-
-  @media (min-width: 768px) {
-    display: grid;
-    grid-template-areas: "name period"
-                         "desc desc";
-    grid-template-columns: 1fr 200px;
-  }
-
-  .name {
-    font-weight: bold;
-
-    @media (min-width: 768px) {
-      grid-area: name;
-    }
-  }
-
-  .period {
-    font-weight: bold;
-    margin-bottom: 5px;
-
-    @media (min-width: 768px) {
-      grid-area: period;
-      text-align: right;
-    }
-  }
-
-  .description {
-    @media (min-width: 768px) {
-      grid-area: desc;
-    }
-  }
-
-}
-
-</style>
-

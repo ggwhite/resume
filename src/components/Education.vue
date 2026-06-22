@@ -1,55 +1,19 @@
 <template>
-  <div class="education">
-    <div class="degree">{{ degree }}</div>
-    <div class="period">{{ start }} - {{ end }}</div>
-    {{ school }}
+  <div class="md:mr-10 md:grid md:grid-cols-[1fr_200px]">
+    <div class="font-bold">{{ degree }}</div>
+    <div class="font-bold mb-1 md:text-right">{{ start }} - {{ end }}</div>
+    <div class="md:col-span-2">{{ school }}</div>
   </div>
 </template>
 
 <script>
-import Description from '@/components/Description.vue'
-
 export default {
-    name: "education",
-    props: {
-      degree: String,
-      school: String,
-      start: String,
-      end: String,
-      description: String | Object
-    },
-    components: {
-      Description
-    }
+  name: 'Education',
+  props: {
+    degree: String,
+    school: String,
+    start: String,
+    end: String,
+  },
 }
 </script>
-
-<style lang="less" scoped>
-
-.education {
-
-  @media (min-width: 768px) {
-    display: grid;
-    grid-template-areas: "degree period"
-                         "school school";
-    grid-template-columns: 1fr 200px;
-  }
-
-  .degree {
-    font-weight: bold;
-  }
-
-  .period {
-    font-weight: bold;
-    margin-bottom: 5px;
-
-    @media (min-width: 768px) {
-      grid-area: period;
-      text-align: right;
-    }
-  }
-
-}
-
-</style>
-
