@@ -1,43 +1,50 @@
-# resume
+# Resume
 
-Use Vue.js to build a resume.
+White Chang's web resume, built with Vue 3 + Vite + Tailwind CSS.
 
-* Node.js: v16.20.2
-* npm: v8.19.4
+Live: [https://ggwhite.github.io/resume/](https://ggwhite.github.io/resume/)
 
+## Setup
 
-
-## Project setup
-
-### Install Node.js
-
-```
-nvm install v16.20.2 // install Node.js by nvm
-```
-
-```
+```bash
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+## Development
+
+```bash
+npm run dev
 ```
 
-### Compiles and minifies for production
+## Build
+
+```bash
+npm run build    # output to docs/
 ```
+
+## Generate PDF
+
+Requires [Playwright](https://playwright.dev/python/) (Python).
+
+```bash
+npm run dev &                                    # start dev server
+python scripts/generate-pdf.py --port <port>     # generate PDFs to public/
+```
+
+## Deploy
+
+GitHub Pages serves from `master` branch `/docs` directory.
+
+```bash
 npm run build
+git add docs/
+git commit && git push
 ```
 
-### Run your tests
-```
-npm run test
-```
+## Tech Stack
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Vue 3 + Vite
+- Tailwind CSS v3
+- vue-router 4 (hash mode)
+- @lucide/vue (icons)
+- Playwright (PDF generation)
