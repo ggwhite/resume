@@ -41,7 +41,7 @@ export default {
     intro: "我設計系統、AI 負責實作、我驗收 AI 遺漏的部分。這個循環——架構 → 委派 → 補漏——是我能規模化交付的方式。",
     points: [
       "開發了 4x (github.com/ggwhite/4x)——開源的多角色 AI 開發框架，將工程流程拆分為 Design/Code/Review/Test 四階段，搭配確定性護欄機制",
-      "架構優先工作流程：由我做架構決策（模組邊界、通訊協議、安全模型），再由 AI agent 實作——並補上 AI 遺漏的生產環境盲點，如缺失的 logging 機制與服務間認證",
+      "架構優先工作流程：由我做架構決策（模組邊界、通訊協議、安全模型），再由 AI agent 實作——並補上 AI 遺漏的生產環境盲點，如 logging 覆蓋率與安全加固",
       "跨技術棧交付：10 年累積 Golang、Java、Lua、JavaScript 實戰經驗，搭配 AI 協作能快速在不同技術棧間切換交付",
       "運用 AI 加速團隊培育——透過 AI 輔助的 code review 和 test case 撰寫指導新人",
     ],
