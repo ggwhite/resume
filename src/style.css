@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-gray-600;
+  }
+
+  a {
+    @apply text-gray-600 no-underline;
+  }
+
+  a:hover {
+    @apply text-gray-400 no-underline;
+  }
+}
+
+@media print {
+  @page {
+    margin: 10mm;
+    size: A4;
+  }
+}
