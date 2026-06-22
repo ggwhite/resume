@@ -98,7 +98,7 @@ export default {
           "建立 Helm Chart、架設 GitLab Runner、開發部署腳本",
         ],
         "人才培育": [
-          "帶領新進工程師，指導撰寫 test case，建立測試習慣",
+          "透過 code review 與 pair programming 帶新人上手，指導撰寫 test case",
         ],
       },
     },
@@ -128,8 +128,8 @@ export default {
       start: "2016/09",
       end: "2019/05",
       description: {
-        "領導 2 名工程師 — Micro-service RESTful API (Golang / Java)": [
-          "Pair Programming 協助成員成長",
+        "Micro-service RESTful API (Golang / Java)": [
+          "透過 pair programming 與 code review 帶 2 名工程師上手",
           "OpenId Service (Golang, Google APIs)",
           "Product Service、Payment Service、Stock Service (Golang, MSSQL, Memcached)",
           "Kafka Forwarder (Golang, Kafka)",
