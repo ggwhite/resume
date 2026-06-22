@@ -15,7 +15,7 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
-  about: "Senior backend engineer with 10+ years building game server systems at scale. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. My workflow is AI-first: I use Claude Code as my primary development tool, supplemented by Codex, for architecture design, code review, and rapid development across any tech stack.",
+  about: "Senior backend engineer with 10+ years building game server systems at scale. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. My workflow is AI-augmented: I design the architecture and make critical decisions, then leverage AI agents (Claude Code, Codex) as an implementation layer to deliver at 5-10x speed. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
       title: "Game Server Architecture",
@@ -38,11 +38,11 @@ export default {
     },
   ],
   aiWorkflow: {
-    intro: "AI is not a tool I list on my resume — it's how I work. Specific technologies matter less when AI enables rapid adaptation to any stack.",
+    intro: "I design the system, AI implements it, I verify what AI misses. This loop — architect → delegate → catch gaps — is how I deliver at scale.",
     points: [
-      "Daily workflow: architecture design, code generation, debugging, and code review through Claude Code, with Codex as supplement",
-      "Cross-stack delivery: 10+ years of hands-on experience across Golang, Java, Lua, JavaScript — combined with AI, enables rapid context-switching and delivery across stacks",
-      "Built this resume site (Vue 3 + Vite + Tailwind CSS) entirely through AI-assisted development",
+      "Built 4x (github.com/ggwhite/4x) — an open-source multi-role AI dev framework that splits the engineering loop into Design/Code/Review/Test phases with deterministic guardrails",
+      "Architect-first workflow: I make architecture decisions (module boundaries, protocols, security model), then use AI agents for implementation — catching production blind spots like missing observability and inter-service auth",
+      "Cross-stack delivery: 10+ years across Golang, Java, Lua, JavaScript — combined with AI orchestration, enables rapid context-switching across any tech stack",
       "Use AI to accelerate team mentoring — guided junior engineers with AI-assisted code review and test case writing",
     ],
   },
