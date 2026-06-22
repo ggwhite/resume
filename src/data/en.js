@@ -41,7 +41,7 @@ export default {
     intro: "I design the system, AI implements it, I verify what AI misses. This loop — architect → delegate → catch gaps — is how I deliver at scale.",
     points: [
       "Built 4x (github.com/ggwhite/4x) — an open-source multi-role AI dev framework that splits the engineering loop into Design/Code/Review/Test phases with deterministic guardrails",
-      "Architect-first workflow: I make architecture decisions (module boundaries, protocols, security model), then use AI agents for implementation — catching production blind spots like missing observability and inter-service auth",
+      "Architect-first workflow: I make architecture decisions (module boundaries, protocols, security model), then use AI agents for implementation — catching production blind spots that AI overlooks, like logging coverage and security hardening",
       "Cross-stack delivery: 10+ years across Golang, Java, Lua, JavaScript — combined with AI orchestration, enables rapid context-switching across any tech stack",
       "Use AI to accelerate team mentoring — guided junior engineers with AI-assisted code review and test case writing",
     ],
