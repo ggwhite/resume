@@ -5,7 +5,7 @@ export default {
   labels: {
     summary: "Summary of Qualifications",
     experience: "Employment History",
-    project: "Piecework Project",
+    project: "Freelance & Side Projects",
     personalInfo: "Personal Info",
     programming: "Programming",
     tools: "Tools",
@@ -15,11 +15,11 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
-  about: "Senior backend engineer with 10+ years building game server systems at scale. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. My workflow is AI-augmented: I design the architecture and make critical decisions, then leverage AI agents (Claude Code, Codex) as an implementation layer to deliver at 5-10x speed. I catch what AI misses — production observability, security hardening, system integrity.",
+  about: "Senior backend engineer with 10+ years building high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: I design the architecture and make critical decisions, then leverage AI agents as an implementation layer. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
-      title: "Game Server Architecture",
-      description: "Designed multi-server systems (Gate/Lobby/Game) and built reusable game frameworks that significantly cut development cycles for new titles.",
+      title: "High-Concurrency Backend Architecture",
+      description: "Designed multi-server distributed systems (Gate/Lobby/Game) across 10+ repositories and multiple platforms. Built reusable frameworks that cut new title development cycles by over 50%.",
       tech: "Lua/Skynet, Golang, TCP/WebSocket, gRPC",
     },
     {
@@ -49,6 +49,7 @@ export default {
   profile: {
     name: "White Chang",
     position: "Senior Backend Engineer",
+
     ...contact,
     programming,
     tools: {
@@ -61,23 +62,23 @@ export default {
     },
   },
   summary: [
-    "10+ years experience as a backend engineer, specializing in game server architecture (Lua/Skynet/Golang/Java).",
-    "Hands-on experience in MongoDB performance tuning and Redis architecture optimization for large-scale data.",
+    "10+ years as a backend engineer building high-concurrency distributed systems across gaming, payment, and enterprise domains.",
+    "Hands-on MongoDB performance tuning and Redis architecture optimization at scale (~2.7M records/day).",
     "Proficient in Kubernetes, Docker, and GitLab CI/CD; experienced in hybrid cloud/on-premise deployments.",
-    "Experienced in AI-assisted development workflows (Claude Code, Codex).",
+    "AI-augmented workflow practitioner — built 4x, an open-source multi-role AI dev framework.",
   ],
   experience: [
     {
       id: "Tyche",
       company: "Tyche Tech Co, Ltd",
-      position: "Senior Server Engineer",
+      position: "Senior Backend Engineer",
       start: "Jan. 2021",
       end: "Present",
       description: {
-        "Maintained & Developed Gaming Servers & Backend Management Projects": [
-          "Project C: Servers(Lua, Skynet), Backend(Java, Spring Boot, MyBatis), CI/CD(GitLab, SSH)",
-          "Project B: Servers(Lua), Backend(PHP, Laravel), CI/CD(GitLab, SSH)",
-          "Project A: Servers(Golang), Backend(.Net), CI/CD(GitLab, Kubernetes, Helm)",
+        "Architected & Delivered Multi-Platform Gaming Systems (5-10 person team)": [
+          "Platform C: Game Servers (Lua/Skynet), BI Backend (Java/Spring Boot/MyBatis), CI/CD (GitLab, SSH)",
+          "Platform B: Game Servers (Lua), Backend (PHP/Laravel), CI/CD (GitLab, SSH)",
+          "Platform A: Game Servers (Golang), Backend (.Net), CI/CD (GitLab, Kubernetes, Helm)",
         ],
         "MongoDB Performance Optimization": [
           "Diagnosed full-collection scan on ~2.7M records/day",
@@ -105,13 +106,13 @@ export default {
     {
       id: "Terpro",
       company: "Terpro Mobile Co, Ltd",
-      position: "Senior Server Engineer",
+      position: "Senior Backend Engineer",
       start: "Jun. 2019",
       end: "Dec. 2020",
       description: {
         "Slot Game Core Framework (Golang)": [
-          "Encapsulated shared mechanics: FreeGame, Lightning, PickGame",
-          "New games reuse the framework directly, significantly reducing development cycle",
+          "Encapsulated shared mechanics (FreeGame, Lightning, PickGame) into a reusable framework",
+          "Reduced new game development cycle by over 50% through framework reuse",
         ],
         "Kubernetes Deployment": [
           "Designed and maintained Helm chart deployment scripts",

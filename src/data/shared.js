@@ -1,7 +1,7 @@
 import Photo from '@/assets/photo.jpg'
 
 export const contact = {
-  email: "eddy6868@msn.com",
+  email: "ggw.chang@gmail.com",
   phone: "+886 928827611",
   github: "https://github.com/ggwhite",
   linkedin: "https://linkedin.com/in/white-chang",

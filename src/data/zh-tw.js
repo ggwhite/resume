@@ -5,7 +5,7 @@ export default {
   labels: {
     summary: "摘要",
     experience: "工作經歷",
-    project: "外包接案",
+    project: "接案與個人專案",
     personalInfo: "個人資訊",
     programming: "程式語言",
     tools: "工具",
@@ -15,11 +15,11 @@ export default {
     print: "列印 / 存為 PDF",
     download: "下載 PDF",
   },
-  about: "資深後端工程師，10 年以上遊戲服務器架構經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。我的工作方式是 AI 增強：由我主導架構設計與關鍵決策，再透過 AI agent（Claude Code、Codex）作為實作層，以 5-10 倍速度交付。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
+  about: "資深後端工程師，10 年以上高併發分散式系統開發經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：由我主導架構設計與關鍵決策，再透過 AI agent 作為實作層。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
   competencies: [
     {
-      title: "遊戲服務器架構",
-      description: "設計多服務器系統（Gate/Lobby/Game），建立可複用的遊戲框架，大幅縮短新遊戲的開發週期。",
+      title: "高併發後端架構",
+      description: "設計多服務器分散式系統（Gate/Lobby/Game），橫跨 10+ 個 repo 與多平台。建立可複用框架，將新遊戲開發週期縮短超過 50%。",
       tech: "Lua/Skynet, Golang, TCP/WebSocket, gRPC",
     },
     {
@@ -61,10 +61,10 @@ export default {
     },
   },
   summary: [
-    "10 年以上後端工程師經歷，專精遊戲服務器架構（Lua/Skynet/Golang/Java）",
-    "具備 MongoDB 效能優化、Redis 架構設計實戰經驗，解決大規模資料查詢效能問題",
+    "10 年以上後端工程師經歷，專精高併發分散式系統，橫跨遊戲、支付與企業 API 領域",
+    "具備 MongoDB 效能優化、Redis 架構設計實戰經驗，處理日均 ~270 萬筆資料規模",
     "熟悉 Kubernetes、Docker、GitLab CI/CD 等 DevOps 工具，具雲端與本地混合部署經驗",
-    "具備 AI 輔助開發工作流程經驗（Claude Code、Codex）",
+    "AI 增強開發實踐者——開發了 4x 開源多角色 AI 開發框架",
   ],
   experience: [
     {
@@ -74,10 +74,10 @@ export default {
       start: "2021/01",
       end: "現在",
       description: {
-        "維護及開發遊戲服務器與後台管理系統": [
-          "專案 C：遊戲服務器 (Lua, Skynet)、後台 (Java, Spring Boot, MyBatis)、CI/CD (GitLab, SSH)",
-          "專案 B：遊戲服務器 (Lua)、後台 (PHP, Laravel)、CI/CD (GitLab, SSH)",
-          "專案 A：遊戲服務器 (Golang)、後台 (.Net)、CI/CD (GitLab, Kubernetes, Helm)",
+        "主導多平台遊戲系統架構與交付（5-10 人團隊）": [
+          "平台 C：遊戲服務器 (Lua/Skynet)、BI 後台 (Java/Spring Boot/MyBatis)、CI/CD (GitLab, SSH)",
+          "平台 B：遊戲服務器 (Lua)、後台 (PHP/Laravel)、CI/CD (GitLab, SSH)",
+          "平台 A：遊戲服務器 (Golang)、後台 (.Net)、CI/CD (GitLab, Kubernetes, Helm)",
         ],
         "MongoDB 效能優化": [
           "診斷全集合掃描問題（每日約 270 萬筆資料）",
@@ -110,8 +110,8 @@ export default {
       end: "2020/12",
       description: {
         "老虎機遊戲底層框架 (Golang)": [
-          "封裝 FreeGame、Lightning、PickGame 等共用機制",
-          "新遊戲開發可直接複用，大幅縮短開發週期",
+          "封裝 FreeGame、Lightning、PickGame 等共用機制為可複用框架",
+          "新遊戲開發週期縮短超過 50%",
         ],
         "Kubernetes 部署": [
           "設計並維護 Helm Chart 部署腳本",
