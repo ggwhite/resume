@@ -11,6 +11,7 @@ export const contact = {
 export const programming = {
   "Golang": ["Gin", "Dig", "Cobra", "Viper", "gRPC"],
   "Java": ["Spring", "Spring Boot", "MyBatis"],
+  "Python": [],
   "Lua": ["Skynet"],
   "Javascript & Node.js": ["Vue.js", "Nuxt.js", "TypeScript", "jQuery"],
   "PHP": ["Laravel"],
