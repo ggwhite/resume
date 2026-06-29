@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resume Cake Portfolio Cards</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f7fafc;
+      --paper: #eef2f7;
+      --muted: #9aa8b8;
+      --line: rgba(232, 239, 248, .15);
+      --panel: rgba(9, 15, 25, .76);
+      --panel-strong: rgba(13, 20, 32, .93);
+      --blue: #60a5fa;
+      --indigo: #818cf8;
+      --mint: #34d399;
+      --amber: #fbbf24;
+      --coral: #fb7185;
+      --cyan: #22d3ee;
+      --slate: #0b1020;
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+
+    body {
+      background: #05070d;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    .stage {
+      display: grid;
+      gap: 28px;
+      padding: 28px;
+    }
+
+    .slide {
+      position: relative;
+      width: 1080px;
+      height: 1350px;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 660px 520px at 12% 8%, rgba(96,165,250,.26), transparent),
+        radial-gradient(ellipse 540px 460px at 86% 12%, rgba(52,211,153,.18), transparent),
+        linear-gradient(145deg, #070a11, #101827 54%, #14111f);
+    }
+
+    .slide.alt-a {
+      background:
+        radial-gradient(ellipse 640px 500px at 70% 0%, rgba(129,140,248,.24), transparent),
+        radial-gradient(ellipse 440px 360px at 12% 82%, rgba(34,211,238,.14), transparent),
+        linear-gradient(145deg, #070a11, #101827 50%, #0b1820);
+    }
+
+    .slide.alt-b {
+      background:
+        radial-gradient(ellipse 560px 440px at 16% 8%, rgba(52,211,153,.22), transparent),
+        radial-gradient(ellipse 420px 360px at 92% 84%, rgba(251,191,36,.12), transparent),
+        linear-gradient(145deg, #070a11, #111827 52%, #101521);
+    }
+
+    .slide.alt-c {
+      background:
+        radial-gradient(ellipse 580px 460px at 72% 5%, rgba(251,113,133,.18), transparent),
+        radial-gradient(ellipse 460px 380px at 10% 90%, rgba(96,165,250,.17), transparent),
+        linear-gradient(145deg, #070a11, #101827 52%, #17111a);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), transparent 86%);
+    }
+
+    .frame {
+      position: absolute;
+      inset: 30px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      padding: 58px 64px 50px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .mark {
+      width: 78px;
+      height: 78px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--blue), var(--mint));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 24px 70px rgba(34,211,238,.18);
+      color: #07101d;
+      font-size: 40px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -1px;
+    }
+
+    .brand-copy {
+      padding-top: 6px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 900;
+      letter-spacing: 2.1px;
+      text-transform: uppercase;
+    }
+
+    .number {
+      min-width: 104px;
+      padding: 14px 18px;
+      border: 1px solid rgba(52,211,153,.44);
+      border-radius: 999px;
+      background: rgba(52,211,153,.1);
+      color: #c8f6df;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 950;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin-top: 44px;
+      font-size: 25px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin-top: 18px;
+      max-width: 960px;
+      font-size: 74px;
+      line-height: 1.08;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin-top: 24px;
+      max-width: 920px;
+      color: #dbe5ef;
+      font-size: 33px;
+      line-height: 1.42;
+      font-weight: 760;
+    }
+
+    .footer {
+      margin-top: auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 30px;
+      color: var(--muted);
+      font-size: 23px;
+      line-height: 1.25;
+      font-weight: 850;
+    }
+
+    .repo {
+      color: #eef4fb;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 22px;
+      font-weight: 850;
+    }
+
+    .blue { color: var(--blue); }
+    .indigo { color: var(--indigo); }
+    .mint { color: var(--mint); }
+    .amber { color: var(--amber); }
+    .coral { color: var(--coral); }
+    .cyan { color: var(--cyan); }
+
+    .stat-row {
+      margin-top: 38px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .stat,
+    .panel,
+    .mini-card,
+    .flow-step,
+    .code-window,
+    .feature {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.055);
+    }
+
+    .stat {
+      padding: 28px 26px;
+      border-radius: 20px;
+    }
+
+    .stat-value {
+      font-size: 54px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .stat-label {
+      margin-top: 10px;
+      color: #b9c6d4;
+      font-size: 21px;
+      line-height: 1.28;
+      font-weight: 800;
+    }
+
+    .thesis {
+      margin-top: 34px;
+      padding: 28px 32px;
+      border-left: 6px solid var(--mint);
+      background: rgba(52,211,153,.08);
+      color: #e9fbf2;
+      font-size: 30px;
+      line-height: 1.42;
+      font-weight: 900;
+    }
+
+    .chip-grid {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .mini-card {
+      padding: 20px 22px;
+      border-radius: 16px;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 23px;
+      line-height: 1.2;
+      font-weight: 950;
+    }
+
+    .mini-card span {
+      display: block;
+      margin-top: 8px;
+      color: #bac6d4;
+      font-size: 19px;
+      line-height: 1.35;
+      font-weight: 720;
+    }
+
+    .browser {
+      margin-top: 40px;
+      border: 1px solid rgba(232,239,248,.18);
+      border-radius: 22px;
+      background: rgba(238,242,247,.96);
+      color: #101827;
+      overflow: hidden;
+      box-shadow: 0 30px 90px rgba(0,0,0,.32);
+    }
+
+    .browser-bar {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      background: #dce3ec;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 999px;
+      background: #94a3b8;
+    }
+
+    .dot:nth-child(1) { background: #fb7185; }
+    .dot:nth-child(2) { background: #fbbf24; }
+    .dot:nth-child(3) { background: #34d399; }
+
+    .url {
+      margin-left: 12px;
+      flex: 1;
+      border-radius: 999px;
+      padding: 9px 16px;
+      background: #f8fafc;
+      color: #64748b;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .resume-mock {
+      padding: 30px 34px 34px;
+      display: grid;
+      grid-template-columns: 1fr 250px;
+      gap: 28px;
+      min-height: 435px;
+    }
+
+    .mock-title {
+      font-size: 42px;
+      line-height: 1.05;
+      font-weight: 950;
+      letter-spacing: 0;
+      color: #172033;
+    }
+
+    .mock-subtitle {
+      margin-top: 7px;
+      color: #64748b;
+      font-size: 22px;
+      font-weight: 780;
+    }
+
+    .mock-copy {
+      margin-top: 22px;
+      color: #475569;
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .mock-tags {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .mock-tags span {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 16px;
+      font-weight: 850;
+    }
+
+    .avatar {
+      align-self: start;
+      width: 154px;
+      height: 154px;
+      margin-left: auto;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 7px solid #fff;
+      box-shadow: 0 18px 42px rgba(15,23,42,.18);
+    }
+
+    .side-list {
+      margin-top: 26px;
+      display: grid;
+      gap: 12px;
+      color: #334155;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .flow {
+      margin-top: 38px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .flow-step {
+      min-height: 235px;
+      padding: 28px;
+      border-radius: 18px;
+    }
+
+    .flow-step header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: baseline;
+    }
+
+    .flow-step h2 {
+      font-size: 33px;
+      line-height: 1.1;
+      font-weight: 950;
+    }
+
+    .flow-step small {
+      color: var(--muted);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 17px;
+      font-weight: 850;
+    }
+
+    .flow-step p {
+      margin-top: 16px;
+      color: #c6d1de;
+      font-size: 23px;
+      line-height: 1.38;
+      font-weight: 760;
+    }
+
+    .path {
+      margin-top: 28px;
+      padding: 22px 26px;
+      border: 1px solid rgba(96,165,250,.24);
+      border-radius: 16px;
+      background: rgba(96,165,250,.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      color: #cfe6ff;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 20px;
+      font-weight: 850;
+    }
+
+    .dual {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .panel {
+      min-height: 455px;
+      border-radius: 22px;
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    .panel h2 {
+      font-size: 34px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .panel p {
+      margin-top: 14px;
+      color: #c6d2df;
+      font-size: 22px;
+      line-height: 1.38;
+      font-weight: 760;
+    }
+
+    .route-list {
+      margin-top: 26px;
+      display: grid;
+      gap: 12px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 18px;
+      font-weight: 820;
+      color: #dce8f5;
+    }
+
+    .route-list div,
+    .pdf-sheet {
+      border: 1px solid rgba(232,239,248,.13);
+      border-radius: 13px;
+      background: rgba(0,0,0,.18);
+    }
+
+    .route-list div {
+      padding: 13px 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pdf-sheet {
+      margin-top: 24px;
+      height: 260px;
+      background:
+        linear-gradient(#e2e8f0 12px, transparent 12px) 28px 32px / 68% 34px no-repeat,
+        linear-gradient(#cbd5e1 10px, transparent 10px) 28px 90px / 82% 28px repeat-y,
+        linear-gradient(135deg, #f8fafc, #dbeafe);
+      box-shadow: inset 0 0 0 10px rgba(255,255,255,.55);
+    }
+
+    .stack {
+      margin-top: 38px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 25px 26px;
+      min-height: 185px;
+      border-radius: 18px;
+    }
+
+    .feature h2 {
+      font-size: 30px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .feature p {
+      margin-top: 13px;
+      color: #c2cfdd;
+      font-size: 21px;
+      line-height: 1.38;
+      font-weight: 740;
+    }
+
+    .code-window {
+      margin-top: 34px;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .code-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 18px;
+      font-weight: 850;
+    }
+
+    pre {
+      padding: 24px 26px 28px;
+      color: #d8e6f3;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 23px;
+      line-height: 1.55;
+      font-weight: 760;
+      white-space: pre-wrap;
+    }
+
+    .timeline {
+      margin-top: 38px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 165px 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .period {
+      border-radius: 16px;
+      border: 1px solid rgba(52,211,153,.28);
+      background: rgba(52,211,153,.08);
+      padding: 20px 18px;
+      color: #c9f8df;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .work {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 20px 22px;
+    }
+
+    .work h2 {
+      font-size: 27px;
+      line-height: 1.14;
+      font-weight: 950;
+    }
+
+    .work p {
+      margin-top: 8px;
+      color: #c5d2df;
+      font-size: 20px;
+      line-height: 1.36;
+      font-weight: 720;
+    }
+
+    .deploy {
+      margin-top: 38px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .terminal {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(2,6,23,.78);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.055);
+    }
+
+    .terminal pre {
+      font-size: 24px;
+      line-height: 1.58;
+    }
+
+    .ship-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .ship-item {
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: var(--panel);
+      padding: 22px 22px;
+    }
+
+    .ship-item strong {
+      display: block;
+      font-size: 25px;
+      font-weight: 950;
+      line-height: 1.1;
+    }
+
+    .ship-item span {
+      display: block;
+      margin-top: 9px;
+      color: #c3cfdd;
+      font-size: 19px;
+      line-height: 1.34;
+      font-weight: 730;
+    }
+
+    .cover {
+      width: 1200px;
+      height: 360px;
+      overflow: hidden;
+      position: relative;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 520px 280px at 16% 0%, rgba(96,165,250,.32), transparent),
+        radial-gradient(ellipse 420px 260px at 92% 12%, rgba(52,211,153,.24), transparent),
+        linear-gradient(145deg, #070a11, #101827 60%, #14111f);
+    }
+
+    .cover .grid {
+      background-size: 64px 64px;
+    }
+
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      padding: 48px 58px;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .cover h1 {
+      margin: 0;
+      font-size: 68px;
+      line-height: .98;
+      max-width: 700px;
+    }
+
+    .cover p {
+      margin-top: 18px;
+      color: #dbe5ef;
+      font-size: 28px;
+      line-height: 1.25;
+      font-weight: 780;
+    }
+
+    .cover-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cover-chip {
+      padding: 17px 20px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgba(9,15,25,.72);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: #dfeaf6;
+      font-size: 20px;
+      line-height: 1.12;
+      font-weight: 850;
+    }
+
+    .cover-chip span {
+      color: var(--mint);
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    .preview {
+      width: 1296px;
+      height: 270px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 7px;
+      background: #05070d;
+      overflow: hidden;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section id="cover" class="cover">
+      <div class="grid"></div>
+      <div class="cover-inner">
+        <div>
+          <div class="brand-copy">Resume project / Vue 3 static site</div>
+          <h1>把履歷做成可部署的工程作品。</h1>
+          <p>雙語網頁、PDF 產線、資料集中管理，一份履歷同時展示資歷與工程品味。</p>
+        </div>
+        <div class="cover-stack">
+          <div class="cover-chip">Vue 3 + Vite <span>frontend</span></div>
+          <div class="cover-chip">Hash routes + bilingual data <span>i18n</span></div>
+          <div class="cover-chip">Playwright PDF output <span>docs/</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="card-01" class="slide">
+      <div class="grid"></div>
+      <div class="frame"></div>
+      <div class="content">
+        <div class="top">
+          <div class="brand">
+            <div class="mark">CV</div>
+            <div class="brand-copy">Resume project<br>deployable portfolio</div>
+          </div>
+          <div class="number">01/06</div>
+        </div>
+        <div class="eyebrow mint">Positioning</div>
+        <h1>履歷不是 PDF 附件，<br>是能被打開的工程作品。</h1>
+        <p class="lead">這個專案把個人履歷做成 Vue 靜態網站，同時支援雙語瀏覽、互動展開、PDF 下載與 GitHub Pages 部署。</p>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-value blue">2</div>
+            <div class="stat-label">語系<br>EN / zh-TW</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value mint">1</div>
+            <div class="stat-label">頁式 PDF<br>自動產生</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value amber">10+</div>
+            <div class="stat-label">年後端經驗<br>濃縮呈現</div>
+          </div>
+        </div>
+        <div class="thesis">核心目標：讓招募方在 30 秒內看懂定位，也讓工程方看得到架構與維護方式。</div>
+        <div class="footer">
+          <div>Vue 3 · Vite · Tailwind CSS · vue-router</div>
+          <div class="repo">github.com/ggwhite/resume</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="card-02" class="slide alt-a">
+      <div class="grid"></div>
+      <div class="frame"></div>
+      <div class="content">
+        <div class="top">
+          <div class="brand">
+            <div class="mark">UI</div>
+            <div class="brand-copy">Readable interface<br>not a template</div>
+          </div>
+          <div class="number">02/06</div>
+        </div>
+        <div class="eyebrow blue">Product surface</div>
+        <h1>第一眼像履歷，<br>第二眼看得到產品介面。</h1>
+        <p class="lead">正式版頁面保留履歷閱讀習慣，但加入互動展開、清楚區塊、技能標籤與 PDF 下載行為。</p>
+        <div class="browser">
+          <div class="browser-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <div class="url">ggwhite.github.io/resume/#/zh-tw</div>
+          </div>
+          <div class="resume-mock">
+            <div>
+              <div class="mock-title">張育誠 (White)</div>
+              <div class="mock-subtitle">資深後端工程師</div>
+              <div class="mock-copy">10 年以上高併發分散式系統開發經驗，專注效能瓶頸、部署自動化與系統安全。</div>
+              <div class="mock-tags">
+                <span>Golang</span><span>Java</span><span>Lua</span><span>K8s</span><span>Redis</span>
+              </div>
+            </div>
+            <div>
+              <img class="avatar" src="../../../../src/assets/photo.jpg" alt="">
+              <div class="side-list">
+                <div>Core competencies</div>
+                <div>AI workflow</div>
+                <div>Employment history</div>
+                <div>Projects</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div>互動網站 + 可下載 PDF，兩種閱讀情境都照顧。</div>
+          <div class="repo">/#/ · /#/zh-tw</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="card-03" class="slide alt-b">
+      <div class="grid"></div>
+      <div class="frame"></div>
+      <div class="content">
+        <div class="top">
+          <div class="brand">
+            <div class="mark">DB</div>
+            <div class="brand-copy">Content model<br>single source</div>
+          </div>
+          <div class="number">03/06</div>
+        </div>
+        <div class="eyebrow mint">Maintainability</div>
+        <h1>內容集中在 data，<br>元件只負責渲染。</h1>
+        <p class="lead">履歷資料拆成共用資料、英文版、中文版；Component 不藏文案，讓雙語更新與 PDF 輸出保持一致。</p>
+        <div class="flow">
+          <div class="flow-step">
+            <header><h2 class="blue">shared.js</h2><small>contact / skills</small></header>
+            <p>聯絡方式與程式語言技能共用，避免兩份履歷內容漂移。</p>
+          </div>
+          <div class="flow-step">
+            <header><h2 class="mint">zh-tw.js</h2><small>content</small></header>
+            <p>中文履歷完整資料：摘要、能力、經歷、專案與學歷。</p>
+          </div>
+          <div class="flow-step">
+            <header><h2 class="indigo">en.js</h2><small>content</small></header>
+            <p>英文版與中文版同步維護，保留不同語境下的自然表述。</p>
+          </div>
+          <div class="flow-step">
+            <header><h2 class="amber">views</h2><small>render</small></header>
+            <p>ResumeModern 與 ResumePdf 分別處理網站與一頁式 PDF 版面。</p>
+          </div>
+        </div>
+        <div class="path">
+          <span>src/data/*</span><span>→</span><span>Vue components</span><span>→</span><span>Web / PDF</span>
+        </div>
+        <div class="footer">
+          <div>資料維護原則清楚，改內容不必翻模板。</div>
+          <div class="repo">src/data/</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="card-04" class="slide alt-c">
+      <div class="grid"></div>
+      <div class="frame"></div>
+      <div class="content">
+        <div class="top">
+          <div class="brand">
+            <div class="mark">PDF</div>
+            <div class="brand-copy">Dual output<br>same resume</div>
+          </div>
+          <div class="number">04/06</div>
+        </div>
+        <div class="eyebrow coral">Output pipeline</div>
+        <h1>同一份內容，<br>輸出網站與一頁式 PDF。</h1>
+        <p class="lead">PDF 不是另外手排，而是透過專用路由與 Playwright 原生 PDF renderer 產生，降低改版後內容不同步的風險。</p>
+        <div class="dual">
+          <div class="panel">
+            <h2 class="blue">Web resume</h2>
+            <p>適合線上瀏覽：互動展開工作經歷、閱讀完整內容、直接下載 PDF。</p>
+            <div class="route-list">
+              <div><span>/#/</span><span>EN</span></div>
+              <div><span>/#/zh-tw</span><span>中文</span></div>
+              <div><span>/#/legacy</span><span>保留舊版</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h2 class="mint">PDF resume</h2>
+            <p>適合投遞附件：A4 一頁式、雙語版本、由腳本產生後放進 public。</p>
+            <div class="pdf-sheet"></div>
+          </div>
+        </div>
+        <div class="footer">
+          <div>一份資料，兩種載體，更新成本更低。</div>
+          <div class="repo">scripts/generate-pdf.py</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="card-05" class="slide">
+      <div class="grid"></div>
+      <div class="frame"></div>
+      <div class="content">
+        <div class="top">
+          <div class="brand">
+            <div class="mark">BE</div>
+            <div class="brand-copy">Backend signal<br>career summary</div>
+          </div>
+          <div class="number">05/06</div>
+        </div>
+        <div class="eyebrow amber">Profile content</div>
+        <h1>資深後端定位，<br>用可掃描的結構呈現。</h1>
+        <p class="lead">內容不是流水帳，而是把高併發架構、資料庫優化、DevOps、資安完整性與 AI 輔助開發整理成可比較的證據。</p>
+        <div class="timeline">
+          <div class="timeline-row">
+            <div class="period">2021 → now</div>
+            <div class="work">
+              <h2>TycheTech · 多平台遊戲系統</h2>
+              <p>Lua/Skynet、Golang、Java 後台、CI/CD、Kubernetes、Helm。</p>
+            </div>
+          </div>
+          <div class="timeline-row">
+            <div class="period">2019 → 2020</div>
+            <div class="work">
+              <h2>Terpro · Slot game core framework</h2>
+              <p>封裝共用機制，將新遊戲開發週期縮短超過 50%。</p>
+            </div>
+          </div>
+          <div class="timeline-row">
+            <div class="period">2016 → 2019</div>
+            <div class="work">
+              <h2>WistronITS · Micro-service APIs</h2>
+              <p>Golang / Java API、Kafka forwarder、測試自動化與團隊培育。</p>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div>把工作經歷變成技術證據，而不是只列公司名稱。</div>
+          <div class="repo">10+ years backend</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="card-06" class="slide alt-a">
+      <div class="grid"></div>
+      <div class="frame"></div>
+      <div class="content">
+        <div class="top">
+          <div class="brand">
+            <div class="mark">CI</div>
+            <div class="brand-copy">Static deploy<br>repeatable build</div>
+          </div>
+          <div class="number">06/06</div>
+        </div>
+        <div class="eyebrow cyan">Ship path</div>
+        <h1>靜態站部署，<br>流程短但不隨便。</h1>
+        <p class="lead">Vite build 輸出到 docs，GitHub Pages 直接服務；PDF 與作品集素材放 public，打包後一起上線。</p>
+        <div class="deploy">
+          <div class="terminal">
+            <div class="code-head"><span>deploy.sh</span><span>GitHub Pages</span></div>
+            <pre>npm run build
+python3 scripts/generate-pdf.py --port 5173
+git add docs/ public/
+git commit
+git push</pre>
+          </div>
+          <div class="ship-list">
+            <div class="ship-item">
+              <strong class="blue">Production base</strong>
+              <span>/resume/，符合 GitHub Pages 子路徑部署。</span>
+            </div>
+            <div class="ship-item">
+              <strong class="mint">Docs output</strong>
+              <span>master branch 的 docs/ 直接作為正式網站來源。</span>
+            </div>
+            <div class="ship-item">
+              <strong class="amber">Portfolio ready</strong>
+              <span>Cake 用圖片素材也跟網站一同版本化。</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div>簡單、可重跑、可部署，是小型個人專案最重要的品質。</div>
+          <div class="repo">npm run build</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
