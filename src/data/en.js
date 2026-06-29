@@ -102,6 +102,9 @@ export default {
           "Investigated Redis data tampering, traced full attack chain (game state forgery + withdrawal record manipulation)",
           "Designed three-layer defense: HMAC signing + state machine + audit trail",
         ],
+        "Message Queue": [
+          "Implemented real-time push notification system using RabbitMQ for cross-service async messaging",
+        ],
         "CI/CD Pipeline": [
           "Automated Docker image builds to Harbor registry via GitLab CI/CD",
           "Remote Docker Compose deployment via SSH for dev environments",

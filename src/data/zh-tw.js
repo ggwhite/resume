@@ -101,6 +101,9 @@ export default {
           "調查 Redis 資料竄改事件，追蹤完整攻擊鏈（遊戲狀態偽造 + 出款紀錄竄改）",
           "設計 HMAC 簽章 + 狀態機 + audit trail 三層防護架構",
         ],
+        "訊息推播": [
+          "使用 RabbitMQ 實作即時推播機制，處理跨服務非同步通知",
+        ],
         "CI/CD Pipeline": [
           "自動化建置 Docker Image 上傳至 Harbor Registry",
           "透過 SSH 遠端操作 Docker Compose 完成開發環境部署",
