@@ -18,6 +18,11 @@ export default {
   about: "資深後端工程師，10 年以上高併發分散式系統開發經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：由我主導架構設計與關鍵決策，再透過 AI agent 作為實作層。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
   competencies: [
     {
+      title: "系統現代化與多租戶架構",
+      description: "獨立主導遊戲平台全面重寫：以 Go 多租戶 config-driven 架構取代 13 個平台各自 fork 的 release branch。設計 Proto2/Proto3 雙相容序列化層，讓舊 client 無縫接入新系統。",
+      tech: "Golang, gRPC, Protobuf, Redis, MySQL, MongoDB",
+    },
+    {
       title: "高併發後端架構",
       description: "設計多服務器分散式系統（Gate/Lobby/Game），橫跨 10+ 個 repo 與多平台。建立可複用框架，將新遊戲開發週期縮短超過 50%。",
       tech: "Lua/Skynet, Golang, TCP/WebSocket, gRPC",
@@ -34,7 +39,7 @@ export default {
     },
     {
       title: "資安與資料完整性",
-      description: "調查 Redis 資料竄改事件，追蹤攻擊路徑至 vendor 目錄漏洞，實作 AES 加密 + Checksum 驗證機制。",
+      description: "調查 Redis 資料竄改事件，追蹤攻擊路徑並分析完整攻擊鏈。設計 HMAC-SHA256 資料簽章機制，從架構層阻斷直接修改 Redis 繞過應用層驗證的攻擊。",
     },
   ],
   aiWorkflow: {
@@ -74,6 +79,12 @@ export default {
       start: "2021/01",
       end: "現在",
       description: {
+        "平台現代化（獨立主導）": [
+          "以 Go 重寫 Lua/PHP/Java 混合遊戲平台，涵蓋 TCP gateway、遊戲引擎、BI 後台、支付服務",
+          "設計多租戶 config-driven 架構，單一 codebase 支援 13 個平台，取代各自 fork 的 release branch",
+          "設計 Proto2/Proto3 雙相容序列化層，舊 Lua client 無縫接入 Go 新系統",
+          "實作 Redis 資料 HMAC-SHA256 簽章機制，從架構層防禦資料竄改攻擊",
+        ],
         "主導多平台遊戲系統架構與交付（5-10 人團隊）": [
           "平台 C：遊戲服務器 (Lua/Skynet)、BI 後台 (Java/Spring Boot/MyBatis)、CI/CD (GitLab, SSH)",
           "平台 B：遊戲服務器 (Lua)、後台 (PHP/Laravel)、CI/CD (GitLab, SSH)",
@@ -87,8 +98,8 @@ export default {
           "將 key 結構改為 Hash（rid 作為 field），避免大量 SCAN 操作，提升查詢效率",
         ],
         "資安強化": [
-          "調查 Redis 資料遭竄改事件，發現 PHP vendor 目錄漏洞",
-          "實作 AES 加密與 Checksum 驗證機制，確保異常竄改可被即時偵測",
+          "調查 Redis 資料竄改事件，追蹤完整攻擊鏈（遊戲狀態偽造 + 出款紀錄竄改）",
+          "設計 HMAC 簽章 + 狀態機 + audit trail 三層防護架構",
         ],
         "CI/CD Pipeline": [
           "自動化建置 Docker Image 上傳至 Harbor Registry",

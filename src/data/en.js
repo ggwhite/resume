@@ -18,6 +18,11 @@ export default {
   about: "Senior backend engineer with 10+ years building high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: I design the architecture and make critical decisions, then leverage AI agents as an implementation layer. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
+      title: "System Modernization & Multi-Tenancy",
+      description: "Solo-led full platform rewrite from Lua/PHP/Java to Go with config-driven multi-tenant architecture, replacing 13 per-platform release branch forks with a single codebase. Designed Proto2/Proto3 dual-compatible serialization layer for seamless legacy client migration.",
+      tech: "Golang, gRPC, Protobuf, Redis, MySQL, MongoDB",
+    },
+    {
       title: "High-Concurrency Backend Architecture",
       description: "Designed multi-server distributed systems (Gate/Lobby/Game) across 10+ repositories and multiple platforms. Built reusable frameworks that cut new title development cycles by over 50%.",
       tech: "Lua/Skynet, Golang, TCP/WebSocket, gRPC",
@@ -34,7 +39,7 @@ export default {
     },
     {
       title: "Security & Data Integrity",
-      description: "Investigated Redis data tampering incidents, traced attack vectors to vendor directory vulnerabilities, implemented AES encryption + checksum verification.",
+      description: "Investigated Redis data tampering incidents, analyzed full attack chains. Designed HMAC-SHA256 data signing mechanism to architecturally prevent direct Redis manipulation that bypasses application-layer validation.",
     },
   ],
   aiWorkflow: {
@@ -75,6 +80,12 @@ export default {
       start: "Jan. 2021",
       end: "Present",
       description: {
+        "Platform Modernization (Solo Lead)": [
+          "Rewrote Lua/PHP/Java gaming platform in Go — TCP gateway, game engine, BI backend, payment services",
+          "Designed multi-tenant config-driven architecture: single codebase serving 13 platforms, replacing per-platform release branch forks",
+          "Designed Proto2/Proto3 dual-compatible serialization layer for seamless legacy Lua client migration to Go",
+          "Implemented Redis data HMAC-SHA256 signing to architecturally prevent data tampering attacks",
+        ],
         "Architected & Delivered Multi-Platform Gaming Systems (5-10 person team)": [
           "Platform C: Game Servers (Lua/Skynet), BI Backend (Java/Spring Boot/MyBatis), CI/CD (GitLab, SSH)",
           "Platform B: Game Servers (Lua), Backend (PHP/Laravel), CI/CD (GitLab, SSH)",
@@ -88,8 +99,8 @@ export default {
           "Refactored key structure to Hash (rid as field), eliminated excessive SCAN operations",
         ],
         "Security Hardening": [
-          "Traced Redis data tampering to PHP vendor directory vulnerability",
-          "Implemented AES encryption + checksum verification to detect unauthorized modification",
+          "Investigated Redis data tampering, traced full attack chain (game state forgery + withdrawal record manipulation)",
+          "Designed three-layer defense: HMAC signing + state machine + audit trail",
         ],
         "CI/CD Pipeline": [
           "Automated Docker image builds to Harbor registry via GitLab CI/CD",
