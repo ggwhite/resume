@@ -15,7 +15,7 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
-  about: "Senior backend engineer with 10+ years building high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: I design the architecture and make critical decisions, then leverage AI agents as an implementation layer. I catch what AI misses — production observability, security hardening, system integrity.",
+  about: "Senior backend engineer with 10+ years building high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: day-to-day I collaborate with AI for debugging, investigation, and architecture discussions; for new feature development, I use a self-built multi-role AI loop framework to automate the Design → Code → Review → Test pipeline. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
       title: "System Modernization & Multi-Tenancy",
@@ -43,12 +43,12 @@ export default {
     },
   ],
   aiWorkflow: {
-    intro: "I design the system, AI implements it, I verify what AI misses. This loop — architect → delegate → catch gaps — is how I deliver at scale.",
+    intro: "Day-to-day I collaborate with AI through prompting — debugging, investigation, architecture discussions. For new feature development, I switch to a self-built loop framework that lets AI iterate autonomously while I handle architecture design and final acceptance.",
     points: [
-      "Built 4x (github.com/ggwhite/4x) — an open-source multi-role AI dev framework that splits the engineering loop into Design/Code/Review/Test phases with deterministic guardrails",
+      "Built 4x (github.com/ggwhite/4x) — an open-source multi-role AI dev framework: Designer → Coder → Reviewer → Tester → Deep Reviewer → Acceptor, with cross-role oversight, automatic FAIL-retry cycles, batch execution, and structured reporting",
       "Architect-first workflow: I make architecture decisions (module boundaries, protocols, security model), then use AI agents for implementation — catching production blind spots that AI overlooks, like logging coverage and security hardening",
-      "Cross-stack delivery: 10+ years across Golang, Java, Lua, JavaScript — combined with AI orchestration, enables rapid context-switching across any tech stack",
-      "Use AI to accelerate team mentoring — guided junior engineers with AI-assisted code review and test case writing",
+      "Engineering guardrails for AI: harness configuration (CLAUDE.md / AGENTS.md / coding-rules) ensures AI follows project conventions; external memory (learnings.json) prevents repeated mistakes",
+      "Cross-stack delivery: 10+ years across Golang, Java, Lua, JavaScript — combined with AI collaboration, enables rapid context-switching across any tech stack",
     ],
   },
   profile: {
@@ -70,7 +70,7 @@ export default {
     "10+ years as a backend engineer building high-concurrency distributed systems across gaming, payment, and enterprise domains.",
     "Hands-on MongoDB performance tuning and Redis architecture optimization at scale (~2.7M records/day).",
     "Proficient in Kubernetes, Docker, and GitLab CI/CD; experienced in hybrid cloud/on-premise deployments.",
-    "AI-augmented workflow practitioner — built 4x, an open-source multi-role AI dev framework.",
+    "AI-augmented workflow practitioner — built 4x, an open-source multi-role AI dev framework that automates the Design/Code/Review/Test pipeline for new features.",
   ],
   experience: [
     {

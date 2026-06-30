@@ -15,7 +15,7 @@ export default {
     print: "列印 / 存為 PDF",
     download: "下載 PDF",
   },
-  about: "資深後端工程師，10 年以上高併發分散式系統開發經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：由我主導架構設計與關鍵決策，再透過 AI agent 作為實作層。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
+  about: "資深後端工程師，10 年以上高併發分散式系統開發經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：日常以 AI 協作進行 debug、調查與架構討論；開發新功能時，透過自建的多角色 AI 迴圈框架自動化 Design → Code → Review → Test 流程。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
   competencies: [
     {
       title: "系統現代化與多租戶架構",
@@ -43,12 +43,12 @@ export default {
     },
   ],
   aiWorkflow: {
-    intro: "我設計系統、AI 負責實作、我驗收 AI 遺漏的部分。這個循環——架構 → 委派 → 補漏——是我能規模化交付的方式。",
+    intro: "日常開發以 AI 協作為主——debug、調查、架構討論都透過 prompt 進行。新功能開發時，切換到自建的迴圈框架讓 AI 自主迭代，我負責架構設計與最終驗收。",
     points: [
-      "開發了 4x (github.com/ggwhite/4x)——開源的多角色 AI 開發框架，將工程流程拆分為 Design/Code/Review/Test 四階段，搭配確定性護欄機制",
+      "開發了 4x (github.com/ggwhite/4x)——開源的多角色 AI 開發框架：Designer → Coder → Reviewer → Tester → Deep Reviewer → Acceptor，角色間互相監督，FAIL 自動回退重做，支援 batch 連續執行與結構化報告",
       "架構優先工作流程：由我做架構決策（模組邊界、通訊協議、安全模型），再由 AI agent 實作——並補上 AI 遺漏的生產環境盲點，如 logging 覆蓋率與安全加固",
+      "為 AI 建立工程護欄：harness 配置（CLAUDE.md / AGENTS.md / coding-rules）確保 AI 遵循專案規範，外部記憶（learnings.json）讓 AI 不重複犯錯",
       "跨技術棧交付：10 年累積 Golang、Java、Lua、JavaScript 實戰經驗，搭配 AI 協作能快速在不同技術棧間切換交付",
-      "運用 AI 加速團隊培育——透過 AI 輔助的 code review 和 test case 撰寫指導新人",
     ],
   },
   profile: {
@@ -69,7 +69,7 @@ export default {
     "10 年以上後端工程師經歷，專精高併發分散式系統，橫跨遊戲、支付與企業 API 領域",
     "具備 MongoDB 效能優化、Redis 架構設計實戰經驗，處理日均 ~270 萬筆資料規模",
     "熟悉 Kubernetes、Docker、GitLab CI/CD 等 DevOps 工具，具雲端與本地混合部署經驗",
-    "AI 增強開發實踐者——開發了 4x 開源多角色 AI 開發框架",
+    "AI 增強開發實踐者——開發了 4x 開源多角色 AI 開發框架，自動化新功能的 Design/Code/Review/Test 流程",
   ],
   experience: [
     {
