@@ -79,19 +79,32 @@
     <!-- Projects -->
     <section class="py-8 border-b border-slate-100">
       <h2 class="section-title">{{ labels.project }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div v-for="p in project" :key="p.id"
-             class="bg-slate-50 rounded-lg p-4 border border-slate-100">
-          <div class="flex items-baseline justify-between mb-2">
-            <h3 class="font-bold text-slate-700 text-sm">{{ p.name }}</h3>
-            <span class="text-xs text-slate-400 shrink-0 ml-2">{{ p.start }} — {{ p.end }}</span>
+      <div class="space-y-1">
+        <div v-for="p in project" :key="p.id" class="rounded-lg overflow-hidden">
+          <div class="flex items-center gap-2.5 py-2.5 px-2 -mx-2 cursor-pointer rounded-lg
+                       hover:bg-slate-50 transition-colors select-none"
+               @click="toggleProject(p.id)">
+            <span class="w-2 h-2 rounded-full bg-slate-300 shrink-0"></span>
+            <div class="flex-1 min-w-0">
+              <span class="font-bold text-slate-700">{{ p.name }}</span>
+            </div>
+            <span class="text-sm text-slate-400 font-medium shrink-0 hidden sm:inline">{{ p.start }} — {{ p.end }}</span>
+            <ChevronDown :size="16"
+                         class="text-slate-400 shrink-0 transition-transform duration-200"
+                         :class="expandedProject[p.id] ? 'rotate-180' : ''" />
           </div>
-          <ul v-if="Array.isArray(p.description)" class="text-sm text-slate-600 space-y-1">
-            <li v-for="(d, i) in p.description" :key="i" class="flex gap-1.5">
-              <span class="text-slate-400 shrink-0">·</span>
-              <span>{{ d }}</span>
-            </li>
-          </ul>
+          <div class="text-xs text-slate-400 pl-[18px] -mt-1 mb-1 sm:hidden">{{ p.start }} — {{ p.end }}</div>
+          <transition name="expand">
+            <div v-if="expandedProject[p.id]"
+                 class="bg-slate-50 rounded-lg border border-slate-100 p-4 ml-[18px] mb-3 mt-1">
+              <ul v-if="Array.isArray(p.description)" class="text-sm text-slate-600 space-y-1">
+                <li v-for="(d, i) in p.description" :key="i" class="flex gap-1.5">
+                  <span class="text-slate-400 shrink-0">·</span>
+                  <span>{{ d }}</span>
+                </li>
+              </ul>
+            </div>
+          </transition>
         </div>
       </div>
     </section>
@@ -138,7 +151,7 @@ export default {
     locale: { type: String, default: 'en' },
   },
   data() {
-    return { expanded: {} }
+    return { expanded: {}, expandedProject: {} }
   },
   computed: {
     data() { return localeData[this.locale] || localeData.en },
@@ -156,6 +169,9 @@ export default {
   methods: {
     toggleExp(id) {
       this.expanded = { ...this.expanded, [id]: !this.expanded[id] }
+    },
+    toggleProject(id) {
+      this.expandedProject = { ...this.expandedProject, [id]: !this.expandedProject[id] }
     },
   },
 }
