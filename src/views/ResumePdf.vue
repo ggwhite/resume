@@ -1,5 +1,5 @@
 <template>
-  <div class="pdf-resume font-sans text-[11px] leading-[1.4] text-slate-700 px-2">
+  <div class="pdf-resume font-sans text-[10.5px] leading-[1.35] text-slate-700 px-2">
 
     <!-- Header -->
     <div class="flex items-center gap-4 pb-3 border-b-2 border-slate-300 mb-4">
@@ -17,17 +17,17 @@
     </div>
 
     <!-- About -->
-    <p class="text-slate-600 leading-relaxed mb-4">{{ data.about }}</p>
+    <p class="text-slate-600 leading-snug mb-3">{{ data.about }}</p>
 
     <!-- Two columns: Competencies + AI -->
-    <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="grid grid-cols-2 gap-3 mb-3">
       <!-- Competencies -->
       <div>
         <h2 class="section-title">{{ labels.competencies }}</h2>
-        <div class="space-y-2.5">
+        <div class="space-y-2">
           <div v-for="c in data.competencies" :key="c.title">
             <h3 class="font-bold text-slate-800">{{ c.title }}</h3>
-            <p class="text-[10.5px] text-slate-600 leading-snug mt-0.5">{{ c.description }}</p>
+            <p class="text-[10px] text-slate-600 leading-snug mt-0.5">{{ c.description }}</p>
             <p v-if="c.tech" class="text-[9px] text-slate-400 mt-0.5">{{ c.tech }}</p>
           </div>
         </div>
@@ -35,10 +35,10 @@
       <!-- AI Workflow -->
       <div>
         <h2 class="section-title">{{ labels.aiWorkflow }}</h2>
-        <p class="text-[10px] text-slate-500 italic mb-2">{{ data.aiWorkflow.intro }}</p>
-        <ul class="space-y-1.5">
+        <p class="text-[9.5px] text-slate-500 italic mb-1.5">{{ data.aiWorkflow.intro }}</p>
+        <ul class="space-y-1">
           <li v-for="(point, i) in data.aiWorkflow.points" :key="i"
-              class="text-[10.5px] text-slate-600 leading-snug flex gap-1.5">
+              class="text-[10px] text-slate-600 leading-snug flex gap-1.5">
             <span class="text-indigo-500 shrink-0">•</span>
             <span>{{ point }}</span>
           </li>
@@ -47,9 +47,9 @@
     </div>
 
     <!-- Experience -->
-    <div class="mb-4">
+    <div class="mb-3">
       <h2 class="section-title">{{ labels.experience }}</h2>
-      <div class="space-y-2">
+      <div class="space-y-1.5">
         <div v-for="exp in experience" :key="exp.id">
           <div class="flex items-baseline gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full shrink-0 relative top-[-0.5px]"
@@ -69,18 +69,15 @@
     </div>
 
     <!-- Projects -->
-    <div class="mb-4">
+    <div class="mb-3">
       <h2 class="section-title">{{ labels.project }}</h2>
-      <div class="space-y-1.5">
+      <div class="space-y-1">
         <div v-for="p in project" :key="p.id">
           <div class="flex items-baseline gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0 relative top-[-0.5px]"></span>
             <span class="font-bold text-slate-700">{{ p.name }}</span>
             <span class="flex-1"></span>
             <span class="text-[10px] text-slate-400 shrink-0">{{ p.start }} — {{ p.end }}</span>
-          </div>
-          <div v-if="Array.isArray(p.description)" class="ml-4 mt-0.5 text-[10px] text-slate-500 leading-snug">
-            {{ p.description.join(' / ') }}
           </div>
         </div>
       </div>
@@ -143,7 +140,7 @@ export default {
 
 <style scoped>
 .section-title {
-  @apply text-[12px] font-bold text-slate-800 mb-2 pb-1 border-b border-slate-200 flex items-center gap-1.5;
+  @apply text-[11.5px] font-bold text-slate-800 mb-1.5 pb-0.5 border-b border-slate-200 flex items-center gap-1.5;
 }
 .section-title::before {
   content: '';
