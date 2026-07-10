@@ -103,12 +103,12 @@ import zhTw from '@/data/zh-tw'
 
 const highlights = {
   en: {
-    Tyche: "3 game server projects (Lua/Skynet, Golang). MongoDB optimization on 2.7M records/day. Redis architecture redesign. Security incident investigation & AES encryption. CI/CD pipeline with Docker/Harbor/Helm.",
+    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Security incident investigation & AES encryption. CI/CD pipeline with Docker/Harbor/Helm.",
     Terpro: "Built reusable slot game framework (FreeGame, Lightning, PickGame). Kubernetes/Helm deployment.",
     WistronITS: "Led 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
   },
   'zh-tw': {
-    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。資安事件調查與 AES 加密。Docker/Harbor/Helm CI/CD Pipeline。",
+    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。資安事件調查與 AES 加密。Docker/Harbor/Helm CI/CD Pipeline。",
     Terpro: "建立可複用老虎機遊戲框架（FreeGame、Lightning、PickGame）。Kubernetes/Helm 部署。",
     WistronITS: "領導 2 名工程師。開發 5 個微服務（OpenId、Product、Payment、Stock、Kafka）。Jenkins/Nexus CI 工具鏈。",
   },
