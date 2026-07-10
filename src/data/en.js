@@ -91,9 +91,9 @@ export default {
           "Platform B: Game Servers (Lua), Backend (PHP/Laravel), CI/CD (GitLab, SSH)",
           "Platform A: Game Servers (Golang), Backend (.Net), CI/CD (GitLab, Kubernetes, Helm)",
         ],
-        "MongoDB Performance Optimization": [
-          "Diagnosed full-collection scan on ~2.7M records/day",
-          "Designed compound indexes; implemented Lua scheduler to pre-build daily indexes automatically",
+        "Reward Claim Bug Investigation & Performance Optimization": [
+          "Investigated a financial-loss bug where players could claim rewards multiple times; root-caused to a race condition (concurrent requests passing the check simultaneously), fixed with a Redis-based dedup marker",
+          "Diagnosed full-collection scan on ~2.7M records/day, designed compound indexes, implemented Lua scheduler to pre-build daily indexes automatically, and generalized the fix to other large collections",
         ],
         "Redis Architecture Optimization": [
           "Refactored key structure to Hash (rid as field), eliminated excessive SCAN operations",

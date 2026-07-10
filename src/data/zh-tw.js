@@ -90,9 +90,9 @@ export default {
           "平台 B：遊戲服務器 (Lua)、後台 (PHP/Laravel)、CI/CD (GitLab, SSH)",
           "平台 A：遊戲服務器 (Golang)、後台 (.Net)、CI/CD (GitLab, Kubernetes, Helm)",
         ],
-        "MongoDB 效能優化": [
-          "診斷全集合掃描問題（每日約 270 萬筆資料）",
-          "設計複合索引，實作 Lua Server 排程自動預建每日索引",
+        "活動領獎 Bug 排查與效能優化": [
+          "排查玩家重複領取活動獎勵的財損 bug，定位為併發競態（多請求同時通過檢查），設計 Redis 標記機制防止重複發放",
+          "診斷全集合掃描問題（每日約 270 萬筆資料），設計複合索引，實作 Lua Server 排程自動預建每日索引，並推廣到其他大型 collection",
         ],
         "Redis 架構優化": [
           "將 key 結構改為 Hash（rid 作為 field），避免大量 SCAN 操作，提升查詢效率",
