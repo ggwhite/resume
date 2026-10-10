@@ -15,7 +15,7 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
-  about: "Senior backend engineer with 10+ years building high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: day-to-day I collaborate with AI for debugging, investigation, and architecture discussions; for new feature development, I use a self-built multi-role AI loop framework to automate the Design → Code → Review → Test pipeline. I catch what AI misses — production observability, security hardening, system integrity.",
+  about: "Senior backend engineer with nearly 15 years of software development experience, specializing in high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: Claude Code runs as my main session for planning and final decisions, delegating file search, implementation, and verification to subagents on different models (whoever writes the code never verifies it); harness rule files keep AI behavior in check, and my self-built memory-mcp carries context across sessions. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
       title: "System Modernization & Multi-Tenancy",
@@ -43,12 +43,12 @@ export default {
     },
   ],
   aiWorkflow: {
-    intro: "Day-to-day I collaborate with AI through prompting — debugging, investigation, architecture discussions. For new feature development, I switch to a self-built loop framework that lets AI iterate autonomously while I handle architecture design and final acceptance.",
+    intro: "Claude Code is my main session for day-to-day work — debugging, investigation, and architecture discussions happen there, with me owning planning and final decisions. Implementation and verification are delegated to subagents on different models depending on the task.",
     points: [
-      "Built 4x (github.com/ggwhite/4x) — an open-source multi-role AI dev framework: Designer → Coder → Reviewer → Tester → Deep Reviewer → Acceptor, with cross-role oversight, automatic FAIL-retry cycles, batch execution, and structured reporting",
+      "Multi-model subagent delegation: lightweight models handle file search and routine chores, a worker handles implementation, and a separate, independent verifier signs off — whoever writes the code never verifies it",
       "Architect-first workflow: I make architecture decisions (module boundaries, protocols, security model), then use AI agents for implementation — catching production blind spots that AI overlooks, like logging coverage and security hardening",
-      "Engineering guardrails for AI: harness configuration (CLAUDE.md / AGENTS.md / coding-rules) ensures AI follows project conventions; external memory (learnings.json) prevents repeated mistakes",
-      "Cross-stack delivery: 10+ years across Golang, Java, Lua, JavaScript — combined with AI collaboration, enables rapid context-switching across any tech stack",
+      "Engineering guardrails for AI: harness rule files (CLAUDE.md / AGENTS.md) constrain AI behavior and enforce project conventions; my self-built memory-mcp provides cross-session memory so preferences, past pitfalls, and unfinished work carry over to the next session",
+      "Cross-stack delivery: nearly 15 years across Golang, Java, Lua, JavaScript — combined with AI collaboration, enables rapid context-switching across any tech stack",
     ],
   },
   profile: {
@@ -67,10 +67,10 @@ export default {
     },
   },
   summary: [
-    "10+ years as a backend engineer building high-concurrency distributed systems across gaming, payment, and enterprise domains.",
+    "Nearly 15 years of software development experience, building high-concurrency distributed systems across gaming, payment, and enterprise domains.",
     "Hands-on MongoDB performance tuning and Redis architecture optimization at scale (~2.7M records/day).",
     "Proficient in Kubernetes, Docker, and GitLab CI/CD; experienced in hybrid cloud/on-premise deployments.",
-    "AI-augmented workflow practitioner — built 4x, an open-source multi-role AI dev framework that automates the Design/Code/Review/Test pipeline for new features.",
+    "AI-augmented workflow practitioner — runs Claude Code with multi-model subagent delegation (implementation and verification kept separate), and built memory-mcp to give AI agents cross-session memory.",
   ],
   experience: [
     {
@@ -86,10 +86,20 @@ export default {
           "Designed Proto2/Proto3 dual-compatible serialization layer for seamless legacy Lua client migration to Go",
           "Implemented Redis data HMAC-SHA256 signing to architecturally prevent data tampering attacks",
         ],
-        "Architected & Delivered Multi-Platform Gaming Systems (5-10 person team)": [
+        "Architecture Planning & Technical Decisions in a 5-10 Person Team": [
+          "Planned multi-platform system architecture; assessed whether proposed changes should be made, along with their impact and risk, to inform technical decisions",
           "Platform C: Game Servers (Lua/Skynet), BI Backend (Java/Spring Boot/MyBatis), CI/CD (GitLab, SSH)",
           "Platform B: Game Servers (Lua), Backend (PHP/Laravel), CI/CD (GitLab, SSH)",
           "Platform A: Game Servers (Golang), Backend (.Net), CI/CD (GitLab, Kubernetes, Helm)",
+          "Introduced the team's shared knowledge base and AI agent collaboration rules: an index document ties together platform environments, codebase structure, decision records, and runbooks; rules are split into always-loaded and on-demand layers so Claude Code and Codex share the same conventions",
+          "Set up a feedback loop for troubleshooting playbooks and runbooks: every investigation and release pitfall is written back into the docs, with a cross-platform table of recurring issues so the next migration can avoid them up front",
+        ],
+        "Containerization Migration (Jul. 2026 – Oct. 2026)": [
+          "Migrated game services and back-office systems for multiple platforms from bare metal to Docker containers (Docker Compose, healthchecks, environment-variable-based config injection)",
+          "Pushed images to Harbor / AWS ECR and released via GitLab tag pipelines triggered by git tags; fixed a missing CI rule that prevented tag pipelines from running",
+          "Wrote the production cutover runbook — step-by-step from write freeze and data sync to reopening traffic, with clear completion criteria for each step",
+          "Built data comparison and config validation scripts for MySQL / Redis / MongoDB across old and new environments; the fix-up tool defaults to dry-run, writes only when explicitly told to, and backs up original values first",
+          "Pulled production configs back and compared them against git key by key (semantic, not textual), surfacing settings where git had drifted from production to prevent config regressions at launch",
         ],
         "Reward Claim Bug Investigation & Performance Optimization": [
           "Investigated a financial-loss bug where players could claim rewards multiple times; root-caused to a race condition (concurrent requests passing the check simultaneously), fixed with a Redis-based dedup marker",
@@ -99,7 +109,7 @@ export default {
           "Refactored key structure to Hash (rid as field), eliminated excessive SCAN operations",
         ],
         "Security Hardening": [
-          "Investigated Redis data tampering, traced full attack chain (game state forgery + withdrawal record manipulation)",
+          "Investigated Redis data tampering, traced full attack chain (game state forgery + transaction record tampering)",
           "Designed three-layer defense: HMAC signing + state machine + audit trail",
         ],
         "Message Queue": [
@@ -124,8 +134,8 @@ export default {
       start: "Jun. 2019",
       end: "Dec. 2020",
       description: {
-        "Slot Game Core Framework (Golang)": [
-          "Encapsulated shared mechanics (FreeGame, Lightning, PickGame) into a reusable framework",
+        "Game Mechanics Framework (Golang)": [
+          "Encapsulated shared game mechanics into a reusable framework",
           "Reduced new game development cycle by over 50% through framework reuse",
         ],
         "Kubernetes Deployment": [
@@ -196,6 +206,29 @@ export default {
     },
   ],
   project: [
+    {
+      id: "memory-mcp",
+      name: "memory-mcp — Cross-Session Memory for AI Coding Agents (open source, personal)",
+      start: "Jun. 2026",
+      end: "Present",
+      description: [
+        "MCP server and CLI written in Go that lets AI coding agents store and recall memory across sessions (github.com/ggwhite/memory-mcp)",
+        "SQLite FTS5 full-text search with a trigram tokenizer, supporting CJK; optional semantic search with local Ollama embeddings, merged via Reciprocal Rank Fusion, falling back to keyword-only search when Ollama is offline",
+        "Claude Code hooks integration: injects relevant memories at session start based on the working directory, auto-recalls related memories on each prompt, and auto-summarizes at session end; common secret formats are masked on write",
+        "Golang, SQLite, mcp-go, Cobra",
+      ],
+    },
+    {
+      id: "4x",
+      name: "4x — Multi-Role AI Development Framework (open source, completed)",
+      start: "Jun. 2026",
+      end: "Aug. 2026",
+      description: [
+        "Open-source CLI (github.com/ggwhite/4x, 34 GitHub stars) that orchestrated AI coding agents into a multi-role loop — Design → Code → Review → Test → Deep Review → Accept — with isolated, mutually checking roles",
+        "Implemented deterministic guardrails (state machine, scope lock) in the Go CLI rather than relying on prompts; supported multiple runners including Claude Code, Codex, and Gemini CLI, plus a dependency-aware batch mode",
+        "Lessons from this multi-role pipeline evolved into my current, lighter subagent setup, keeping its core principle of separating implementation from verification",
+      ],
+    },
     {
       id: "PGS",
       name: "PGS Game Server (solo)",
