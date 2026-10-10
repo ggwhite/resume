@@ -15,7 +15,7 @@ export default {
     print: "列印 / 存為 PDF",
     download: "下載 PDF",
   },
-  about: "資深後端工程師，10 年以上高併發分散式系統開發經驗。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：日常以 AI 協作進行 debug、調查與架構討論；開發新功能時，透過自建的多角色 AI 迴圈框架自動化 Design → Code → Review → Test 流程。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
+  about: "資深後端工程師，近 15 年軟體開發經驗，專精高併發分散式系統。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：以 Claude Code 為主 session 負責規劃與拍板，依任務把檔案搜尋、實作、驗收分派給不同模型的 subagent（寫的人不驗自己），並用 harness 規則檔約束 AI 行為、用自建的 memory-mcp 延續跨 session 記憶。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
   competencies: [
     {
       title: "系統現代化與多租戶架構",
@@ -43,12 +43,12 @@ export default {
     },
   ],
   aiWorkflow: {
-    intro: "日常開發以 AI 協作為主——debug、調查、架構討論都透過 prompt 進行。新功能開發時，切換到自建的迴圈框架讓 AI 自主迭代，我負責架構設計與最終驗收。",
+    intro: "日常開發以 Claude Code 為主 session——debug、調查、架構討論都在這裡進行，由我負責規劃與拍板；實作與驗收則依任務分派給不同模型的 subagent。",
     points: [
-      "開發了 4x (github.com/ggwhite/4x)——開源的多角色 AI 開發框架：Designer → Coder → Reviewer → Tester → Deep Reviewer → Acceptor，角色間互相監督，FAIL 自動回退重做，支援 batch 連續執行與結構化報告",
+      "多模型 subagent 分工：輕量模型負責檔案搜尋與雜事、實作交給 worker、再由另一個獨立的 verifier 驗收——寫的人不驗自己",
       "架構優先工作流程：由我做架構決策（模組邊界、通訊協議、安全模型），再由 AI agent 實作——並補上 AI 遺漏的生產環境盲點，如 logging 覆蓋率與安全加固",
-      "為 AI 建立工程護欄：harness 配置（CLAUDE.md / AGENTS.md / coding-rules）確保 AI 遵循專案規範，外部記憶（learnings.json）讓 AI 不重複犯錯",
-      "跨技術棧交付：10 年累積 Golang、Java、Lua、JavaScript 實戰經驗，搭配 AI 協作能快速在不同技術棧間切換交付",
+      "為 AI 建立工程護欄：以 harness 規則檔（CLAUDE.md / AGENTS.md）約束 AI 行為與專案規範；以自建的 memory-mcp 提供跨 session 記憶，讓偏好、踩過的坑與未完成的工作能延續到下一個 session",
+      "跨技術棧交付：近 15 年累積 Golang、Java、Lua、JavaScript 實戰經驗，搭配 AI 協作能快速在不同技術棧間切換交付",
     ],
   },
   profile: {
@@ -66,10 +66,10 @@ export default {
     },
   },
   summary: [
-    "10 年以上後端工程師經歷，專精高併發分散式系統，橫跨遊戲、支付與企業 API 領域",
+    "近 15 年軟體開發經歷，專精高併發分散式系統，橫跨遊戲、支付與企業 API 領域",
     "具備 MongoDB 效能優化、Redis 架構設計實戰經驗，處理日均 ~270 萬筆資料規模",
     "熟悉 Kubernetes、Docker、GitLab CI/CD 等 DevOps 工具，具雲端與本地混合部署經驗",
-    "AI 增強開發實踐者——開發了 4x 開源多角色 AI 開發框架，自動化新功能的 Design/Code/Review/Test 流程",
+    "AI 增強開發實踐者——以 Claude Code 搭配多模型 subagent 分工（實作與驗收分離），並自建 memory-mcp 提供 AI agent 跨 session 記憶",
   ],
   experience: [
     {
@@ -85,10 +85,20 @@ export default {
           "設計 Proto2/Proto3 雙相容序列化層，舊 Lua client 無縫接入 Go 新系統",
           "實作 Redis 資料 HMAC-SHA256 簽章機制，從架構層防禦資料竄改攻擊",
         ],
-        "主導多平台遊戲系統架構與交付（5-10 人團隊）": [
+        "在 5-10 人團隊中負責架構規劃與技術決策": [
+          "規劃多平台系統架構，評估改動該不該做、影響範圍與風險，作為技術決策依據",
           "平台 C：遊戲服務器 (Lua/Skynet)、BI 後台 (Java/Spring Boot/MyBatis)、CI/CD (GitLab, SSH)",
           "平台 B：遊戲服務器 (Lua)、後台 (PHP/Laravel)、CI/CD (GitLab, SSH)",
           "平台 A：遊戲服務器 (Golang)、後台 (.Net)、CI/CD (GitLab, Kubernetes, Helm)",
+          "導入團隊共用知識庫與 AI agent 協作規則：以索引文件串起平台環境、程式碼結構、決策紀錄與操作手冊，規則分為常駐與依情境載入兩層，讓 Claude Code 與 Codex 共用同一套規範",
+          "建立排查 playbook 與 runbook 的沉澱流程：每次排查與上線踩到的坑都回寫成文件，並整理跨平台重複問題對照表，讓下一次遷移能提前避開",
+        ],
+        "容器化遷移（2026/07–2026/10）": [
+          "將多個遊戲平台的遊戲服務與後台從裸機遷移至 Docker 容器（Docker Compose、healthcheck、環境變數注入設定）",
+          "image 推送至 Harbor／AWS ECR，以 git tag 觸發 GitLab tag pipeline 發版；修正 CI 規則缺漏導致 tag pipeline 不觸發的問題",
+          "撰寫上線 cutover runbook，從停寫、資料同步到開放流量分步驟執行，每步定義完成判準",
+          "開發新舊環境 MySQL／Redis／MongoDB 資料比對與設定驗證腳本；修正工具預設只預覽，需明確指定才寫入，並先備份原值",
+          "將正式環境設定撈回與 git 逐 key 做語意比對，找出 git 與線上不一致的設定，避免照 git 上線造成設定回退",
         ],
         "活動領獎 Bug 排查與效能優化": [
           "排查玩家重複領取活動獎勵的財損 bug，定位為併發競態（多請求同時通過檢查），設計 Redis 標記機制防止重複發放",
@@ -98,7 +108,7 @@ export default {
           "將 key 結構改為 Hash（rid 作為 field），避免大量 SCAN 操作，提升查詢效率",
         ],
         "資安強化": [
-          "調查 Redis 資料竄改事件，追蹤完整攻擊鏈（遊戲狀態偽造 + 出款紀錄竄改）",
+          "調查 Redis 資料竄改事件，追蹤完整攻擊鏈（遊戲狀態偽造 + 交易紀錄竄改）",
           "設計 HMAC 簽章 + 狀態機 + audit trail 三層防護架構",
         ],
         "訊息推播": [
@@ -123,8 +133,8 @@ export default {
       start: "2019/06",
       end: "2020/12",
       description: {
-        "老虎機遊戲底層框架 (Golang)": [
-          "封裝 FreeGame、Lightning、PickGame 等共用機制為可複用框架",
+        "遊戲機制共用框架 (Golang)": [
+          "將共用遊戲機制封裝為可複用框架",
           "新遊戲開發週期縮短超過 50%",
         ],
         "Kubernetes 部署": [
@@ -195,6 +205,29 @@ export default {
     },
   ],
   project: [
+    {
+      id: "memory-mcp",
+      name: "memory-mcp — AI coding agent 跨 session 記憶（開源，個人專案）",
+      start: "2026/06",
+      end: "現在",
+      description: [
+        "以 Go 撰寫的 MCP server 與 CLI，讓 AI coding agent 在不同 session 間保存與檢索記憶（github.com/ggwhite/memory-mcp）",
+        "SQLite FTS5 trigram 全文搜尋，支援中日韓文；可選用本機 Ollama 產生向量做語意搜尋，以 Reciprocal Rank Fusion 混合排序，Ollama 離線時自動降級為純關鍵字搜尋",
+        "整合 Claude Code hooks：session 開始依工作目錄注入相關記憶、每則訊息自動檢索相關記憶、session 結束自動產生摘要；存入時遮蔽常見金鑰格式",
+        "Golang、SQLite、mcp-go、Cobra",
+      ],
+    },
+    {
+      id: "4x",
+      name: "4x — 多角色 AI 開發框架（開源，已完成）",
+      start: "2026/06",
+      end: "2026/08",
+      description: [
+        "開源 CLI（github.com/ggwhite/4x，GitHub 34 stars），將 AI coding agent 編排成 Design → Code → Review → Test → Deep Review → Accept 的多角色迴圈，角色彼此隔離、互相監督",
+        "以 Go CLI 實作狀態機、scope lock 等確定性護欄，不依賴 prompt 約束；支援 Claude Code、Codex、Gemini CLI 等多種 runner，以及依相依關係排程的 batch 模式",
+        "從這個多角色 pipeline 的經驗，收斂成現在較輕量的 subagent 分工，保留「實作與驗收分離」的核心原則",
+      ],
+    },
     {
       id: "PGS",
       name: "PGS 遊戲服務器（獨立開發）",

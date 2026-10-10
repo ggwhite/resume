@@ -103,13 +103,13 @@ import zhTw from '@/data/zh-tw'
 
 const highlights = {
   en: {
-    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Security incident investigation & AES encryption. CI/CD pipeline with Docker/Harbor/Helm.",
-    Terpro: "Built reusable slot game framework (FreeGame, Lightning, PickGame). Kubernetes/Helm deployment.",
+    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Security incident investigation & AES encryption. CI/CD pipeline with Docker/Harbor/Helm. Handled containerization of multiple platforms, migrating from bare metal (Harbor/ECR releases, cutover runbooks, data verification scripts); introduced a shared team knowledge base and AI collaboration rules.",
+    Terpro: "Built a reusable game mechanics framework, cutting new-game development time by over 50%. Kubernetes/Helm deployment.",
     WistronITS: "Led 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
   },
   'zh-tw': {
-    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。資安事件調查與 AES 加密。Docker/Harbor/Helm CI/CD Pipeline。",
-    Terpro: "建立可複用老虎機遊戲框架（FreeGame、Lightning、PickGame）。Kubernetes/Helm 部署。",
+    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。資安事件調查與 AES 加密。Docker/Harbor/Helm CI/CD Pipeline。負責多平台從裸機容器化遷移（Harbor／ECR 發版、cutover runbook、資料比對腳本）；導入團隊共用知識庫與 AI 協作規則。",
+    Terpro: "建立可複用遊戲機制框架，新遊戲開發週期縮短超過 50%。Kubernetes/Helm 部署。",
     WistronITS: "領導 2 名工程師。開發 5 個微服務（OpenId、Product、Payment、Stock、Kafka）。Jenkins/Nexus CI 工具鏈。",
   },
 }
