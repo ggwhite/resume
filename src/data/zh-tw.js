@@ -219,13 +219,11 @@ export default {
     },
     {
       id: "4x",
-      name: "4x — 多角色 AI 開發框架（開源，已完成）",
+      name: "4x — 多角色 AI 開發框架（開源，已封存）",
       start: "2026/06",
       end: "2026/08",
       description: [
-        "開源 CLI（github.com/ggwhite/4x，GitHub 34 stars），將 AI coding agent 編排成 Design → Code → Review → Test → Deep Review → Accept 的多角色迴圈，角色彼此隔離、互相監督",
-        "以 Go CLI 實作狀態機、scope lock 等確定性護欄，不依賴 prompt 約束；支援 Claude Code、Codex、Gemini CLI 等多種 runner，以及依相依關係排程的 batch 模式",
-        "從這個多角色 pipeline 的經驗，收斂成現在較輕量的 subagent 分工，保留「實作與驗收分離」的核心原則",
+        "開源 Go CLI（github.com/ggwhite/4x，GitHub 34 stars），讓 AI coding agent 以 Design → Code → Review → Test 彼此隔離的角色運作，並以確定性護欄把關；原生 subagent 功能成熟後封存，核心原則「寫的人不驗自己」延續到現在的工作流程",
       ],
     },
     {

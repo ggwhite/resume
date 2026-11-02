@@ -220,13 +220,11 @@ export default {
     },
     {
       id: "4x",
-      name: "4x — Multi-Role AI Development Framework (open source, completed)",
+      name: "4x — Multi-Role AI Development Framework (open source, archived)",
       start: "Jun. 2026",
       end: "Aug. 2026",
       description: [
-        "Open-source CLI (github.com/ggwhite/4x, 34 GitHub stars) that orchestrated AI coding agents into a multi-role loop — Design → Code → Review → Test → Deep Review → Accept — with isolated, mutually checking roles",
-        "Implemented deterministic guardrails (state machine, scope lock) in the Go CLI rather than relying on prompts; supported multiple runners including Claude Code, Codex, and Gemini CLI, plus a dependency-aware batch mode",
-        "Lessons from this multi-role pipeline evolved into my current, lighter subagent setup, keeping its core principle of separating implementation from verification",
+        "Open-source Go CLI (github.com/ggwhite/4x, 34 GitHub stars) that ran AI coding agents as isolated Design → Code → Review → Test roles with deterministic guardrails; archived once native subagents covered it, and its core rule — whoever writes the code never verifies it — lives on in my current workflow",
       ],
     },
     {
