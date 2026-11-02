@@ -218,6 +218,17 @@ export default {
       ],
     },
     {
+      id: "jarvis",
+      name: "Jarvis — Claude Code Agent 即時可觀測面板（開源，個人專案）",
+      start: "2026/10",
+      end: "現在",
+      description: [
+        "在對話旁開即時面板，顯示每個 subagent 的任務、執行時間、token 用量與預估 API 成本，並標出卡住或迴圈的 agent（github.com/ggwhite/jarvis）",
+        "跨 session 總覽本機所有 Claude Code：狀態、額度用量、一鍵跳到該 session；另有各 repo 的檔案變更、diff 與 commit graph",
+        "TypeScript、Claude Code plugin API、1,100+ 個測試；Claude Desktop 原生版面與終端機 cell grid 兩種繪製",
+      ],
+    },
+    {
       id: "4x",
       name: "4x — 多角色 AI 開發框架（開源，已封存）",
       start: "2026/06",
