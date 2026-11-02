@@ -219,6 +219,17 @@ export default {
       ],
     },
     {
+      id: "jarvis",
+      name: "Jarvis — Live Observability for Claude Code Agents (open source, personal)",
+      start: "Oct. 2026",
+      end: "Present",
+      description: [
+        "Real-time pane beside the chat showing each subagent's task, elapsed time, token use and estimated API cost, and flagging stuck or looping agents (github.com/ggwhite/jarvis)",
+        "Fleet view across every local Claude Code session — status, quota usage, one-click jump to a session — plus per-repo file changes, diffs and commit graph",
+        "TypeScript, Claude Code plugin API, 1,100+ tests; renders natively in Claude Desktop and as a cell grid in the terminal",
+      ],
+    },
+    {
       id: "4x",
       name: "4x — Multi-Role AI Development Framework (open source, archived)",
       start: "Jun. 2026",
