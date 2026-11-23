@@ -262,7 +262,10 @@ html:not(.is-pdf) body { margin: 0; }
 .pitch dd { color: var(--dim); font-size: 0.97rem; line-height: 1.6; }
 .pitch .tags { margin-top: 0 !important; }
 .flag .btn { margin-top: 14px; }
-.flag .demo { margin-top: 0; font-size: 13px; }
+.flag .demo { margin-top: 0; font-size: 14.5px; box-shadow: 0 30px 80px -40px rgba(100, 102, 255, 0.55); }
+.flag .term pre, .flag .mask, .flag .roles4 { padding: 18px 20px; }
+.flag .hud-head, .flag .hud-row, .flag .hud-tabs { padding-inline: 20px; }
+.flag .hud-row { padding-block: 10px; }
 .more-head { margin-top: clamp(40px, 7vh, 72px) !important; }
 .til { display: flex; flex-direction: column; justify-content: center; }
 .til h3 { font-size: clamp(1.6rem, 2.6vw, 2.3rem); }
