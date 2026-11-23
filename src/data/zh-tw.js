@@ -15,9 +15,10 @@ export default {
     print: "列印 / 存為 PDF",
     download: "下載 PDF",
   },
-  // 互動網站的語氣與場景：標題、故事段落、場景標籤。
-  // 只是換說法——每一句都對應下方紀錄（competencies／aiWorkflow／experience／project）
-  // 或各 repo README 裡的事實。
+  // 互動網站的語氣與場景：標題、故事、場景標籤。
+  // 只是換說法——每一句都對應下方紀錄（competencies／aiWorkflow／experience／project）、
+  // 已核可的面試故事，或各 repo README 裡的事實。標題、hero 與圖一律用中性詞
+  // （服務、使用者、平台）；產業細節留在工作經歷紀錄裡。
   site: {
     nav: { systems: "問題", work: "經歷", ai: "AI 工作流程", oss: "開源", skills: "工具箱", contact: "聯絡" },
     langSwitch: { label: "EN", to: "/" },
@@ -25,44 +26,88 @@ export default {
       nameLines: ["張育誠"],
       altName: "White Chang",
       stack: "Go · Java · Lua",
-      lede: "近 15 年後端開發，近 7 年都待在即時遊戲服務器平台——在這裡，一個併發競態會讓獎勵發兩次，一筆被竄改的 Redis 資料就能偽造遊戲狀態。我用 Go、Java、Lua（Skynet）寫系統，管 AI agent 只有一條規則：寫的人不驗自己。",
-      scroll: "往下捲動",
+      lede: "近 15 年後端開發，近 7 年專注在高併發的即時系統平台。我處理的是不能出錯的那幾塊：資料與效能、可靠性與資安、交付。主要用 Go、Java、Lua，管 AI agent 只有一條規則：寫的人不驗自己。",
+      words: ["Go", "Java", "Lua", "Redis", "MongoDB", "MySQL", "gRPC", "Docker", "Kubernetes"],
       photoAlt: "張育誠的照片",
     },
     stats: [
       { prefix: "~", num: 15, suffix: "", unit: "年", label: "軟體開發經驗" },
       { prefix: "~", num: 270, suffix: " 萬", unit: "筆 / 日", label: "診斷全集合掃描並設計索引的 MongoDB 資料規模" },
-      { prefix: ">", num: 50, suffix: "%", unit: "縮短", label: "以可複用 Go 框架縮短新遊戲開發週期" },
+      { prefix: ">", num: 50, suffix: "%", unit: "縮短", label: "以可複用 Go 框架縮短新產品開發週期" },
       { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker，我的開源 Go 函式庫" },
     ],
     systems: {
-      title: "我一再解決的五種問題",
-      sub: "往下捲，每一段都會演給你看。",
+      title: "五個問題，從前因說起",
+      sub: "畫面會跟著文字演：先是原本的情況，再是出了什麼事，最後是怎麼解。",
       steps: [
-        { scene: "poc", head: "知道什麼時候不該上線。", body: "我規劃了多平台遊戲後端的微服務／gRPC 整合方案，做到可 demo 的 POC，連防竄改資料層都做了：HMAC 簽章、狀態機、audit trail。然後評估、喊停。全面重寫對線上平台風險過高，所以 POC 就停在 POC。" },
-        { scene: "framework", head: "一套框架，很多款遊戲。", body: "多服務器分散式系統——Gate、Lobby、Game——橫跨 10+ 個 repo 與多個平台。把共用機制收進可複用框架之後，新遊戲開發週期縮短超過 50%。" },
-        { scene: "index", head: "別再把每一筆都讀過一遍。", body: "一個每天進來約 270 萬筆資料的集合，查詢卻是從頭掃到尾。我診斷出全集合掃描，設計複合索引。快取這一側，重構 Redis key 架構，直到大量的 SCAN 消失。" },
-        { scene: "pipeline", head: "從一個 git tag，到跑起來的容器。", body: "Docker Image 自動建置、推送到 Harbor。Kubernetes 用 Helm Chart 部署。架 GitLab Runner，也做 SSH 遠端部署。發版是一條 pipeline，不是一場儀式。" },
-        { scene: "tamper", head: "先假設 secret 已經外露。", body: "我追完一起 Redis 資料竄改事件的完整攻擊鏈。secret 一旦外露，應用層驗證就會被繞過——所以受影響遊戲的敏感狀態從 Redis 搬進 process 記憶體，並以 Docker 隔離環境。" },
+        {
+          scene: "race", head: "兩個請求，一道檢查。", tags: ["併發", "Redis"],
+          body: [
+            "有個功能讓每位使用者一天領取一次。伺服器分三步處理：先檢查今天領過沒，再跑一個查詢確認資格，最後發放。",
+            "使用者回報按鈕點了沒反應，於是又點了幾次。每一次點擊都通過第一步，因為還沒有任何一筆發放；它們全排在同一個慢查詢後面。查詢一回來，每個等著的請求各發一次。同一個人領到好幾次，是會造成財損的 bug。",
+            "漏洞在「檢查」和「發放」之間的空窗。我用 Redis 標記把它關上：第一個寫入標記的請求繼續往下走，之後的全部被擋下，標記一天後過期。",
+          ],
+        },
+        {
+          scene: "index", head: "那個查詢，為什麼慢到會出事。", tags: ["MongoDB", "效能"],
+          body: [
+            "那個慢查詢是第二個根因，而且是另一回事。它讀的資料放在每天自動建立的 collection 裡，一天約 270 萬筆。",
+            "每天建立 collection 的流程裡，沒有建索引這一步。所以每次查詢都是全集合掃描，慢查詢還引發重試，讓情況更糟。",
+            "手動補一個索引只救得了一天。我在 Lua Server 加了排程，提前為「今天」和「明天」的 collection 建好複合索引，午夜切換時就不會落在沒有索引的集合上。之後把同一套做法推廣到其他大型 collection。",
+          ],
+        },
+        {
+          scene: "tamper", head: "secret 外露之後，把資料搬走。", tags: ["資安", "Redis", "Docker"],
+          body: [
+            "為了讓斷線的連線能從中斷處接回去，服務把 session 狀態存在 Redis。",
+            "後來紀錄裡出現正常流程不可能產生的結果：有人直接改 Redis 裡的狀態。我先加 checksum，再改用 AES 加密，都沒用——secret 一旦外露，任何應用層驗證攻擊者都能照做一份。",
+            "所以我不再守著原地的資料，而是把它搬走。受影響服務的敏感狀態改存 process 記憶體，Redis client 碰不到；環境再用 Docker 隔離。我另外設計了防竄改架構（HMAC 簽章、狀態機、audit trail），這部分做到可 demo 的 POC，沒有進正式環境。",
+          ],
+        },
+        {
+          scene: "migrate", head: "搬動線上服務，不留意外。", tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
+          body: [
+            "多個平台的服務與後台直接跑在裸機上，而 git 裡的設定早就和正式環境實際在跑的不一致。",
+            "這種搬遷只有一次切換的機會。照著 git 直接上線，正式環境的設定會在沒人發現的情況下被改回舊值。",
+            "2026 年 7 月到 10 月，我把它們搬進 Docker 容器。image 推到 Harbor 與 AWS ECR，以 git tag 觸發發版 pipeline。我把正式環境的設定撈回來，和 git 逐 key 比對；寫了比對新舊環境 MySQL、Redis、MongoDB 的腳本；也寫了上線 cutover runbook：停寫、資料同步、開放流量，每一步都有完成判準。修正工具預設只預覽，明確指定才寫入，而且先備份原值。",
+          ],
+        },
+        {
+          scene: "poc", head: "知道什麼時候不該上線。", tags: ["Golang", "gRPC", "Protobuf"],
+          body: [
+            "三個平台各自長在不同的技術棧上：Go 配 .NET、Lua 配 PHP、Lua/Skynet 配 Java。服務器、後台、部署流程各一套。",
+            "資料竄改事件之後，我想要的是根治，不是再補一個 patch：一套後端，服務之間走 gRPC，資料完整性從設計之初就做進去。",
+            "我把它做到可 demo 的 POC。接著把「遷移」和「設計」分開評估，然後喊停：全面重寫對線上平台風險過高。沒有任何東西進正式環境。設計得好，不代表遷移就值得做。",
+          ],
+        },
       ],
     },
     work: {
       title: "這些事發生的地方",
       sub: "近 15 年，橫跨遊戲、支付與企業系統。",
-      role: "在 5–10 人團隊中負責架構規劃與技術決策：先評估一個改動該不該做、會動到哪裡、風險多高。",
+      role: "在 5–10 人團隊中負責架構規劃與技術決策：先評估一個改動該不該做、會動到哪裡、風險多高。上面五個故事都發生在這裡。還有兩個：",
       chapters: [
-        { scene: "migrate", when: "2026/07 – 2026/10", head: "每一步都照劇本走的遷移。", body: "把多個平台的遊戲服務與後台，從裸機搬進 Docker 容器。上線照我寫的 cutover runbook 走——停寫、資料同步、開放流量——每一步都有完成判準。比對腳本逐一核對新舊環境的 MySQL、Redis、MongoDB；修正工具預設只預覽，明確指定才寫入，而且先備份原值。" },
-        { scene: "race", head: "兩個請求，一份獎勵。", body: "玩家能重複領取同一個活動獎勵，是會造成財損的 bug。根因是併發競態：多個請求同時通過檢查。解法是 Redis 標記機制，擋下重複發放。" },
-        { scene: "index", head: "每天約 270 萬筆，索引先到一步。", body: "查詢原本是全集合掃描。我設計複合索引，用 Lua Server 排程自動預建每日索引，再把同一套做法推廣到其他大型 collection。" },
-        { scene: "hash", head: "一個 Hash，取代整片 keyspace 的掃描。", body: "原本以 rid 為變數的 key，查詢得靠 SCAN 去找。我把結構改成 Hash、rid 當 field，大量的 SCAN 操作就消失了。" },
-        { scene: "inject", head: "先存證，再重啟。", body: "有人透過 Skynet debug console 注入 Lua 程式碼。我先建立監控、保留證據，才動手處理——接著重啟受影響的服務，把記憶體裡的注入程式碼清掉。" },
+        {
+          scene: "hash", head: "一個 Hash，取代整片 keyspace 的掃描。",
+          body: [
+            "有些 Redis 資料是「每個 rid 一把 key」，要讀就得用 SCAN 掃過整片 keyspace。",
+            "我把結構改成單一 Hash、rid 當 field。查詢變成直接命中，大量的 SCAN 操作就消失了。",
+          ],
+        },
+        {
+          scene: "inject", head: "先存證，再重啟。",
+          body: [
+            "紀錄裡持續出現異常結果。我追查到是有人透過 Skynet debug console 注入 Lua 程式碼，改掉了記憶體裡的服務邏輯。",
+            "我先建立監控、保留證據，才重啟任何東西。重啟之後，記憶體裡的注入程式碼就被清掉了。",
+          ],
+        },
       ],
       alsoTitle: "在大極還做了",
       also: [
         "導入團隊共用知識庫與 AI agent 協作規則，讓 Claude Code 與 Codex 共用同一套規範。",
         "建立 playbook／runbook 的沉澱流程：每次排查與上線踩到的坑都回寫成文件。",
         "用 RabbitMQ 做即時推播。",
-        "GitLab CI/CD 推送 Harbor、Helm Chart、GitLab Runner。",
+        "GitLab CI/CD 推送 Harbor、Kubernetes Helm Chart、GitLab Runner。",
         "透過 code review 與 pair programming 帶新人上手。",
       ],
       record: "完整紀錄",
@@ -72,8 +117,8 @@ export default {
       title: "Agent 負責動手，我負責決定。",
       quote: "寫的人不驗自己。",
       steps: [
-        { scene: "delegate", head: "三個位子，絕不兼任。", body: "輕量模型負責檔案搜尋與雜事，worker 負責實作，再由另一個獨立的 verifier 驗收。模組邊界、通訊協議、安全模型這些架構決策留在我手上；AI 會漏掉的生產環境盲點——logging 覆蓋率、安全加固——也由我補上。" },
-        { scene: "guard", head: "一道圍欄，一份記憶。", body: "harness 規則檔（CLAUDE.md / AGENTS.md）把 AI 的行為限制在專案規範內。自建的 memory-mcp 讓偏好、踩過的坑與未完成的工作，延續到下一個 session。" },
+        { scene: "delegate", head: "三個位子，絕不兼任。", body: ["輕量模型負責檔案搜尋與雜事，worker 負責實作，再由另一個獨立的 verifier 驗收。", "模組邊界、通訊協議、安全模型這些架構決策留在我手上；AI 會漏掉的生產環境盲點——logging 覆蓋率、安全加固——也由我補上。"] },
+        { scene: "guard", head: "一道圍欄，一份記憶。", body: ["harness 規則檔（CLAUDE.md / AGENTS.md）把 AI 的行為限制在專案規範內。", "自建的 memory-mcp 讓偏好、踩過的坑與未完成的工作，延續到下一個 session。"] },
       ],
     },
     oss: {
@@ -120,44 +165,34 @@ export default {
     skills: { title: "工具箱裡有什麼", hint: "點一個語言，看我搭配什麼用。" },
     contact: { title: "建立連線。", sub: "資深後端工程師 · Go · Java · Lua" },
     scenes: {
-      cluster: { labels: { players: ["玩家"], gate: ["Gate"], lobby: ["Lobby"], g1: ["Game"], g2: ["Game"], g3: ["Game"] }, caps: [] },
-      poc: {
-        labels: { a: ["平台 A"], b: ["平台 B"], c: ["平台 C"], poc: ["gRPC POC", "HMAC · 狀態機 · audit trail"], live: ["線上平台"] },
-        caps: ["整合方案做到可 demo 的 POC", "評估後喊停：全面重寫對線上平台風險過高"],
-      },
-      framework: {
-        labels: { fw: ["可複用框架", "共用遊戲機制"], g1: ["新遊戲"], g2: ["新遊戲"], g3: ["新遊戲"], g4: ["新遊戲"] },
-        caps: ["共用機制只寫一次", "新遊戲開發週期縮短超過 50%"],
+      race: {
+        labels: { req: ["使用者點擊"], c1: ["1 · 領過了嗎？"], c2: ["2 · 符合資格？", "慢查詢"], grant: ["3 · 發放"], mark: ["Redis 標記"] },
+        caps: ["原本該有的流程：檢查、確認、發放一次", "第 2 步很慢，第二次點擊在任何發放之前就通過了第 1 步", "解法：第一個請求寫入 Redis 標記，之後的全部被擋下"],
       },
       index: {
-        labels: { query: ["查詢"], idx: ["複合索引"], coll: ["Collection", "每日約 270 萬筆"] },
-        caps: ["全集合掃描：每一筆都被讀過", "複合索引：直接命中要的資料"],
-      },
-      pipeline: {
-        labels: { tag: ["git tag"], ci: ["GitLab CI/CD"], img: ["Docker Image"], reg: ["Harbor"], dep: ["Helm / SSH"], run: ["上線運行"] },
-        caps: ["Tag → pipeline → image → registry → 部署"],
+        labels: { query: ["查詢"], idx: ["複合索引"], sched: ["Lua 排程", "每日執行"], coll: ["今天的 collection", "每日約 270 萬筆"] },
+        caps: ["每天都會自動建立一個新的 collection", "它沒有索引，所以每次查詢都把每一筆讀過", "排程提前建好今天和明天的索引", "查詢走索引，直接命中要的資料"],
       },
       tamper: {
-        labels: { atk: ["攻擊者"], redis: ["Redis", "敏感狀態"], val: ["應用層驗證"], docker: ["Docker"], game: ["遊戲服務器"], mem: ["Process 記憶體"] },
-        caps: ["secret 外露：被竄改的資料直接通過應用層驗證", "敏感狀態改存 process 記憶體，並以 Docker 隔離環境"],
+        labels: { atk: ["攻擊者"], redis: ["Redis", "session 狀態"], val: ["應用層驗證", "checksum · AES"], docker: ["Docker"], svc: ["服務"], mem: ["Process 記憶體"] },
+        caps: ["服務把 session 狀態存在 Redis，連線才能接回去", "狀態在 Redis 被直接改掉；secret 外露後，驗證照樣放行", "狀態改存 process 記憶體，環境以 Docker 隔離"],
       },
       migrate: {
-        labels: { old: ["裸機"], s1: ["遊戲服務"], s2: ["後台"], neu: ["Docker"], c1: ["遊戲服務"], c2: ["後台"], f: ["1 · 停寫"], sy: ["2 · 資料同步"], op: ["3 · 開放流量"] },
-        caps: ["Runbook 第 1 步：停寫", "Runbook 第 2 步：同步資料，比對新舊環境", "Runbook 第 3 步：在容器上開放流量"],
+        labels: { old: ["裸機"], s1: ["服務"], s2: ["後台"], neu: ["Docker"], c1: ["服務"], c2: ["後台"], f: ["1 · 停寫"], sy: ["2 · 資料同步"], op: ["3 · 開放流量"] },
+        caps: ["搬遷前：線上流量跑在裸機上", "Runbook 第 1 步：停寫", "Runbook 第 2 步：同步資料，比對新舊環境", "Runbook 第 3 步：在容器上開放流量"],
       },
-      race: {
-        labels: { r1: ["請求 A"], r2: ["請求 B"], chk: ["檢查：領過了嗎？"], rew: ["獎勵"], mark: ["Redis 標記"] },
-        caps: ["競態：兩個請求同時通過檢查", "有了 Redis 標記，重複的那一筆被擋下"],
+      poc: {
+        labels: { a: ["平台 A", "Go · .NET"], b: ["平台 B", "Lua · PHP"], c: ["平台 C", "Lua · Java"], poc: ["gRPC POC", "HMAC · 狀態機 · audit trail"], live: ["線上平台"] },
+        caps: ["三個平台、三種技術棧，什麼都是三套", "一套後端，做到可 demo 的 POC", "評估後喊停：全面重寫對線上平台風險過高"],
       },
       hash: {
         labels: { keys: ["每個 rid 一把 key"], q: ["查詢"], hash: ["Hash", "field = rid"] },
         caps: ["為了找一個 rid，SCAN 掃過整片 keyspace", "一個 Hash、rid 當 field：直接查到"],
       },
       inject: {
-        labels: { atk: ["攻擊者"], con: ["Skynet debug console"], svc: ["遊戲服務", "記憶體中"], mon: ["監控"], ev: ["證據"] },
+        labels: { atk: ["攻擊者"], con: ["Skynet debug console"], svc: ["服務", "記憶體中"], mon: ["監控"], ev: ["證據"] },
         caps: ["Lua 程式碼從 debug console 被注入", "先做：建立監控、保留證據", "再做：重啟，清掉記憶體裡的注入程式碼"],
       },
-      timeline: { labels: {}, caps: [] },
       delegate: {
         labels: { main: ["主 session", "我規劃與拍板"], light: ["輕量模型", "檔案搜尋與雜事"], worker: ["Worker", "實作"], ver: ["Verifier", "獨立驗收"] },
         caps: ["搜尋與雜事交給輕量模型", "實作交給 worker", "驗收由另一個獨立的 verifier 負責"],
@@ -167,7 +202,6 @@ export default {
         caps: ["規則檔把 agent 限制在專案規範內", "session 結束：學到的東西存起來", "下一個 session 開始：記憶回來了"],
       },
       handshake: { labels: { you: ["你"], me: ["White"] }, caps: [] },
-      dust: { labels: {}, caps: [] },
     },
   },
   pdfHighlights: {

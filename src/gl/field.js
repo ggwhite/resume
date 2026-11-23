@@ -188,9 +188,38 @@ function buildShape(sc, N, density) {
   return { pos, grp }
 }
 
+function buildWordShape(text, box, N) {
+  const PX = 100, W = Math.round(box.w * PX), H = Math.round(box.h * PX)
+  const c = document.createElement('canvas'); c.width = W; c.height = H
+  const g2 = c.getContext('2d', { willReadFrequently: true })
+  const family = '"Bricolage Grotesque Variable", "PingFang TC", sans-serif'
+  let size = H * 0.82
+  g2.font = `800 ${size}px ${family}`
+  size = Math.min(size, (size * W * 0.94) / g2.measureText(text).width)
+  g2.font = `800 ${size}px ${family}`
+  g2.textAlign = 'center'; g2.textBaseline = 'middle'; g2.fillStyle = '#fff'
+  g2.fillText(text, W / 2, H / 2)
+  const data = g2.getImageData(0, 0, W, H).data, pts = []
+  for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) if (data[(y * W + x) * 4 + 3] > 128) pts.push(x, y)
+  const r = rng(text.length * 131 + text.charCodeAt(0)), g = () => (r() + r() + r() + r() - 2) / 2
+  const pos = new Float32Array(N * 4), grp = new Float32Array(N)
+  const n = pts.length / 2, used = n ? Math.min(Math.floor(N * 0.84), Math.floor(n * 2.2)) : 0
+  let i = 0
+  for (; i < used; i++) {
+    const k = Math.floor(r() * n) * 2
+    pos[i * 4] = (pts[k] + r() * 2 - W / 2) / PX; pos[i * 4 + 1] = box.cy - (pts[k + 1] + r() * 2 - H / 2) / PX
+    pos[i * 4 + 2] = g() * 0.03; pos[i * 4 + 3] = pts[k] / W
+  }
+  for (; i < N; i++) {
+    pos[i * 4] = g() * 3.4; pos[i * 4 + 1] = box.cy + g() * 1.8; pos[i * 4 + 2] = g() * 1.6 - 0.4; pos[i * 4 + 3] = r()
+    grp[i] = AMBIENT
+  }
+  return { pos, grp }
+}
+
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {{ reduced: boolean, layer: HTMLElement, texts: Record<string, {labels: Record<string, string[]>, caps: string[]}> }} opts
+ * @param {{ reduced: boolean, layer: HTMLElement, words: string[], texts: Record<string, {labels: Record<string, string[]>, caps: string[]}> }} opts
  * @returns {{ dispose(): void, stats(): object } | null} null when WebGL is unavailable
  */
 export function createField(canvas, opts) {
@@ -245,6 +274,7 @@ export function createField(canvas, opts) {
   const compiled = {}
   const get = (key) => {
     const sc = compiled[key] || (compiled[key] = compile(SCENES[key] ? key : 'dust'))
+    if (!sc.shape && sc.def.words) { sc.wordShapes = (opts.words || ['Go']).map((w) => buildWordShape(w, sc.def.box, COUNT)); sc.shape = sc.wordShapes[0]; sc.word = 0 }
     if (!sc.shape) sc.shape = buildShape(sc, COUNT, DENSITY)
     if (!sc.labels) {
       const txt = (opts.texts[key] || {}).labels || {}
@@ -345,15 +375,19 @@ export function createField(canvas, opts) {
   let acc = 0, frames = 0, fps = 60
   const v = new Vector3(), fitNow = { ...fit }
 
-  function switchTo(a) {
-    prev = cur; cur = get(a.key); slotNow = a.slot
+  function loadShape(shape) { // current targets become the start, `shape` the destination
     from.array.set(to.array); from.needsUpdate = true
-    to.array.set(cur.shape.pos); to.needsUpdate = true
+    to.array.set(shape.pos); to.needsUpdate = true
     const g = grp.array
-    for (let i = 0; i < COUNT; i++) { g[i * 2] = g[i * 2 + 1]; g[i * 2 + 1] = cur.shape.grp[i] }
+    for (let i = 0; i < COUNT; i++) { g[i * 2] = g[i * 2 + 1]; g[i * 2 + 1] = shape.grp[i] }
     grp.needsUpdate = true
     for (let i = 0; i < MAXG; i++) sA[i].copy(sB[i])
-    m = opts.reduced ? 1 : 0; sceneTime = 0
+    m = opts.reduced ? 1 : 0
+  }
+  function switchTo(a) {
+    prev = cur; cur = get(a.key); slotNow = a.slot
+    if (cur.wordShapes) { cur.word = 0; cur.shape = cur.wordShapes[0] }
+    loadShape(cur.shape); sceneTime = 0
     for (const l of prev.labels) if (prev !== cur) { l.el.style.opacity = 0; l.op = 0 }
   }
 
@@ -364,13 +398,17 @@ export function createField(canvas, opts) {
     if (a && (a.key !== cur.key || a.slot !== slotNow)) {
       if (a.key !== cur.key) switchTo(a); else slotNow = a.slot
     }
-    if (!opts.reduced) { time += dt; sceneTime += dt; m = Math.min(1, m + dt / 1.0) }
+    if (!opts.reduced) { time += dt; sceneTime += dt; m = Math.min(1, m + dt / (cur.wordShapes ? 0.8 : 1.0)) }
     const def = cur.def
+    if (cur.wordShapes && !opts.reduced) { // hero: spell the next word
+      const w = Math.floor(sceneTime / def.every) % cur.wordShapes.length
+      if (w !== cur.word) { cur.word = w; loadShape(cur.wordShapes[w]) }
+    }
     const t = opts.reduced ? (def.still == null ? 0 : def.still) : sceneTime % def.dur
 
     // run the script
     for (let i = 0; i < MAXG; i++) sB[i].set(0, 1, 0, 0)
-    sB[AMBIENT].y = cur.nodes.length ? 0.4 : 0.55
+    sB[AMBIENT].y = cur.nodes.length ? 0.4 : cur.wordShapes ? 0.3 : 0.55
     for (const k in nodeState) delete nodeState[k]
     pn = 0; capIdx = -1
     def.play(api, t)
@@ -391,7 +429,7 @@ export function createField(canvas, opts) {
 
     mat.uniforms.uMix.value = m
     mat.uniforms.uTime.value = time
-    mat.uniforms.uAlpha.value = (def.alpha || 1) * (cur.nodes.length ? 1 : wide ? 0.3 : 0.2)
+    mat.uniforms.uAlpha.value = (def.alpha || 1) * (cur.nodes.length || cur.wordShapes ? 1 : wide ? 0.3 : 0.2)
     mat.uniforms.uMouse.value.x = mouse.x; mat.uniforms.uMouse.value.y = mouse.y
 
     // narrow screens: the canvas sits above the page, so draw only inside the slot
@@ -464,7 +502,7 @@ export function createField(canvas, opts) {
   if (opts.reduced) renderStill(); else start()
 
   return {
-    stats: () => ({ fps: Math.round(fps), pixelRatio: pr, particles: COUNT, scene: cur.key, packets: pn }),
+    stats: () => ({ fps: Math.round(fps), pixelRatio: pr, particles: COUNT, scene: cur.key, packets: pn, word: cur.word }),
     dispose() {
       stop(); cancelAnimationFrame(still); ro.disconnect()
       window.removeEventListener('resize', resize)

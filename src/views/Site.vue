@@ -17,7 +17,7 @@
 
     <main id="top">
       <!-- Hero -->
-      <section class="hero" data-stage-root data-scene="cluster">
+      <section class="hero" data-stage-root data-scene="words">
         <div class="wrap hero-grid">
           <div class="hero-copy">
             <p class="kicker"><span>{{ profile.position }}</span><span class="sep"></span><span>{{ s.hero.stack }}</span></p>
@@ -62,13 +62,13 @@
             <h2 :aria-label="s.systems.title"><span v-for="(w, i) in split(s.systems.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
             <p class="sec-sub">{{ s.systems.sub }}</p>
           </header>
-          <div class="story" data-stage-root :data-scene="s.systems.steps[0].scene">
+          <div class="story story-arc" data-stage-root :data-scene="s.systems.steps[0].scene">
             <ol class="steps">
               <li v-for="(st, i) in s.systems.steps" :key="st.scene" class="step" :data-scene="st.scene">
                 <span class="step-n">{{ String(i + 1).padStart(2, '0') }} / {{ String(s.systems.steps.length).padStart(2, '0') }}</span>
                 <h3>{{ st.head }}</h3>
-                <p>{{ st.body }}</p>
-                <ul v-if="data.competencies[i].tech" class="tags"><li v-for="t in data.competencies[i].tech.split(', ')" :key="t">{{ t }}</li></ul>
+                <p v-for="para in st.body" :key="para">{{ para }}</p>
+                <ul class="tags"><li v-for="t in st.tags" :key="t">{{ t }}</li></ul>
               </li>
             </ol>
             <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
@@ -97,7 +97,7 @@
               <li v-for="(st, i) in s.work.chapters" :key="i" class="step" :data-scene="st.scene">
                 <span class="step-n">{{ st.when || String(i + 1).padStart(2, '0') + ' / ' + String(s.work.chapters.length).padStart(2, '0') }}</span>
                 <h3>{{ st.head }}</h3>
-                <p>{{ st.body }}</p>
+                <p v-for="para in st.body" :key="para">{{ para }}</p>
               </li>
             </ol>
             <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
@@ -158,7 +158,7 @@
               <li v-for="(st, i) in s.ai.steps" :key="st.scene" class="step" :data-scene="st.scene">
                 <span class="step-n">{{ String(i + 1).padStart(2, '0') }} / {{ String(s.ai.steps.length).padStart(2, '0') }}</span>
                 <h3>{{ st.head }}</h3>
-                <p>{{ st.body }}</p>
+                <p v-for="para in st.body" :key="para">{{ para }}</p>
               </li>
             </ol>
             <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
@@ -235,11 +235,11 @@
             <p class="sec-sub">{{ s.skills.hint }}</p>
           </header>
           <div class="kit rv">
-            <div class="kit-langs" role="tablist" :aria-label="data.labels.programming">
-              <button v-for="lang in langs" :key="lang" type="button" role="tab" :aria-selected="lang === lang0" :class="{ on: lang === lang0 }"
+            <div class="kit-langs" role="group" :aria-label="data.labels.programming">
+              <button v-for="lang in langs" :key="lang" type="button" :aria-pressed="lang === lang0" :class="{ on: lang === lang0 }"
                 @pointerenter="lang0 = lang" @focus="lang0 = lang" @click="lang0 = lang">{{ lang }}</button>
             </div>
-            <div class="kit-libs" role="tabpanel">
+            <div class="kit-libs" aria-live="polite">
               <p class="kit-big">{{ lang0 }}</p>
               <ul :key="lang0"><li v-for="(l, i) in profile.programming[lang0]" :key="l" :style="{ '--i': i }">{{ l }}</li></ul>
             </div>
@@ -403,7 +403,9 @@ onMounted(async () => {
   try {
     const [{ createField }, { createPortrait }] = await Promise.all([import('@/gl/field'), import('@/gl/portrait')])
     if (!alive) return
-    field = createField(fieldEl.value, { reduced, layer: labelEl.value, texts: sceneTexts.value })
+    await document.fonts.load('800 100px "Bricolage Grotesque Variable"').catch(() => {}) // the hero words are sampled from this face
+    if (!alive) return
+    field = createField(fieldEl.value, { reduced, layer: labelEl.value, texts: sceneTexts.value, words: s.value.hero.words })
     gl.value = !!field
     if (field && !reduced) disposePortrait = createPortrait(portraitEl.value, profile.value.photo, () => { portraitLive.value = true })
     if (import.meta.env.DEV || location.search.includes('stats')) window.__field = field

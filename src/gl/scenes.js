@@ -1,7 +1,8 @@
 // Story scenes. Each scene is a small diagram (nodes + edges, drawn by the particle
 // field) and a looping script that moves packets through it and changes node states,
-// so the picture acts out the paragraph next to it. Label and caption text lives in
-// src/data/*.js under site.scenes[<key>].
+// so the picture acts out the paragraph next to it — in the same order the text tells
+// it: the situation first, then what went wrong, then the fix.
+// Label and caption text lives in src/data/*.js under site.scenes[<key>].
 //
 // Script API (see field.js):
 //   a.pkt(from, to, p, tone, size)   packet at progress p (0..1) along from → to
@@ -21,140 +22,120 @@ const clamp = (v) => Math.min(1, Math.max(0, v))
 export const SCENES = {
   dust: { nodes: [], edges: [], dur: 1, play() {} },
 
-  // Hero — "real-time game server platforms": players → Gate → Lobby → Game
-  cluster: {
+  // Hero — the particles spell the stack, one word at a time (words come from data)
+  words: { nodes: [], edges: [], dur: 1, words: true, every: 2.4, box: { w: 5.6, h: 2.6, cy: 0 }, play() {} },
+
+  // Story 1 — a claim-once flow: check, slow eligibility query, grant. Repeated
+  // requests all pass the first check while the query is slow; an atomic marker fixes it.
+  race: {
     nodes: [
-      circ('players', -2.3, 0.2, 0.3), box('gate', -1.0, 0.2, 0.9, 1.5), box('lobby', 0.35, 0.2, 0.9, 1.5),
-      box('g1', 1.95, 1.15, 1.1, 0.55), box('g2', 1.95, 0.2, 1.1, 0.55), box('g3', 1.95, -0.75, 1.1, 0.55),
+      circ('req', -2.45, -0.1, 0.27, { labelPos: 'below' }),
+      box('c1', -1.05, -0.1, 1.3, 0.8), box('c2', 0.55, -0.1, 1.4, 0.8), box('grant', 2.1, -0.1, 1.1, 0.8),
+      box('mark', -1.05, 1.35, 1.5, 0.55),
     ],
-    edges: [['players', 'gate'], ['gate', 'lobby'], ['lobby', 'g1'], ['lobby', 'g2'], ['lobby', 'g3']],
-    dur: 7.2, still: 2, box: { w: 5.5, h: 3.4, cy: 0.15 },
+    edges: [['req', 'c1'], ['c1', 'c2'], ['c2', 'grant'], ['c1', 'mark']],
+    dur: 17, still: 16,
     play(a, t) {
-      for (let k = 0; k < 5; k++) {
-        const u = ((t / 2.4 + k / 5) % 1) * 3, g = 'g' + ((k % 3) + 1)
-        a.pkt('players', 'gate', u); a.pkt('gate', 'lobby', u - 1); a.pkt('lobby', g, u - 2, 'hot')
-        if (u > 2.8) a.node(g, { tone: 'hot' })
+      const flow = (u, tone, wait) => { // one request: req → c1 → (waits in c2) → grant
+        a.pkt('req', 'c1', seg(u, 0, 0.7), tone, 1.5); a.pkt('c1', 'c2', seg(u, 0.7, 1.4), tone, 1.5)
+        if (u > 1.4 && u < 1.4 + wait) { const p = a.pos('c2'); a.dot(p[0] - 0.3 + ((u * 1.7) % 1) * 0.6, p[1] - 0.22, tone || 'hot', 1.1) }
+        a.pkt('c2', 'grant', seg(u, 1.4 + wait, 2.1 + wait), tone, 1.5)
+      }
+      if (t < 4) { // situation: the normal flow
+        a.cap(0); a.node('mark', { alpha: 0 }); a.edge('c1', 'mark', 0)
+        flow(t - 0.4, 'ok', 0.3)
+        if (t > 2.8) a.node('grant', { tone: 'ok', sub: '× 1' })
+      } else if (t < 10.5) { // problem: step 2 is slow, a second request passes step 1 meanwhile
+        const u = t - 4
+        a.cap(1); a.node('mark', { alpha: 0 }); a.edge('c1', 'mark', 0)
+        a.node('c2', { tone: u > 1.4 && u < 4.6 ? 'hot' : null })
+        flow(u - 0.2, 'bad', 2.6); flow(u - 1.5, 'bad', 1.6)
+        if (u > 4.9) a.node('grant', { tone: 'bad', sub: u > 5.2 ? '× 2' : '× 1' })
+      } else { // fix: check-and-mark in one atomic step
+        const u = t - 10.5
+        a.cap(2)
+        a.pkt('req', 'c1', seg(u, 0.2, 0.9), null, 1.5)
+        a.pkt('c1', 'mark', seg(u, 0.9, 1.4), 'ok', 1.2); a.node('mark', { tone: u > 1.4 ? 'ok' : null })
+        a.pkt('c1', 'c2', seg(u, 1.0, 1.7), 'ok', 1.5)
+        if (u > 1.7 && u < 3.6) { a.node('c2', { tone: 'hot' }); const p = a.pos('c2'); a.dot(p[0] - 0.3 + ((u * 1.7) % 1) * 0.6, p[1] - 0.22, 'ok', 1.1) }
+        a.pkt('req', 'c1', seg(u, 1.6, 2.3), null, 1.5); a.pkt('c1', 'req', seg(u, 2.3, 3.1), 'bad', 1.5) // second request: rejected
+        a.pkt('c2', 'grant', seg(u, 3.6, 4.3), 'ok', 1.5)
+        if (u > 4.3) a.node('grant', { tone: 'ok', sub: '× 1' })
       }
     },
   },
 
-  // Competency 1 — unification built to a POC, evaluated, stopped
-  poc: {
-    nodes: [
-      box('a', -2.05, 1.2, 1.1, 0.55), box('b', -2.05, 0.1, 1.1, 0.55), box('c', -2.05, -1.0, 1.1, 0.55),
-      box('poc', 0.05, 0.1, 1.7, 1.5, { dashed: true }), box('live', 2.1, 0.1, 1.1, 0.9),
-    ],
-    edges: [['a', 'poc'], ['b', 'poc'], ['c', 'poc'], ['poc', 'live']],
-    dur: 11, still: 9,
-    play(a, t) {
-      const src = ['a', 'b', 'c']
-      if (t < 5) {
-        a.cap(0)
-        src.forEach((s, k) => a.pkt(s, 'poc', (t * 0.55 + k / 3) % 1))
-        a.node('poc', { tone: 'hot' }); a.edge('poc', 'live', 0.3); a.node('live', { alpha: 0.6 })
-      } else if (t < 6.6) {
-        a.cap(0); a.node('poc', { tone: 'hot' })
-        a.pkt('poc', 'live', seg(t, 5, 6.6) * 0.5, 'hot', 1.4)
-      } else {
-        a.cap(1)
-        a.pkt('poc', 'live', 0.5, 'bad', 2.2 + Math.sin(t * 6) * 0.4)
-        a.edge('poc', 'live', 0.1); a.node('poc', { tone: 'hot', alpha: 0.75 }); a.node('live', { tone: 'ok' })
-      }
-    },
-  },
-
-  // Competency 2 — shared mechanics in one framework, new titles stack on top
-  framework: {
-    nodes: [
-      box('fw', 0, -1.25, 4.6, 0.75),
-      box('g1', -1.8, 0.75, 1.0, 0.8), box('g2', -0.6, 0.75, 1.0, 0.8), box('g3', 0.6, 0.75, 1.0, 0.8), box('g4', 1.8, 0.75, 1.0, 0.8),
-    ],
-    edges: [['fw', 'g1'], ['fw', 'g2'], ['fw', 'g3'], ['fw', 'g4']],
-    dur: 9, still: 8,
-    play(a, t) {
-      a.cap(t < 5.6 ? 0 : 1); a.node('fw', { tone: 'hot' })
-      for (let i = 0; i < 4; i++) {
-        const g = 'g' + (i + 1), t0 = 0.4 + i * 1.3
-        const v = clamp(seg(t, t0 + 0.7, t0 + 1.1))
-        a.pkt('fw', g, seg(t, t0, t0 + 0.7), 'hot', 1.3)
-        a.node(g, { alpha: 0.06 + v * 0.94, tone: t > 5.6 ? 'ok' : null }); a.edge('fw', g, 0.1 + v * 0.9)
-        if (t > 5.6) a.pkt('fw', g, (t * 0.5 + i / 4) % 1, 'ok', 0.8)
-      }
-    },
-  },
-
-  // Competency 3 / Tyche — full-collection scan vs compound index
+  // Story 2 — each day's new collection had no index; a scheduler now builds it ahead
   index: {
-    nodes: [circ('query', -2.3, -0.3, 0.3), box('idx', -0.95, 1.2, 1.5, 0.55), box('coll', 1.25, -0.1, 2.4, 3.3, { grid: 10, labelPos: 'top' })],
-    edges: [['query', 'coll'], ['query', 'idx'], ['idx', 'coll']],
-    dur: 11, still: 9,
+    nodes: [
+      circ('query', -2.35, -0.6, 0.28, { labelPos: 'below' }), box('idx', -0.95, 0.35, 1.5, 0.55), box('sched', -0.95, 1.55, 1.6, 0.6),
+      box('coll', 1.3, -0.1, 2.3, 3.4, { grid: 10, labelPos: 'top' }),
+    ],
+    edges: [['query', 'coll', -0.5], ['query', 'idx'], ['idx', 'coll'], ['sched', 'idx']],
+    dur: 16, still: 15,
     play(a, t) {
-      if (t < 5.6) {
-        a.cap(0); a.node('idx', { alpha: 0 }); a.edge('query', 'idx', 0); a.edge('idx', 'coll', 0)
-        a.pkt('query', 'coll', (t * 0.8) % 1, 'bad')
-        const f = clamp(seg(t, 0.5, 5.3)) * 10, cur = Math.min(9, Math.floor(f))
-        for (let i = 0; i <= cur; i++) {
-          const [x1, x2, y] = a.row('coll', i)
-          if (i < cur) { a.dot(x1, y, 'bad', 0.9); a.dot((x1 + x2) / 2, y, 'bad', 0.9); a.dot(x2, y, 'bad', 0.9) }
-          else a.dot(x1 + (x2 - x1) * (f - cur), y, 'bad', 2)
+      if (t < 6.5) { // situation + problem: no index, every record is read
+        a.cap(t < 1.6 ? 0 : 1)
+        a.node('idx', { alpha: 0 }); a.node('sched', { alpha: 0 }); a.edge('query', 'idx', 0); a.edge('idx', 'coll', 0); a.edge('sched', 'idx', 0)
+        if (t > 1.6) {
+          a.pkt('query', 'coll', ((t - 1.6) * 0.8) % 1, 'bad')
+          const f = clamp(seg(t, 2, 6.2)) * 10, cur = Math.min(9, Math.floor(f))
+          for (let i = 0; i <= cur; i++) {
+            const [x1, x2, y] = a.row('coll', i)
+            if (i < cur) { a.dot(x1, y, 'bad', 0.9); a.dot((x1 + x2) / 2, y, 'bad', 0.9); a.dot(x2, y, 'bad', 0.9) }
+            else a.dot(x1 + (x2 - x1) * (f - cur), y, 'bad', 2)
+          }
+          a.node('coll', { tone: 'bad' })
         }
-        a.node('coll', { tone: 'bad' })
-      } else {
-        a.cap(1); a.node('idx', { tone: 'ok' }); a.edge('query', 'coll', 0.08); a.node('coll', { alpha: 0.55 })
-        const u = (((t - 5.6) % 1.8) / 1.8) * 2.4
+      } else if (t < 10) { // fix: the scheduler builds the index before the day starts
+        a.cap(2); a.edge('query', 'coll', 0.08); a.edge('query', 'idx', 0.2); a.edge('idx', 'coll', 0.2)
+        a.node('sched', { tone: 'hot' }); a.pkt('sched', 'idx', seg(t, 6.9, 8.1), 'hot', 1.8)
+        a.node('idx', { alpha: t > 8.1 ? 1 : 0.12, tone: t > 8.1 ? 'ok' : null })
+      } else { // outcome: queries go through the index
+        a.cap(3); a.node('idx', { tone: 'ok' }); a.node('sched', { alpha: 0.5 }); a.edge('query', 'coll', 0.08); a.node('coll', { alpha: 0.6 })
+        const u = (((t - 10) % 1.8) / 1.8) * 2.4
         a.pkt('query', 'idx', u, 'ok'); a.pkt('idx', 'coll', u - 1, 'ok')
         if (u > 1.9) for (const i of [3, 6]) { const [x1, x2, y] = a.row('coll', i); a.dot(x1 + (x2 - x1) * 0.4, y, 'ok', 2) }
       }
     },
   },
 
-  // Competency 4 — release pipeline
-  pipeline: {
-    nodes: [
-      box('tag', -1.8, 0.95, 1.3, 0.65), box('ci', 0, 0.95, 1.5, 0.65), box('img', 1.8, 0.95, 1.4, 0.65),
-      box('reg', 1.8, -0.75, 1.3, 0.65), box('dep', 0, -0.75, 1.5, 0.65), box('run', -1.8, -0.75, 1.3, 0.65),
-    ],
-    edges: [['tag', 'ci'], ['ci', 'img'], ['img', 'reg'], ['reg', 'dep'], ['dep', 'run']],
-    dur: 9, still: 8.5,
-    play(a, t) {
-      const n = ['tag', 'ci', 'img', 'reg', 'dep', 'run'], s = t / 1.3
-      a.cap(0)
-      n.forEach((id, i) => {
-        if (i < 5) a.pkt(id, n[i + 1], s - i, 'hot', 1.6)
-        a.node(id, s >= i + 1 || (i === 5 && s >= 5) ? { tone: 'ok' } : s >= i ? { tone: 'hot' } : { alpha: 0.45 })
-      })
-    },
-  },
-
-  // Competency 5 — Redis tampering: validation bypassed, then state moved into process memory
+  // Story 3 — session state in Redis is edited directly; app-layer checks fail once
+  // the secret is exposed; the state moves into process memory behind Docker isolation
   tamper: {
     nodes: [
-      circ('atk', -2.3, 1.25, 0.3), box('redis', -0.6, 1.25, 1.4, 0.75), box('val', -0.6, -0.45, 1.9, 0.6),
-      box('docker', 1.75, -0.45, 1.75, 2.5, { dashed: true, labelPos: 'top' }), box('game', 1.75, -0.2, 1.35, 0.6), box('mem', 1.75, -1.15, 1.35, 0.55),
+      circ('atk', -2.35, 1.3, 0.28), box('redis', -0.6, 1.3, 1.5, 0.75), box('val', -0.6, -0.4, 1.9, 0.7),
+      box('docker', 1.8, -0.5, 1.75, 2.5, { dashed: true, labelPos: 'top' }), box('svc', 1.8, -0.2, 1.35, 0.6), box('mem', 1.8, -1.15, 1.35, 0.55),
     ],
-    edges: [['atk', 'redis'], ['redis', 'val'], ['val', 'game'], ['redis', 'mem', 0.9]],
-    dur: 12.5, still: 11,
+    edges: [['atk', 'redis'], ['redis', 'val'], ['val', 'svc'], ['redis', 'mem', 0.9]],
+    dur: 17, still: 16,
     play(a, t) {
-      a.node('atk', { tone: 'bad' })
-      if (t < 5.8) {
-        a.cap(0); a.node('docker', { alpha: 0 }); a.node('mem', { alpha: 0 }); a.edge('redis', 'mem', 0)
-        const u = ((t % 2.9) / 2.9) * 3.3
-        a.pkt('atk', 'redis', u, 'bad', 1.5); a.pkt('redis', 'val', u - 1, 'bad', 1.5); a.pkt('val', 'game', u - 2, 'bad', 1.5)
-        if (t > 0.9) a.node('redis', { tone: 'bad' })
-        if (t > 1.8) a.node('val', { tone: 'bad', alpha: 0.7 })
-        if (t > 2.7) a.node('game', { tone: 'bad' })
-      } else {
-        const t2 = t - 5.8
-        a.cap(1); a.node('docker', { tone: 'ok' }); a.node('mem', { tone: t2 > 1.5 ? 'ok' : 'hot' }); a.node('game', { tone: 'ok' })
+      if (t < 4) { // situation: the service keeps session state in Redis
+        a.cap(0); a.node('atk', { alpha: 0 }); a.edge('atk', 'redis', 0); a.node('docker', { alpha: 0 }); a.node('mem', { alpha: 0 }); a.edge('redis', 'mem', 0)
+        a.node('val', { alpha: 0.25 })
+        const u = ((t % 2) / 2) * 2
+        a.pkt('redis', 'val', u, 'ok', 1.2); a.pkt('val', 'svc', u - 1, 'ok', 1.2)
+        a.node('redis', { tone: 'ok' }); a.node('svc', { tone: 'ok' })
+      } else if (t < 10.5) { // problem: direct edits pass validation
+        const u2 = t - 4
+        a.cap(1); a.node('atk', { tone: 'bad' }); a.node('docker', { alpha: 0 }); a.node('mem', { alpha: 0 }); a.edge('redis', 'mem', 0)
+        const u = ((u2 % 3.2) / 3.2) * 3.4
+        a.pkt('atk', 'redis', u, 'bad', 1.5); a.pkt('redis', 'val', u - 1, 'bad', 1.5); a.pkt('val', 'svc', u - 2, 'bad', 1.5)
+        if (u2 > 1) a.node('redis', { tone: 'bad' })
+        a.node('val', { tone: u2 > 2 ? 'bad' : 'hot' })
+        if (u2 > 2.9) a.node('svc', { tone: 'bad' })
+      } else { // fix: state leaves Redis for process memory; Docker isolates the environment
+        const t2 = t - 10.5
+        a.cap(2); a.node('atk', { tone: 'bad' }); a.node('docker', { tone: 'ok' }); a.node('mem', { tone: t2 > 1.5 ? 'ok' : 'hot' }); a.node('svc', { tone: 'ok' })
         a.pkt('redis', 'mem', seg(t2, 0.2, 1.5), 'hot', 2)
-        a.node('redis', { alpha: 0.4 }); a.node('val', { alpha: 0.25 }); a.edge('redis', 'val', 0.1); a.edge('val', 'game', 0.1)
+        a.node('redis', { alpha: 0.4 }); a.node('val', { alpha: 0.2 }); a.edge('redis', 'val', 0.1); a.edge('val', 'svc', 0.1)
         a.edge('redis', 'mem', t2 < 1.6 ? 1 : 0.12)
         a.pkt('atk', 'redis', (t2 % 2.2) / 2.2, 'bad', 1.2)
       }
     },
   },
 
-  // Tyche — bare metal → Docker, following the cutover runbook
+  // Story 4 — bare metal → Docker, following the cutover runbook
   migrate: {
     nodes: [
       box('old', -1.75, 0.55, 1.75, 2.0, { labelPos: 'top' }), box('s1', -1.75, 0.6, 1.3, 0.45), box('s2', -1.75, -0.05, 1.3, 0.45),
@@ -162,46 +143,50 @@ export const SCENES = {
       box('f', -1.85, -1.55, 1.5, 0.5), box('sy', 0, -1.55, 1.5, 0.5), box('op', 1.85, -1.55, 1.6, 0.5),
     ],
     edges: [['s1', 'c1'], ['s2', 'c2'], ['f', 'sy'], ['sy', 'op']],
-    dur: 11, still: 10,
+    dur: 15, still: 14,
     play(a, t) {
-      const step = t < 2.6 ? 0 : t < 6.8 ? 1 : 2
-      a.cap(step)
-      a.node('f', { tone: step > 0 ? 'ok' : 'hot' })
-      a.node('sy', step === 1 ? { tone: 'hot' } : step > 1 ? { tone: 'ok' } : { alpha: 0.4 })
-      a.node('op', step === 2 ? { tone: t > 9 ? 'ok' : 'hot' } : { alpha: 0.4 })
-      const v = clamp(seg(t, 2.6, 6.2))
-      for (const c of ['c1', 'c2']) a.node(c, { alpha: 0.08 + v * 0.92, tone: step === 2 ? 'ok' : null })
-      a.edge('s1', 'c1', step === 1 ? 1 : 0.15); a.edge('s2', 'c2', step === 1 ? 1 : 0.15)
-      if (step === 0) { a.node('old', { tone: 'hot' }) }
-      if (step === 1) for (let k = 0; k < 3; k++) { a.pkt('s1', 'c1', ((t - 2.6) * 0.6 + k / 3) % 1, 'hot'); a.pkt('s2', 'c2', ((t - 2.6) * 0.6 + k / 3 + 0.17) % 1, 'hot') }
-      if (step === 2) {
-        for (const o of ['old', 's1', 's2']) a.node(o, { alpha: 0.25 })
-        a.node('neu', { tone: 'ok' })
-        for (let k = 0; k < 3; k++) { const u = ((t - 6.8) * 0.7 + k / 3) % 1; a.dot(1.2 + k * 0.55, 2.35 - u * 0.75, 'ok', 1.2) }
-      }
+      const step = t < 3.6 ? -1 : t < 6.2 ? 0 : t < 10.6 ? 1 : 2
+      a.cap(step + 1)
+      const traffic = (x0, tone) => { for (let k = 0; k < 3; k++) { const u = (t * 0.7 + k / 3) % 1; a.dot(x0 - 0.55 + k * 0.55, 2.35 - u * 0.75, tone, 1.2) } }
+      a.node('f', step < 0 ? { alpha: 0.3 } : { tone: step > 0 ? 'ok' : 'hot' })
+      a.node('sy', step === 1 ? { tone: 'hot' } : step > 1 ? { tone: 'ok' } : { alpha: 0.3 })
+      a.node('op', step === 2 ? { tone: t > 13 ? 'ok' : 'hot' } : { alpha: 0.3 })
+      const v = clamp(seg(t, 6.2, 10))
+      a.node('neu', { alpha: step < 0 ? 0.15 : 1, tone: step === 2 ? 'ok' : null })
+      for (const c of ['c1', 'c2']) a.node(c, { alpha: 0.06 + v * 0.94, tone: step === 2 ? 'ok' : null })
+      a.edge('s1', 'c1', step === 1 ? 1 : 0.12); a.edge('s2', 'c2', step === 1 ? 1 : 0.12)
+      if (step < 0) { traffic(-1.75, 'ok'); a.node('s1', { tone: 'ok' }); a.node('s2', { tone: 'ok' }) }
+      if (step === 0) a.node('old', { tone: 'hot' })
+      if (step === 1) for (let k = 0; k < 3; k++) { a.pkt('s1', 'c1', ((t - 6.2) * 0.6 + k / 3) % 1, 'hot'); a.pkt('s2', 'c2', ((t - 6.2) * 0.6 + k / 3 + 0.17) % 1, 'hot') }
+      if (step === 2) { for (const o of ['old', 's1', 's2']) a.node(o, { alpha: 0.25 }); traffic(1.75, 'ok') }
     },
   },
 
-  // Tyche — two concurrent requests pass the same check; Redis marker fixes it
-  race: {
-    nodes: [circ('r1', -2.3, 0.75, 0.3), circ('r2', -2.3, -0.95, 0.3, { labelPos: 'below' }), box('chk', -0.3, -0.1, 1.6, 0.8), box('rew', 1.95, -0.1, 1.3, 0.8), box('mark', -0.3, 1.45, 1.5, 0.55)],
-    edges: [['r1', 'chk'], ['r2', 'chk'], ['chk', 'rew'], ['chk', 'mark']],
-    dur: 11.5, still: 10,
+  // Story 5 — three platforms on three stacks; a unified gRPC backend built to a POC,
+  // evaluated, and stopped
+  poc: {
+    nodes: [
+      box('a', -2.0, 1.25, 1.35, 0.7), box('b', -2.0, 0.1, 1.35, 0.7), box('c', -2.0, -1.05, 1.35, 0.7),
+      box('poc', 0.2, 0.1, 1.8, 1.5, { dashed: true }), box('live', 2.2, 0.1, 1.0, 0.9),
+    ],
+    edges: [['a', 'poc'], ['b', 'poc'], ['c', 'poc'], ['poc', 'live']],
+    dur: 15, still: 14,
     play(a, t) {
-      if (t < 5.4) {
-        a.cap(0); a.node('mark', { alpha: 0 }); a.edge('chk', 'mark', 0)
-        a.pkt('r1', 'chk', seg(t, 0.5, 1.8), null, 1.6); a.pkt('r2', 'chk', seg(t, 0.5, 1.8), null, 1.6)
-        if (t > 1.7 && t < 2.3) a.node('chk', { tone: 'hot' })
-        a.pkt('chk', 'rew', seg(t, 1.9, 3.0), 'bad', 1.6); a.pkt('chk', 'rew', seg(t, 2.15, 3.25), 'bad', 1.6)
-        if (t > 3.0) a.node('rew', { tone: 'bad', sub: t > 3.25 ? '× 2' : '× 1' })
-      } else {
-        const u = t - 5.4
+      const src = ['a', 'b', 'c']
+      if (t < 3.6) { // situation: three separate stacks
+        a.cap(0); a.node('poc', { alpha: 0 }); a.node('live', { alpha: 0 }); a.edge('poc', 'live', 0)
+        src.forEach((s, k) => { a.edge(s, 'poc', 0); a.node(s, { tone: Math.floor(t / 1.2) % 3 === k ? 'hot' : null }) })
+      } else if (t < 9) { // what I built: one backend, to a working POC
         a.cap(1)
-        a.pkt('r1', 'chk', seg(u, 0.5, 1.8), null, 1.6); a.pkt('r2', 'chk', seg(u, 0.5, 1.8), null, 1.6)
-        a.pkt('chk', 'mark', seg(u, 1.8, 2.4), 'ok', 1.3); a.node('mark', { tone: u > 2.4 ? 'ok' : null })
-        a.pkt('chk', 'rew', seg(u, 2.0, 3.1), 'ok', 1.6); a.pkt('chk', 'r2', seg(u, 2.4, 3.6), 'bad', 1.6)
-        if (u > 3.1) a.node('rew', { tone: 'ok', sub: '× 1' })
-        if (u > 3.6) a.node('r2', { tone: 'bad' })
+        src.forEach((s, k) => a.pkt(s, 'poc', ((t - 3.6) * 0.55 + k / 3) % 1))
+        a.node('poc', { tone: 'hot', alpha: clamp(seg(t, 3.6, 4.6)) }); a.edge('poc', 'live', 0.3); a.node('live', { alpha: 0.6 })
+      } else if (t < 10.6) {
+        a.cap(1); a.node('poc', { tone: 'hot' })
+        a.pkt('poc', 'live', seg(t, 9, 10.6) * 0.5, 'hot', 1.4)
+      } else { // the decision: stopped before production
+        a.cap(2)
+        a.pkt('poc', 'live', 0.5, 'bad', 2.2 + Math.sin(t * 6) * 0.4)
+        a.edge('poc', 'live', 0.1); a.node('poc', { tone: 'hot', alpha: 0.75 }); a.node('live', { tone: 'ok' })
       }
     },
   },
@@ -223,7 +208,7 @@ export const SCENES = {
           if (i < cur) a.node('k' + i, { tone: 'hot', alpha: 0.6 })
           if (i === cur) { a.node('k' + i, { tone: 'bad' }); const p = a.pos('k' + i); a.dot(p[0], p[1], 'bad', 2.2) }
         }
-        const p = a.pos('k' + cur); a.pkt2(a.pos('q'), p, (f - cur), 'bad', 1)
+        a.pkt2(a.pos('q'), a.pos('k' + cur), f - cur, 'bad', 1)
       } else {
         a.cap(1); a.node('hash', { tone: 'ok' }); a.node('keys', { alpha: 0.3 })
         for (let i = 0; i < 8; i++) a.node('k' + i, { alpha: 0.12 })

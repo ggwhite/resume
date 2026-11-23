@@ -100,7 +100,7 @@ const masked = ref(reduced)
 const cells = ref(fields.map((f) => (reduced ? f.out : f.raw)))
 let userSet = false
 function toggleMask(byUser) {
-  if (byUser) userSet = true
+  if (byUser) { userSet = true; clearTimeout(timer) } // a click wins over the pending auto-toggle
   masked.value = !masked.value
   const target = fields.map((f) => (masked.value ? f.out : f.raw))
   if (reduced) { cells.value = target; return }

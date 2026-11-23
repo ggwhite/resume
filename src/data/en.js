@@ -15,9 +15,11 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
-  // Voice and staging for the interactive site: headlines, story steps, scene labels.
+  // Voice and staging for the interactive site: headlines, stories, scene labels.
   // Creative framing only — every claim restates a fact from the record below
-  // (competencies / aiWorkflow / experience / project) or from the repos' READMEs.
+  // (competencies / aiWorkflow / experience / project), the approved interview
+  // stories, or the repos' READMEs. Headlines, hero and diagrams use neutral terms
+  // (services, users, platforms); industry detail stays in the experience record.
   site: {
     nav: { systems: "Problems", work: "Experience", ai: "AI workflow", oss: "Open source", skills: "Toolbox", contact: "Contact" },
     langSwitch: { label: "中文", to: "/zh-tw" },
@@ -25,44 +27,88 @@ export default {
       nameLines: ["White", "Chang"],
       altName: "張育誠",
       stack: "Go · Java · Lua",
-      lede: "About 15 years of backend work — the last seven inside real-time game server platforms, where a race condition pays a reward twice and a tampered Redis record forges game state. I build in Go, Java and Lua (Skynet), and I run my AI agents by one rule: whoever writes the code never verifies it.",
-      scroll: "Scroll",
+      lede: "About 15 years of backend engineering, the last seven on high-concurrency, real-time platforms. I work on the parts that have to hold: data and performance, reliability and security, delivery. I build in Go, Java and Lua, and I run AI agents by one rule: whoever writes the code never verifies it.",
+      words: ["Go", "Java", "Lua", "Redis", "MongoDB", "MySQL", "gRPC", "Docker", "Kubernetes"],
       photoAlt: "Portrait of White Chang",
     },
     stats: [
       { prefix: "~", num: 15, suffix: "", unit: "years", label: "of software development" },
       { prefix: "~", num: 2.7, decimals: 1, suffix: "M", unit: "records / day", label: "MongoDB collection whose full scans I diagnosed and indexed" },
-      { prefix: ">", num: 50, suffix: "%", unit: "shorter", label: "new-title development cycle, via a reusable Go framework" },
+      { prefix: ">", num: 50, suffix: "%", unit: "shorter", label: "development cycle for new products, via a reusable Go framework" },
       { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker, my open-source Go library" },
     ],
     systems: {
-      title: "Five problems I keep solving",
-      sub: "Scroll. Each one plays out as you read it.",
+      title: "Five problems, told from the cause",
+      sub: "The picture follows the text: the situation first, then what went wrong, then the fix.",
       steps: [
-        { scene: "poc", head: "Knowing when not to ship.", body: "I planned a microservice / gRPC unification of a multi-platform game backend and built it to a working POC — tamper-resistant data layer included: HMAC signing, a state machine, an audit trail. Then I evaluated it and stopped. A full rewrite was too risky for live platforms, so the POC stays a POC." },
-        { scene: "framework", head: "One framework, many titles.", body: "Multi-server systems — Gate, Lobby, Game — across 10+ repositories and multiple platforms. The shared mechanics went into a reusable framework, and new-title development cycles got more than 50% shorter." },
-        { scene: "index", head: "Stop reading every record.", body: "A collection taking in ~2.7M records a day was being scanned end to end. I diagnosed the full-collection scans and designed compound indexes. On the cache side, I restructured the Redis key architecture until the excessive SCANs were gone." },
-        { scene: "pipeline", head: "From a git tag to a running container.", body: "Docker images built automatically and pushed to Harbor. Helm charts for Kubernetes. GitLab Runners, and remote deployments over SSH. The release is a pipeline, not a ritual." },
-        { scene: "tamper", head: "Assume the secret has leaked.", body: "I traced a Redis tampering incident through its full attack chain. Once the secret was exposed, app-layer validation could be bypassed — so for the affected games, sensitive state moved out of Redis into process memory, and the environment was isolated with Docker." },
+        {
+          scene: "race", head: "Two requests, one check.", tags: ["Concurrency", "Redis"],
+          body: [
+            "A feature let each user claim something once a day. The server handled it in three steps: check that it had not been claimed yet, run a query to confirm the user qualified, then grant it.",
+            "Users reported that the button did nothing, so they tapped again. Every extra tap passed step one, because nothing had been granted yet, and queued behind the same slow query. When the query came back, each waiting request granted the item. One user, several grants: a bug that cost real money.",
+            "The hole was the gap between checking and granting. I closed it with a Redis marker: the first request to write the marker goes on, every later one is turned away, and the marker expires after a day.",
+          ],
+        },
+        {
+          scene: "index", head: "Why that query was slow enough to matter.", tags: ["MongoDB", "Performance"],
+          body: [
+            "The slow query was a second cause, and a separate one. The records it read live in a collection that is created automatically every day, about 2.7 million records a day.",
+            "Nothing in that daily creation step built an index. So every query scanned the whole collection, and the slow queries triggered retries that made it worse.",
+            "Adding an index by hand would have fixed one day. I wrote a scheduler on the Lua server that builds the compound index ahead of time, for today's and tomorrow's collections, so the midnight switch never lands on a bare one. Then I applied the same approach to the other large collections.",
+          ],
+        },
+        {
+          scene: "tamper", head: "When the secret leaks, move the data.", tags: ["Security", "Redis", "Docker"],
+          body: [
+            "To let a dropped connection pick up where it left off, a service kept session state in Redis.",
+            "Then the records started showing results the normal flow could not have produced. Someone was editing that state in Redis directly. I added a checksum, then AES encryption. Neither held: once the secret is exposed, the attacker can reproduce any app-layer validation.",
+            "So I stopped guarding the data where it was and moved it. For the affected services, the sensitive state went into process memory, where a Redis client cannot reach it, and the environment was isolated with Docker. I also designed a tamper-resistant architecture (HMAC signing, a state machine, an audit trail); that part reached a working POC, not production.",
+          ],
+        },
+        {
+          scene: "migrate", head: "Moving live services without a surprise.", tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
+          body: [
+            "Services and back offices for several platforms ran directly on bare-metal hosts, and the settings in git no longer matched what was actually running in production.",
+            "A move like that gets one cutover. Deploy straight from git, and production settings roll back without anyone noticing.",
+            "Between July and October 2026 I moved them into Docker containers. Images go to Harbor and AWS ECR, and a git tag triggers the release pipeline. I pulled the production configs back and compared them with git key by key, wrote scripts that compare MySQL, Redis and MongoDB between old and new, and wrote the cutover runbook: freeze writes, sync data, reopen traffic, each step with its own completion criteria. The fix-up tool only previews unless told to write, and backs up first.",
+          ],
+        },
+        {
+          scene: "poc", head: "Knowing when not to ship.", tags: ["Golang", "gRPC", "Protobuf"],
+          body: [
+            "Three platforms had grown up on three different stacks: Go with .NET, Lua with PHP, Lua/Skynet with Java. Each had its own servers, back office and deployment pipeline.",
+            "After the tampering incident I wanted a root fix instead of another patch: one backend, services talking over gRPC, with data integrity designed in from the start.",
+            "I built it to a working POC. Then I evaluated the migration separately from the design, and stopped: a full rewrite was too risky for live platforms. Nothing from it went to production. A good design does not make a migration worth doing.",
+          ],
+        },
       ],
     },
     work: {
       title: "Where it happened",
       sub: "Nearly 15 years across gaming, payment and enterprise systems.",
-      role: "Architecture planning and technical decisions in a 5–10 person team: weighing whether a change should be made at all, what it touches, and what it risks.",
+      role: "Architecture planning and technical decisions in a 5–10 person team: weighing whether a change should be made at all, what it touches, and what it risks. The five stories above are from here. Two more:",
       chapters: [
-        { scene: "migrate", when: "Jul – Oct 2026", head: "A migration with a script for every step.", body: "Game services and back offices for multiple platforms moved from bare metal into Docker containers. The cutover followed a runbook I wrote — write freeze, data sync, reopen traffic — each step with its own completion criteria. Comparison scripts checked MySQL, Redis and MongoDB across old and new; the fix-up tool defaults to dry-run and backs up the original values before it writes." },
-        { scene: "race", head: "Two requests, one reward.", body: "Players were claiming the same event reward more than once — a bug that cost real money. The root cause was a race condition: concurrent requests passing the check at the same moment. The fix is a Redis-based dedup marker." },
-        { scene: "index", head: "~2.7M records a day, and the index gets there first.", body: "Queries were scanning the whole collection. I designed compound indexes, wrote a Lua scheduler that pre-builds each day's indexes automatically, and carried the fix over to other large collections." },
-        { scene: "hash", head: "One Hash instead of a keyspace sweep.", body: "Lookups had to SCAN across keys built around the rid. I refactored the structure into a Hash with rid as the field, and the excessive SCAN operations went away." },
-        { scene: "inject", head: "Evidence first. Restart second.", body: "Lua code was injected through the Skynet debug console. I set up monitoring and preserved the evidence before touching anything — then restarted the affected services, which cleared the injected code from memory." },
+        {
+          scene: "hash", head: "One Hash instead of a keyspace sweep.",
+          body: [
+            "Some Redis data was stored as one key per rid, so reading it meant running SCAN across the keyspace.",
+            "I refactored the structure into a single Hash with rid as the field. Lookups became direct, and the excessive SCAN operations went away.",
+          ],
+        },
+        {
+          scene: "inject", head: "Evidence first. Restart second.",
+          body: [
+            "Abnormal results kept showing up in the records. I traced them to Lua code injected through the Skynet debug console, changing service logic in memory.",
+            "I set up monitoring and preserved the evidence before restarting anything. The restart then cleared the injected code from memory.",
+          ],
+        },
       ],
       alsoTitle: "Also at Tyche",
       also: [
         "A shared team knowledge base and AI-agent rules, so Claude Code and Codex follow the same conventions.",
         "A playbook / runbook loop: every investigation and release pitfall gets written back into the docs.",
         "Real-time push notifications over RabbitMQ.",
-        "GitLab CI/CD into Harbor, Helm charts, GitLab Runners.",
+        "GitLab CI/CD into Harbor, Helm charts on Kubernetes, GitLab Runners.",
         "New graduates onboarded through code review and pair programming.",
       ],
       record: "Full record",
@@ -72,8 +118,8 @@ export default {
       title: "Agents do the typing. I do the deciding.",
       quote: "Whoever writes the code never verifies it.",
       steps: [
-        { scene: "delegate", head: "Three seats, never shared.", body: "Lightweight models take file search and routine chores. A worker implements. A separate, independent verifier signs off. Architecture decisions — module boundaries, protocols, the security model — stay with me, and so do the production blind spots AI overlooks: logging coverage, security hardening." },
-        { scene: "guard", head: "A fence, and a memory.", body: "Harness rule files (CLAUDE.md / AGENTS.md) keep agents inside project conventions. memory-mcp, which I built, carries preferences, past pitfalls and unfinished work into the next session." },
+        { scene: "delegate", head: "Three seats, never shared.", body: ["Lightweight models take file search and routine chores. A worker implements. A separate, independent verifier signs off.", "Architecture decisions — module boundaries, protocols, the security model — stay with me, and so do the production blind spots AI overlooks: logging coverage, security hardening."] },
+        { scene: "guard", head: "A fence, and a memory.", body: ["Harness rule files (CLAUDE.md / AGENTS.md) keep agents inside project conventions.", "memory-mcp, which I built, carries preferences, past pitfalls and unfinished work into the next session."] },
       ],
     },
     oss: {
@@ -120,44 +166,34 @@ export default {
     skills: { title: "What's in the toolbox", hint: "Pick a language to see what I use with it." },
     contact: { title: "Open a connection.", sub: "Senior Backend Engineer · Go · Java · Lua" },
     scenes: {
-      cluster: { labels: { players: ["Players"], gate: ["Gate"], lobby: ["Lobby"], g1: ["Game"], g2: ["Game"], g3: ["Game"] }, caps: [] },
-      poc: {
-        labels: { a: ["Platform A"], b: ["Platform B"], c: ["Platform C"], poc: ["gRPC POC", "HMAC · state machine · audit trail"], live: ["Live platforms"] },
-        caps: ["Unification built to a working POC", "Evaluated, then stopped: a full rewrite is too risky for live platforms"],
-      },
-      framework: {
-        labels: { fw: ["Reusable framework", "shared game mechanics"], g1: ["New title"], g2: ["New title"], g3: ["New title"], g4: ["New title"] },
-        caps: ["Shared mechanics, written once", "New-title development cycle: over 50% shorter"],
+      race: {
+        labels: { req: ["User taps"], c1: ["1 · Claimed?"], c2: ["2 · Qualifies?", "slow query"], grant: ["3 · Grant"], mark: ["Redis marker"] },
+        caps: ["How it should work: check, verify, grant once", "Step 2 is slow, so a second tap passes step 1 before anything is granted", "Fix: the first request writes a Redis marker; later ones are turned away"],
       },
       index: {
-        labels: { query: ["Query"], idx: ["Compound index"], coll: ["Collection", "~2.7M records / day"] },
-        caps: ["Full-collection scan: every record gets read", "Compound index: straight to the matching records"],
-      },
-      pipeline: {
-        labels: { tag: ["git tag"], ci: ["GitLab CI/CD"], img: ["Docker image"], reg: ["Harbor"], dep: ["Helm / SSH"], run: ["Running"] },
-        caps: ["Tag → pipeline → image → registry → deploy"],
+        labels: { query: ["Query"], idx: ["Compound index"], sched: ["Lua scheduler", "runs daily"], coll: ["Today's collection", "~2.7M records / day"] },
+        caps: ["A new collection is created every day", "It has no index, so every query reads every record", "A scheduler builds the index ahead, for today and tomorrow", "Queries go through the index, straight to the matching records"],
       },
       tamper: {
-        labels: { atk: ["Attacker"], redis: ["Redis", "sensitive state"], val: ["App-layer validation"], docker: ["Docker"], game: ["Game server"], mem: ["Process memory"] },
-        caps: ["Secret exposed: tampered data walks through app-layer validation", "Sensitive state moved into process memory, environment isolated with Docker"],
+        labels: { atk: ["Attacker"], redis: ["Redis", "session state"], val: ["App-layer validation", "checksum · AES"], docker: ["Docker"], svc: ["Service"], mem: ["Process memory"] },
+        caps: ["A service keeps session state in Redis so connections can resume", "The state is edited in Redis directly; with the secret exposed, validation passes it", "The state moves into process memory; the environment is isolated with Docker"],
       },
       migrate: {
-        labels: { old: ["Bare metal"], s1: ["Game services"], s2: ["Back office"], neu: ["Docker"], c1: ["Game services"], c2: ["Back office"], f: ["1 · Write freeze"], sy: ["2 · Data sync"], op: ["3 · Reopen traffic"] },
-        caps: ["Runbook step 1: freeze writes", "Runbook step 2: sync data, compare old against new", "Runbook step 3: reopen traffic on the containers"],
+        labels: { old: ["Bare metal"], s1: ["Services"], s2: ["Back office"], neu: ["Docker"], c1: ["Services"], c2: ["Back office"], f: ["1 · Write freeze"], sy: ["2 · Data sync"], op: ["3 · Reopen traffic"] },
+        caps: ["Before: live traffic on bare-metal hosts", "Runbook step 1: freeze writes", "Runbook step 2: sync data, compare old against new", "Runbook step 3: reopen traffic on the containers"],
       },
-      race: {
-        labels: { r1: ["Request A"], r2: ["Request B"], chk: ["Check: claimed?"], rew: ["Reward"], mark: ["Redis marker"] },
-        caps: ["Race: both requests pass the check at the same moment", "With the Redis dedup marker, the duplicate is rejected"],
+      poc: {
+        labels: { a: ["Platform A", "Go · .NET"], b: ["Platform B", "Lua · PHP"], c: ["Platform C", "Lua · Java"], poc: ["gRPC POC", "HMAC · state machine · audit trail"], live: ["Live platforms"] },
+        caps: ["Three platforms, three stacks, three of everything", "One backend, built to a working POC", "Evaluated, then stopped: a full rewrite is too risky for live platforms"],
       },
       hash: {
         labels: { keys: ["one key per rid"], q: ["Lookup"], hash: ["Hash", "field = rid"] },
         caps: ["SCAN walks the keyspace to find one rid", "One Hash, rid as the field: a direct lookup"],
       },
       inject: {
-        labels: { atk: ["Attacker"], con: ["Skynet debug console"], svc: ["Game service", "in memory"], mon: ["Monitoring"], ev: ["Evidence"] },
+        labels: { atk: ["Attacker"], con: ["Skynet debug console"], svc: ["Service", "in memory"], mon: ["Monitoring"], ev: ["Evidence"] },
         caps: ["Lua code injected through the debug console", "First: monitoring on, evidence preserved", "Then: restart clears the injected code from memory"],
       },
-      timeline: { labels: {}, caps: [] },
       delegate: {
         labels: { main: ["Main session", "I plan and decide"], light: ["Lightweight model", "file search, chores"], worker: ["Worker", "implementation"], ver: ["Verifier", "independent sign-off"] },
         caps: ["Search and chores go to a lightweight model", "Implementation goes to the worker", "Sign-off comes from a separate verifier"],
@@ -167,7 +203,6 @@ export default {
         caps: ["Rule files keep the agent inside project conventions", "Session ends: what it learned is stored", "Next session starts: the memory comes back"],
       },
       handshake: { labels: { you: ["You"], me: ["White"] }, caps: [] },
-      dust: { labels: {}, caps: [] },
     },
   },
   pdfHighlights: {

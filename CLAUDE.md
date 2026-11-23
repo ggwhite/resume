@@ -54,8 +54,8 @@ src/
     portrait.js      # 大頭照的 WebGL 平面（全彩、切片進場、指標漣漪）
   styles/site.css    # 網站樣式、動態、reduced-motion 與無 WebGL fallback
   assets/
-    portrait.jpg     # 網站與 PDF 使用的大頭照（由 photo.jpg 裁切，全彩，已去除 metadata）
-    photo.jpg        # 原始照片，NEVER 刪除
+    portrait.jpg     # 網站與 PDF 使用的大頭照（全彩、已裁切、已去除 metadata）
+    photo.jpg        # 同一張裁切後的照片；NEVER 把未裁切的原始照片加回 repo
 scripts/
   generate-pdf.py    # PDF 產生與檢查
   pdf-text.swift     # 以 PDFKit 抽出 PDF 文字
@@ -66,12 +66,15 @@ scripts/
 - 場景定義在 `gl/scenes.js`（節點、連線、`play(a, t)` 腳本）；標籤與字幕文字在兩個語言檔的 `site.scenes.<key>`。
 - 場景一律要「演出那一段寫的事」：標籤用畫面上那段文字裡的名詞，腳本只表現來源裡有的事實（例：POC 停在 POC、Redis 事件的結果是「敏感狀態改存 process 記憶體＋Docker 隔離」）。NEVER 放純裝飾、沒有意義的形狀。
 - 新增故事：`scenes.js` 加場景 → 兩個語言檔加 `site.scenes.<key>` → `Site.vue`（或資料的 steps／chapters）加一段 `data-scene`。
-- 目前場景：cluster（hero）、poc／framework／index／pipeline／tamper（五種問題）、migrate／race／index／hash／inject（大極）、timeline（先前經歷）、delegate／guard（AI 工作流程）、handshake（聯絡）、dust（無圖）。
+- 目前場景：words（hero，粒子逐一拼出 `site.hero.words` 的技術名稱）、race／index／tamper／migrate／poc（五個問題）、hash／inject（大極）、timeline（先前經歷）、delegate／guard（AI 工作流程）、handshake（聯絡）、dust（無圖）。
+- 故事場景的腳本順序一律跟文字一樣：先演「原本的情況」，再演「出了什麼事」，最後演「怎麼解／結果」；字幕（`caps`）逐段對應。
 
 ## 資料維護原則
 - **履歷內容一律放 `src/data/`**；component 只負責渲染。
 - 英文版與中文版保持同步、內容對等。
-- `site` 的創意文案只能換說法（框架、節奏、標題、比喻），每一句都要對得上紀錄欄位或 repo README 的事實；數字、職稱、日期、成果 NEVER 自行編造。
+- `site` 的創意文案只能換說法（框架、節奏、標題、比喻），每一句都要對得上紀錄欄位、`~/ob/求職/面試故事/` 已核可的故事或 repo README 的事實；數字、職稱、日期、成果 NEVER 自行編造。
+- 「五個問題」的每個故事一律寫成外人看得懂的三段：原本的情況 → 出了什麼事 → 我怎麼做與結果；NEVER 一開頭就丟結論。
+- 標題、hero、圖上的標籤一律用中性詞（服務、使用者、平台、發放）；NEVER 出現 Lobby、玩家、獎勵、博弈這類產業色彩的詞。公司名稱與日期照實保留，遊戲相關細節只留在工作經歷紀錄（experience）裡。
 - NEVER 寫「帶領／主導團隊」、NEVER 提內部專案代號；微服務／gRPC 整合與 HMAC 防竄改架構一律寫「做到 POC」。
 - GitHub star 數以 `gh api repos/ggwhite/<repo>` 為準，改在 `shared.js` 的 `repos`；不到 10 顆的不顯示（memory-mcp、Jarvis 用測試數／功能當佐證）。
 - 開源 demo（`RepoDemo.vue`）的指令、範例值、分頁與角色名稱一律取自各 repo README；NEVER 編造輸出或數據。Jarvis 面板要保留「示意，非即時資料」字樣。
@@ -82,7 +85,7 @@ scripts/
 - 沒有 WebGL 時不下載 three.js、隱藏舞台欄；NEVER 讓 console 出現錯誤。
 - pixel ratio 上限：桌機 2、手機 1.5；fps 低於約 42 自動降低。分頁隱藏時暫停。
 - 窄螢幕：舞台固定在畫面上方，canvas 以 scissor 只畫在舞台範圍內，粒子不可跑到內文後面。
-- 文字一律是真的 DOM 文字，NEVER 畫進 canvas。小字（kicker、編號、頁尾）保留深色底。
+- 內容文字一律是真的 DOM 文字，NEVER 只畫在 canvas。唯一例外是 hero 的粒子字（裝飾、`aria-hidden`，同樣的技術名稱在 kicker 與內文都有）。小字（kicker、編號、頁尾）保留深色底。
 
 ## 路由
 | 路由 | 說明 |
@@ -92,5 +95,5 @@ scripts/
 | `/#/pdf` `/#/pdf/zh-tw` | PDF 專用版面（不在導航列） |
 
 ## 注意事項
-- `photo.jpg`／`portrait.jpg` 是個人照片，不要刪除；照片一律全彩，裁切時不可帶到其他人。
+- `photo.jpg`／`portrait.jpg` 是個人照片；照片一律全彩，畫面裡不可有其他人。未裁切的原始照片已從歷史移除，NEVER 再加回來。
 - `site.css` 會在 PDF 路由一起載入，PDF 版面的 class 名稱不可與它重複（例：`.contact` 曾撞名）。

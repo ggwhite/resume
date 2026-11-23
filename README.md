@@ -25,7 +25,7 @@ npm run pdf      # regenerate both PDFs (see below)
 | `src/views/Site.vue` | The interactive site (`/#/` English, `/#/zh-tw` Chinese). Renders data only. |
 | `src/components/RepoDemo.vue` | Live demos in the open-source cards: typed terminal, HUD sketch, masking toggle, role loop. |
 | `src/styles/site.css` | Site styles: tokens, layout, motion, reduced-motion and no-WebGL fallbacks. |
-| `src/gl/scenes.js` | The story scenes: each is a small diagram (nodes + edges) and a looping script that moves packets and changes node states. |
+| `src/gl/scenes.js` | The story scenes: each is a small diagram (nodes + edges) and a looping script that plays the story in the order the text tells it (situation, what went wrong, fix). The hero scene spells the stack in particles. |
 | `src/gl/field.js` | The three.js engine: a particle field draws the active scene's diagram and re-forms on every step; packets, projected DOM labels and captions; fits the scene into its DOM slot. |
 | `src/gl/portrait.js` | The portrait as a WebGL plane (full-colour photo, slice-in reveal, pointer ripple). |
 | `src/views/ResumePdf.vue` | Plain one-page layout for the PDF (`/#/pdf`, `/#/pdf/zh-tw`). |
