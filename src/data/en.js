@@ -140,13 +140,13 @@ export default {
     oss: {
       title: "Things I've put on GitHub",
       freelance: "Freelance",
-      archived: "archived",
+      archived: "no longer maintained",
       stars: "stars",
       lines: {
         "memory-mcp": "AI agents forget everything when a session ends. This remembers.",
         "jarvis": "A live HUD beside the chat: what every subagent is doing, and what it costs.",
         "go-masker": "One struct tag between your logs and someone's phone number.",
-        "4x": "Archived on purpose. Its one rule still runs my workflow.",
+        "4x": "No longer maintained, on purpose. Its one rule still runs my workflow.",
       },
       labels: { problem: "Problem", how: "How it works", proof: "Proof", repo: "View on GitHub", more: "Also on GitHub" },
       flag: {
@@ -439,11 +439,11 @@ export default {
     },
     {
       id: "4x",
-      name: "4x — Multi-Role AI Development Framework (open source, archived)",
+      name: "4x — Multi-Role AI Development Framework (open source, no longer maintained)",
       start: "Jun. 2026",
       end: "Aug. 2026",
       description: [
-        "Open-source Go CLI (github.com/ggwhite/4x, 35 GitHub stars) that ran AI coding agents as isolated Design → Code → Review → Test roles with deterministic guardrails; archived once native subagents covered it, and its core rule — whoever writes the code never verifies it — lives on in my current workflow",
+        "Open-source Go CLI (github.com/ggwhite/4x, 35 GitHub stars) that ran AI coding agents as isolated Design → Code → Review → Test roles with deterministic guardrails; no longer maintained once native subagents covered it, and its core rule — whoever writes the code never verifies it — lives on in my current workflow",
       ],
     },
     {

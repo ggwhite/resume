@@ -139,13 +139,13 @@ export default {
     oss: {
       title: "我放上 GitHub 的東西",
       freelance: "接案",
-      archived: "已封存",
+      archived: "不再維護",
       stars: "stars",
       lines: {
         "memory-mcp": "session 一結束，AI agent 就全忘了。這個工具幫它記得。",
         "jarvis": "對話旁的即時 HUD：每個 subagent 正在做什麼、花了多少。",
         "go-masker": "log 和別人的手機號碼之間，只隔一個 struct tag。",
-        "4x": "刻意封存。它的那條規則，還在我的工作流程裡。",
+        "4x": "已不再維護。它的那條規則，還在我的工作流程裡。",
       },
       labels: { problem: "問題", how: "怎麼運作", proof: "佐證", repo: "到 GitHub 看", more: "GitHub 上還有" },
       flag: {
@@ -437,11 +437,11 @@ export default {
     },
     {
       id: "4x",
-      name: "4x — 多角色 AI 開發框架（開源，已封存）",
+      name: "4x — 多角色 AI 開發框架（開源，不再維護）",
       start: "2026/06",
       end: "2026/08",
       description: [
-        "開源 Go CLI（github.com/ggwhite/4x，GitHub 35 stars），讓 AI coding agent 以 Design → Code → Review → Test 彼此隔離的角色運作，並以確定性護欄把關；原生 subagent 功能成熟後封存，核心原則「寫的人不驗自己」延續到現在的工作流程",
+        "開源 Go CLI（github.com/ggwhite/4x，GitHub 35 stars），讓 AI coding agent 以 Design → Code → Review → Test 彼此隔離的角色運作，並以確定性護欄把關；原生 subagent 功能成熟後不再維護，核心原則「寫的人不驗自己」延續到現在的工作流程",
       ],
     },
     {
