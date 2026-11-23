@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: 'docs',
     emptyOutDir: true,
+    chunkSizeWarningLimit: 600, // three.js is one lazy chunk (~130 kB gzip)
   },
   resolve: {
     alias: {

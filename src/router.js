@@ -1,19 +1,17 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import ResumeModern from './views/ResumeModern.vue'
-import Resume from './views/Resume.vue'
-import ResumePdf from './views/ResumePdf.vue'
+import Site from './views/Site.vue'
 
-const router = createRouter({
+const Pdf = () => import('./views/ResumePdf.vue')
+
+export default createRouter({
   history: createWebHashHistory(),
   routes: [
-    { path: '/', name: 'home', component: ResumeModern, props: { locale: 'en' } },
-    { path: '/en', name: 'resume-en', component: ResumeModern, props: { locale: 'en' } },
-    { path: '/zh-tw', name: 'resume-zh-tw', component: ResumeModern, props: { locale: 'zh-tw' } },
-    { path: '/pdf', name: 'pdf-en', component: ResumePdf, props: { locale: 'en' } },
-    { path: '/pdf/zh-tw', name: 'pdf-zh-tw', component: ResumePdf, props: { locale: 'zh-tw' } },
-    { path: '/legacy', name: 'legacy-en', component: Resume, props: { locale: 'en' } },
-    { path: '/legacy/zh-tw', name: 'legacy-zh-tw', component: Resume, props: { locale: 'zh-tw' } },
+    { path: '/', component: Site, props: { locale: 'en' } },
+    { path: '/en', redirect: '/' },
+    { path: '/zh-tw', component: Site, props: { locale: 'zh-tw' } },
+    { path: '/pdf', component: Pdf, props: { locale: 'en' }, meta: { pdf: true } },
+    { path: '/pdf/zh-tw', component: Pdf, props: { locale: 'zh-tw' }, meta: { pdf: true } },
+    { path: '/:rest(.*)*', redirect: '/' },
   ],
+  scrollBehavior: (to, from) => (to.path !== from.path ? { top: 0 } : undefined),
 })
-
-export default router

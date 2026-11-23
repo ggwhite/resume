@@ -15,6 +15,50 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
+  // Presentation copy for the interactive site (hero, section headings, 3D labels)
+  // and the one-page PDF. Facts only — same sources as the rest of this file.
+  site: {
+    nav: { systems: "Systems", work: "Experience", ai: "AI workflow", oss: "Open source", skills: "Toolbox", contact: "Contact" },
+    langSwitch: { label: "中文", to: "/zh-tw" },
+    hero: {
+      nameLines: ["White", "Chang"],
+      altName: "張育誠",
+      stack: "Go · Java · Lua",
+      lede: "Senior backend engineer with ~15 years of software development experience, the last seven on real-time game server platforms. I work mainly in Go, Java and Lua (Skynet), with Redis, MySQL, MongoDB, gRPC, RabbitMQ, Docker and Kubernetes.",
+      scroll: "Scroll",
+      photoAlt: "Portrait of White Chang",
+    },
+    stats: [
+      { prefix: "~", num: 15, suffix: "", unit: "years", label: "of software development" },
+      { prefix: "~", num: 2.7, decimals: 1, suffix: "M", unit: "records / day", label: "MongoDB collection whose full scans I diagnosed and indexed" },
+      { prefix: ">", num: 50, suffix: "%", unit: "shorter", label: "new-title development cycle, via a reusable Go framework" },
+      { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker, my open-source Go library" },
+    ],
+    sections: {
+      systems: { title: "Architecture & systems", sub: "Real-time game platforms: multi-server architecture, data stores, delivery and security." },
+      work: { title: "Experience", sub: "Nearly 15 years across gaming, payment and enterprise systems." },
+      ai: { title: "AI-augmented development", quote: "Whoever writes the code never verifies it.", sub: "I own the architecture and key decisions." },
+      oss: { title: "Open source & side projects", freelance: "Freelance", archived: "archived", stars: "stars" },
+      skills: { title: "Toolbox" },
+      contact: { title: "Get in touch", sub: "Senior Backend Engineer · Go · Java · Lua" },
+    },
+    scene: {
+      systems: ["Gate", "Lobby", "Game"],
+      work: ["2011", "Now"],
+      ai: [
+        { name: "Main session", role: "I plan and decide" },
+        { name: "Lightweight model", role: "file search, chores" },
+        { name: "Worker", role: "implementation" },
+        { name: "Verifier", role: "independent sign-off" },
+      ],
+    },
+    repoLabel: "Repository",
+  },
+  pdfHighlights: {
+    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Redis tampering investigation: moved sensitive state into process memory, Docker isolation; handled a Lua code injection via the Skynet debug console. CI/CD pipeline with Docker/Harbor/Helm. Handled containerization of multiple platforms, migrating from bare metal (Harbor/ECR releases, cutover runbooks, data verification scripts); introduced a shared team knowledge base and AI collaboration rules.",
+    Terpro: "Built a reusable game mechanics framework, cutting new-game development time by over 50%. Kubernetes/Helm deployment.",
+    WistronITS: "Mentored 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
+  },
   about: "Senior backend engineer with nearly 15 years of software development experience, specializing in high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: Claude Code runs as my main session for planning and final decisions, delegating file search, implementation, and verification to subagents on different models (whoever writes the code never verifies it); harness rule files keep AI behavior in check, and my self-built memory-mcp carries context across sessions. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
@@ -233,7 +277,7 @@ export default {
       start: "Jun. 2026",
       end: "Aug. 2026",
       description: [
-        "Open-source Go CLI (github.com/ggwhite/4x, 34 GitHub stars) that ran AI coding agents as isolated Design → Code → Review → Test roles with deterministic guardrails; archived once native subagents covered it, and its core rule — whoever writes the code never verifies it — lives on in my current workflow",
+        "Open-source Go CLI (github.com/ggwhite/4x, 35 GitHub stars) that ran AI coding agents as isolated Design → Code → Review → Test roles with deterministic guardrails; archived once native subagents covered it, and its core rule — whoever writes the code never verifies it — lives on in my current workflow",
       ],
     },
     {

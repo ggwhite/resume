@@ -1,149 +1,100 @@
+<!--
+  One-page PDF layout (routes /#/pdf and /#/pdf/zh-tw), printed by scripts/generate-pdf.py.
+  Built for machine reading (ATS / job sites): a single column in DOM order, plain
+  text nodes, system fonts, no letter-spacing, no kerning tricks, no canvas.
+-->
 <template>
-  <div class="pdf-resume font-sans text-[10.5px] leading-[1.35] text-slate-700 px-2">
-
-    <!-- Header -->
-    <div class="flex items-center gap-4 pb-3 border-b-2 border-slate-300 mb-4">
-      <img :src="profile.photo" class="w-14 h-14 rounded-full object-cover shrink-0" />
-      <div class="flex-1">
-        <h1 class="text-[22px] font-extrabold text-slate-800 leading-tight">{{ profile.name }}</h1>
-        <p class="text-[13px] text-slate-500 font-medium">{{ profile.position }}</p>
+  <div class="pdf" :class="'pdf-' + locale">
+    <header class="top">
+      <img :src="profile.photo" alt="" />
+      <div class="who">
+        <h1>{{ profile.name }}</h1>
+        <p class="pos">{{ profile.position }}</p>
+        <p class="reach">{{ profile.email }} | {{ profile.phone }} | github.com/ggwhite | linkedin.com/in/white-chang</p>
       </div>
-      <div class="text-[9.5px] text-slate-500 text-right shrink-0 space-y-0.5">
-        <div>{{ profile.email }}</div>
-        <div>{{ profile.phone }}</div>
-        <div>github.com/ggwhite</div>
-        <div>linkedin.com/in/white-chang</div>
-      </div>
-    </div>
+    </header>
 
-    <!-- About -->
-    <p class="text-slate-600 leading-snug mb-3">{{ data.about }}</p>
+    <p class="about">{{ data.about }}</p>
 
-    <!-- Two columns: Competencies + AI -->
-    <div class="grid grid-cols-2 gap-3 mb-3">
-      <!-- Competencies -->
-      <div>
-        <h2 class="section-title">{{ labels.competencies }}</h2>
-        <div class="space-y-2">
-          <div v-for="c in data.competencies" :key="c.title">
-            <h3 class="font-bold text-slate-800">{{ c.title }}</h3>
-            <p class="text-[10px] text-slate-600 leading-snug mt-0.5">{{ c.description }}</p>
-            <p v-if="c.tech" class="text-[9px] text-slate-400 mt-0.5">{{ c.tech }}</p>
-          </div>
-        </div>
-      </div>
-      <!-- AI Workflow -->
-      <div>
-        <h2 class="section-title">{{ labels.aiWorkflow }}</h2>
-        <p class="text-[9.5px] text-slate-500 italic mb-1.5">{{ data.aiWorkflow.intro }}</p>
-        <ul class="space-y-1">
-          <li v-for="(point, i) in data.aiWorkflow.points" :key="i"
-              class="text-[10px] text-slate-600 leading-snug flex gap-1.5">
-            <span class="text-indigo-500 shrink-0">•</span>
-            <span>{{ point }}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <section>
+      <h2>{{ labels.competencies }}</h2>
+      <p v-for="c in data.competencies" :key="c.title" class="item"><b>{{ c.title }}: </b>{{ c.description }}<span v-if="c.tech" class="tech"> ({{ c.tech }})</span></p>
+    </section>
 
-    <!-- Experience -->
-    <div class="mb-3">
-      <h2 class="section-title">{{ labels.experience }}</h2>
-      <div class="space-y-1.5">
-        <div v-for="exp in experience" :key="exp.id">
-          <div class="flex items-baseline gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full shrink-0 relative top-[-0.5px]"
-                  :class="exp.end === 'Present' || exp.end === '現在' ? 'bg-indigo-500' : 'bg-slate-300'"></span>
-            <span class="font-bold text-slate-800">{{ exp.position }}</span>
-            <span class="text-slate-400 mx-0.5">·</span>
-            <span class="text-slate-500">{{ exp.company }}</span>
-            <span class="flex-1"></span>
-            <span class="text-[10px] text-slate-400 shrink-0">{{ exp.start }} — {{ exp.end }}</span>
-          </div>
-          <!-- Brief highlights for recent roles -->
-          <div v-if="exp.highlights" class="ml-4 mt-0.5 text-[10px] text-slate-500 leading-snug">
-            {{ exp.highlights }}
-          </div>
-        </div>
-      </div>
-    </div>
+    <section>
+      <h2>{{ labels.aiWorkflow }}</h2>
+      <p class="item">{{ data.aiWorkflow.intro }}</p>
+      <ul><li v-for="p in data.aiWorkflow.points" :key="p">• {{ p }}</li></ul>
+    </section>
 
-    <!-- Projects -->
-    <div class="mb-3">
-      <h2 class="section-title">{{ labels.project }}</h2>
-      <div class="space-y-1">
-        <div v-for="p in project" :key="p.id">
-          <div class="flex items-baseline gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0 relative top-[-0.5px]"></span>
-            <span class="font-bold text-slate-700">{{ p.name }}</span>
-            <span class="flex-1"></span>
-            <span class="text-[10px] text-slate-400 shrink-0">{{ p.start }} — {{ p.end }}</span>
-          </div>
-        </div>
+    <section>
+      <h2>{{ labels.experience }}</h2>
+      <div v-for="e in data.experience" :key="e.id" class="row">
+        <p class="row-head"><b>{{ e.position }}</b>, {{ e.company }} <span class="date">({{ e.start }} – {{ e.end }})</span></p>
+        <p v-if="data.pdfHighlights[e.id]" class="row-body">{{ data.pdfHighlights[e.id] }}</p>
       </div>
-    </div>
+    </section>
 
-    <!-- Education -->
-    <div v-if="education && education.length">
-      <h2 class="section-title">{{ labels.education }}</h2>
-      <div v-for="edu in education" :key="edu.id" class="flex items-baseline gap-1.5">
-        <span class="font-bold text-slate-700">{{ edu.degree }}</span>
-        <span class="text-slate-500">— {{ edu.school }}</span>
-        <span class="flex-1"></span>
-        <span class="text-[10px] text-slate-400 shrink-0">{{ edu.start }} — {{ edu.end }}</span>
-      </div>
-    </div>
+    <section>
+      <h2>{{ labels.project }}</h2>
+      <p v-for="p in projects" :key="p.id" class="row-head"><b>{{ p.name }}</b> <span class="date">({{ p.start }} – {{ p.end }})</span></p>
+    </section>
 
+    <section>
+      <h2>{{ labels.programming }} / {{ labels.tools }}</h2>
+      <p class="item">{{ skills }}</p>
+    </section>
+
+    <section>
+      <h2>{{ labels.education }}</h2>
+      <p v-for="e in data.education" :key="e.id" class="row-head"><b>{{ e.degree }}</b>, {{ e.school }} <span class="date">({{ e.start }} – {{ e.end }})</span></p>
+    </section>
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
 import en from '@/data/en'
 import zhTw from '@/data/zh-tw'
 
-const highlights = {
-  en: {
-    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Redis tampering investigation: moved sensitive state into process memory, Docker isolation; handled a Lua code injection via the Skynet debug console. CI/CD pipeline with Docker/Harbor/Helm. Handled containerization of multiple platforms, migrating from bare metal (Harbor/ECR releases, cutover runbooks, data verification scripts); introduced a shared team knowledge base and AI collaboration rules.",
-    Terpro: "Built a reusable game mechanics framework, cutting new-game development time by over 50%. Kubernetes/Helm deployment.",
-    WistronITS: "Mentored 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
-  },
-  'zh-tw': {
-    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。Redis 竄改事件調查：敏感狀態改存 process 記憶體、Docker 隔離；處理 Skynet debug console 遭注入 Lua 程式碼事件。Docker/Harbor/Helm CI/CD Pipeline。負責多平台從裸機容器化遷移（Harbor／ECR 發版、cutover runbook、資料比對腳本）；導入團隊共用知識庫與 AI 協作規則。",
-    Terpro: "建立可複用遊戲機制框架，新遊戲開發週期縮短超過 50%。Kubernetes/Helm 部署。",
-    WistronITS: "指導 2 名工程師上手。開發 5 個微服務（OpenId、Product、Payment、Stock、Kafka）。Jenkins/Nexus CI 工具鏈。",
-  },
-}
-
-const localeData = { en, 'zh-tw': zhTw }
-
-export default {
-  name: 'ResumePdf',
-  props: {
-    locale: { type: String, default: 'en' },
-  },
-  computed: {
-    data() { return localeData[this.locale] || localeData.en },
-    labels() { return this.data.labels },
-    profile() { return this.data.profile },
-    experience() {
-      const h = highlights[this.locale] || highlights.en
-      return this.data.experience.map(exp => ({
-        ...exp,
-        highlights: h[exp.id] || null,
-      }))
-    },
-    project() { return this.data.project.filter(p => p.pdf !== false) },
-    education() { return this.data.education },
-  },
-}
+const props = defineProps({ locale: { type: String, default: 'en' } })
+const data = computed(() => (props.locale === 'zh-tw' ? zhTw : en))
+const labels = computed(() => data.value.labels)
+const profile = computed(() => data.value.profile)
+const projects = computed(() => data.value.project.filter((p) => p.pdf !== false))
+const skills = computed(() => {
+  const langs = Object.entries(profile.value.programming).map(([k, v]) => (v.length ? `${k} (${v.join(', ')})` : k))
+  const tools = Object.values(profile.value.tools).flat()
+  return [...langs, ...tools].join(', ')
+})
 </script>
 
-<style scoped>
-.section-title {
-  @apply text-[11.5px] font-bold text-slate-800 mb-1.5 pb-0.5 border-b border-slate-200 flex items-center gap-1.5;
+<style>
+html.is-pdf, html.is-pdf body { margin: 0; background: #fff; }
+@page { size: A4; margin: 7mm 10mm; }
+.pdf {
+  width: 190mm; margin: 0 auto; color: #1b1b22;
+  font: 400 8.2pt/1.33 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-kerning: none; font-variant-ligatures: none; letter-spacing: 0; text-rendering: optimizeSpeed;
+  hyphens: manual; text-align: left;
 }
-.section-title::before {
-  content: '';
-  @apply w-0.5 h-3.5 bg-indigo-500 rounded-full inline-block;
-}
+/* Not PingFang: Chromium splits it into fallback runs and the PDF text layer comes
+   out of order. Heiti TC extracts in exact DOM order (checked by generate-pdf.py). */
+.pdf-zh-tw { font-family: 'Helvetica Neue', 'Heiti TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; font-size: 8.7pt; line-height: 1.4; }
+.pdf * { margin: 0; padding: 0; box-sizing: border-box; }
+.pdf .top { display: flex; align-items: center; gap: 4mm; padding-bottom: 2.2mm; border-bottom: 1.2pt solid #1b1b22; }
+.pdf .top img { width: 15mm; height: 15mm; border-radius: 50%; object-fit: cover; object-position: 60% 30%; flex: none; }
+.pdf h1 { font-size: 19pt; line-height: 1.1; font-weight: 700; }
+.pdf .pos { font-size: 11pt; font-weight: 500; color: #4b3fd6; }
+.pdf .reach { color: #44444f; margin-top: 0.6mm; }
+.pdf .about { margin-top: 2.2mm; }
+.pdf section { margin-top: 2.3mm; }
+.pdf h2 { font-size: 10pt; font-weight: 700; color: #4b3fd6; border-bottom: 0.5pt solid #c9c9d6; padding-bottom: 0.5mm; margin-bottom: 1.2mm; }
+.pdf .item + .item, .pdf .row + .row { margin-top: 0.9mm; }
+.pdf ul { list-style: none; margin-top: 0.9mm; }
+.pdf li { padding-left: 3mm; text-indent: -3mm; }
+.pdf li + li { margin-top: 0.6mm; }
+.pdf .tech, .pdf .date { color: #5a5a66; }
+.pdf .row-body { color: #33333d; }
+.pdf b { font-weight: 700; }
 </style>

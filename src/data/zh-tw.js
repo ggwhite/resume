@@ -15,6 +15,50 @@ export default {
     print: "列印 / 存為 PDF",
     download: "下載 PDF",
   },
+  // 互動網站用的呈現文案（hero、區塊標題、3D 標籤）與一頁式 PDF 摘要。
+  // 只放事實，來源與本檔其他內容相同。
+  site: {
+    nav: { systems: "系統", work: "經歷", ai: "AI 工作流程", oss: "開源", skills: "技術工具", contact: "聯絡" },
+    langSwitch: { label: "EN", to: "/" },
+    hero: {
+      nameLines: ["張育誠"],
+      altName: "White Chang",
+      stack: "Go · Java · Lua",
+      lede: "資深後端工程師，近 15 年軟體開發經驗，近 7 年專注即時遊戲服務器平台。主要使用 Go、Java、Lua（Skynet），搭配 Redis、MySQL、MongoDB、gRPC、RabbitMQ、Docker、Kubernetes。",
+      scroll: "往下捲動",
+      photoAlt: "張育誠的照片",
+    },
+    stats: [
+      { prefix: "~", num: 15, suffix: "", unit: "年", label: "軟體開發經驗" },
+      { prefix: "~", num: 270, suffix: " 萬", unit: "筆 / 日", label: "診斷全集合掃描並設計索引的 MongoDB 資料規模" },
+      { prefix: ">", num: 50, suffix: "%", unit: "縮短", label: "以可複用 Go 框架縮短新遊戲開發週期" },
+      { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker，我的開源 Go 函式庫" },
+    ],
+    sections: {
+      systems: { title: "架構與系統", sub: "即時遊戲平台：多服務器架構、資料儲存、交付與資安。" },
+      work: { title: "工作經歷", sub: "近 15 年，橫跨遊戲、支付與企業系統。" },
+      ai: { title: "AI 輔助開發", quote: "寫的人不驗自己。", sub: "架構與關鍵決策由我負責。" },
+      oss: { title: "開源與個人專案", freelance: "接案", archived: "已封存", stars: "stars" },
+      skills: { title: "技術工具" },
+      contact: { title: "聯絡我", sub: "資深後端工程師 · Go · Java · Lua" },
+    },
+    scene: {
+      systems: ["Gate", "Lobby", "Game"],
+      work: ["2011", "現在"],
+      ai: [
+        { name: "主 session", role: "我規劃與拍板" },
+        { name: "輕量模型", role: "檔案搜尋與雜事" },
+        { name: "Worker", role: "實作" },
+        { name: "Verifier", role: "獨立驗收" },
+      ],
+    },
+    repoLabel: "Repository",
+  },
+  pdfHighlights: {
+    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。Redis 竄改事件調查：敏感狀態改存 process 記憶體、Docker 隔離；處理 Skynet debug console 遭注入 Lua 程式碼事件。Docker/Harbor/Helm CI/CD Pipeline。負責多平台從裸機容器化遷移（Harbor／ECR 發版、cutover runbook、資料比對腳本）；導入團隊共用知識庫與 AI 協作規則。",
+    Terpro: "建立可複用遊戲機制框架，新遊戲開發週期縮短超過 50%。Kubernetes/Helm 部署。",
+    WistronITS: "指導 2 名工程師上手。開發 5 個微服務（OpenId、Product、Payment、Stock、Kafka）。Jenkins/Nexus CI 工具鏈。",
+  },
   about: "資深後端工程師，近 15 年軟體開發經驗，專精高併發分散式系統。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：以 Claude Code 為主 session 負責規劃與拍板，依任務把檔案搜尋、實作、驗收分派給不同模型的 subagent（寫的人不驗自己），並用 harness 規則檔約束 AI 行為、用自建的 memory-mcp 延續跨 session 記憶。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
   competencies: [
     {
@@ -232,7 +276,7 @@ export default {
       start: "2026/06",
       end: "2026/08",
       description: [
-        "開源 Go CLI（github.com/ggwhite/4x，GitHub 34 stars），讓 AI coding agent 以 Design → Code → Review → Test 彼此隔離的角色運作，並以確定性護欄把關；原生 subagent 功能成熟後封存，核心原則「寫的人不驗自己」延續到現在的工作流程",
+        "開源 Go CLI（github.com/ggwhite/4x，GitHub 35 stars），讓 AI coding agent 以 Design → Code → Review → Test 彼此隔離的角色運作，並以確定性護欄把關；原生 subagent 功能成熟後封存，核心原則「寫的人不驗自己」延續到現在的工作流程",
       ],
     },
     {
