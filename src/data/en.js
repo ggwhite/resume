@@ -61,14 +61,14 @@ export default {
           scene: "tamper", head: "When the secret leaks, move the data.", tags: ["Security", "Redis", "Docker"],
           body: [
             "To let a dropped connection pick up where it left off, a service kept session state in Redis.",
-            "Then the records started showing results the normal flow could not have produced. Someone was editing that state in Redis directly. I added a checksum, then AES encryption. Neither held: once the secret is exposed, the attacker can reproduce any app-layer validation.",
+            "Then the records started showing results the normal flow could not have produced. The state in Redis was being altered outside the normal flow. I added a checksum, then AES encryption. Neither held: once the secret is exposed, the attacker can reproduce any app-layer validation.",
             "So I stopped guarding the data where it was and moved it. For the affected services, the sensitive state went into process memory, where a Redis client cannot reach it, and the environment was isolated with Docker. I also designed a tamper-resistant architecture (HMAC signing, a state machine, an audit trail); that part reached a working POC, not production.",
           ],
         },
         {
           scene: "migrate", head: "Moving live services without a surprise.", tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
           body: [
-            "Services and back offices for several platforms ran directly on bare-metal hosts, and the settings in git no longer matched what was actually running in production.",
+            "Services and back offices for several platforms ran directly on bare-metal hosts, and some of the settings in git no longer matched what was actually running in production.",
             "A move like that gets one cutover. Deploy straight from git, and production settings roll back without anyone noticing.",
             "Between July and October 2026 I moved them into Docker containers. Images go to Harbor and AWS ECR, and a git tag triggers the release pipeline. I pulled the production configs back and compared them with git key by key, wrote scripts that compare MySQL, Redis and MongoDB between old and new, and wrote the cutover runbook: freeze writes, sync data, reopen traffic, each step with its own completion criteria. The fix-up tool only previews unless told to write, and backs up first.",
           ],

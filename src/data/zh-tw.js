@@ -60,14 +60,14 @@ export default {
           scene: "tamper", head: "secret 外露之後，把資料搬走。", tags: ["資安", "Redis", "Docker"],
           body: [
             "為了讓斷線的連線能從中斷處接回去，服務把 session 狀態存在 Redis。",
-            "後來紀錄裡出現正常流程不可能產生的結果：有人直接改 Redis 裡的狀態。我先加 checksum，再改用 AES 加密，都沒用——secret 一旦外露，任何應用層驗證攻擊者都能照做一份。",
+            "後來紀錄裡出現正常流程不可能產生的結果：Redis 裡的狀態在正常流程之外被改動了。我先加 checksum，再改用 AES 加密，都沒用——secret 一旦外露，任何應用層驗證攻擊者都能照做一份。",
             "所以我不再守著原地的資料，而是把它搬走。受影響服務的敏感狀態改存 process 記憶體，Redis client 碰不到；環境再用 Docker 隔離。我另外設計了防竄改架構（HMAC 簽章、狀態機、audit trail），這部分做到可 demo 的 POC，沒有進正式環境。",
           ],
         },
         {
           scene: "migrate", head: "搬動線上服務，不留意外。", tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
           body: [
-            "多個平台的服務與後台直接跑在裸機上，而 git 裡的設定早就和正式環境實際在跑的不一致。",
+            "多個平台的服務與後台直接跑在裸機上，而 git 裡有部分設定早就和正式環境實際在跑的不一致。",
             "這種搬遷只有一次切換的機會。照著 git 直接上線，正式環境的設定會在沒人發現的情況下被改回舊值。",
             "2026 年 7 月到 10 月，我把它們搬進 Docker 容器。image 推到 Harbor 與 AWS ECR，以 git tag 觸發發版 pipeline。我把正式環境的設定撈回來，和 git 逐 key 比對；寫了比對新舊環境 MySQL、Redis、MongoDB 的腳本；也寫了上線 cutover runbook：停寫、資料同步、開放流量，每一步都有完成判準。修正工具預設只預覽，明確指定才寫入，而且先備份原值。",
           ],
