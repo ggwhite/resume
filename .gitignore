@@ -19,3 +19,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# required by scripts/generate-pdf.py (text-layer check)
+!scripts/pdf-text.swift
