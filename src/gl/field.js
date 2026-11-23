@@ -343,7 +343,8 @@ export function createField(canvas, opts) {
     measure()
   }
   function measure() {
-    anchors = [...document.querySelectorAll('[data-scene]')].map((el) => {
+    // elements without layout (inside a closed <details>) are skipped
+    anchors = [...document.querySelectorAll('[data-scene]')].filter((el) => el.getClientRects().length).map((el) => {
       const root = el.closest('[data-stage-root]')
       return { key: el.dataset.scene, top: el.getBoundingClientRect().top + window.scrollY, slot: root && root.querySelector('.stage-slot') }
     })

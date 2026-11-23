@@ -20,87 +20,109 @@ export default {
   // 已核可的面試故事，或各 repo README 裡的事實。標題、hero 與圖一律用中性詞
   // （服務、使用者、平台）；產業細節留在工作經歷紀錄裡。
   site: {
-    nav: { systems: "問題", work: "經歷", ai: "AI 工作流程", oss: "開源", skills: "工具箱", contact: "聯絡" },
+    nav: { bring: "我能做什麼", work: "經歷", oss: "開源", skills: "工具箱", contact: "聯絡" },
     langSwitch: { label: "EN", to: "/" },
     hero: {
       nameLines: ["張育誠"],
       altName: "White Chang",
+      value: "我讓高流量的線上系統算得對、跑得快、改版上線穩得住，並用 AI agent 加快交付。",
+      chips: ["約 15 年後端開發", "即時、高併發的線上系統", "開源 go-masker：GitHub 130+ stars"],
       stack: "Go · Java · Lua",
-      lede: "近 15 年後端開發，近 7 年專注在高併發的即時系統平台。我處理的是不能出錯的那幾塊：資料與效能、可靠性與資安、交付。主要用 Go、Java、Lua，管 AI agent 只有一條規則：寫的人不驗自己。",
+      contact: "聯絡我",
       words: ["Go", "Java", "Lua", "Redis", "MongoDB", "MySQL", "gRPC", "Docker", "Kubernetes"],
       photoAlt: "張育誠的照片",
     },
-    stats: [
-      { prefix: "~", num: 15, suffix: "", unit: "年", label: "軟體開發經驗" },
-      { prefix: "~", num: 270, suffix: " 萬", unit: "筆 / 日", label: "診斷全集合掃描並設計索引的 MongoDB 資料規模" },
-      { prefix: ">", num: 50, suffix: "%", unit: "縮短", label: "以可複用 Go 框架縮短新產品開發週期" },
-      { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker，我的開源 Go 函式庫" },
-    ],
-    systems: {
-      title: "五個問題，從前因說起",
-      sub: "畫面會跟著文字演：先是原本的情況，再是出了什麼事，最後是怎麼解。",
-      steps: [
+    labels: { situation: "情況", problem: "問題", action: "做法", result: "結果", detail: "工程細節" },
+    bring: {
+      title: "我能為團隊做什麼",
+      sub: "三件事，每一件都有真實案例。",
+      strengths: [
         {
-          scene: "race", head: "兩個請求，一道檢查。", tags: ["併發", "Redis"],
-          body: [
-            "有個功能讓每位使用者一天領取一次。伺服器分三步處理：先檢查今天領過沒，再跑一個查詢確認資格，最後發放。",
-            "使用者回報按鈕點了沒反應，於是又點了幾次。每一次點擊都通過第一步，因為還沒有任何一筆發放；它們全排在同一個慢查詢後面。查詢一回來，每個等著的請求各發一次。同一個人領到好幾次，是會造成財損的 bug。",
-            "漏洞在「檢查」和「發放」之間的空窗。我用 Redis 標記把它關上：第一個寫入標記的請求繼續往下走，之後的全部被擋下，標記一天後過期。",
+          line: "系統出問題時，我找的是真正的原因，不是最近的那一個。",
+          stories: [
+            {
+              scene: "race",
+              head: "重複領取完全停止，查詢從幾分鐘降到幾百毫秒。",
+              tldr: "一個每天只能領一次的功能，同一個人卻領到好幾次。看起來是一個 bug，底下其實是兩個各自獨立的原因；我把兩個都找出來，分開修掉。",
+              detail: [
+                { k: "situation", scene: "race", text: "有個功能讓每位使用者一天領取一次。伺服器分三步處理：先檢查今天領過沒，再跑一個查詢確認資格，最後發放。" },
+                { k: "problem", scene: "race", text: "使用者回報按鈕點了沒反應，於是又點了幾次。每一次點擊都通過第一步，因為還沒有任何一筆發放；它們全排在同一個慢查詢後面。查詢一回來，每個等著的請求各發一次：同一個人領到好幾次，是會造成財損的 bug。" },
+                { k: "action", scene: "race", text: "第一個原因：「檢查」和「發放」之間有空窗。我用 Redis 標記把它關上——第一個寫入標記的請求繼續往下走，之後的全部被擋下，標記一天後過期。" },
+                { k: "action", scene: "index", text: "第二個原因：查詢本身。它讀的資料放在每天自動建立的 collection 裡，一天約 270 萬筆；而每天建立 collection 的流程裡沒有建索引這一步，所以每次查詢都是全集合掃描。我在 Lua Server 加了排程，提前為「今天」和「明天」的 collection 建好複合索引，再把同一套做法推廣到其他大型 collection。" },
+                { k: "result", scene: "index", text: "重複領取完全停止。查詢時間從幾分鐘降到幾百毫秒。" },
+              ],
+              tags: ["併發", "Redis", "MongoDB", "效能"],
+            },
           ],
         },
         {
-          scene: "index", head: "那個查詢，為什麼慢到會出事。", tags: ["MongoDB", "效能"],
-          body: [
-            "那個慢查詢是第二個根因，而且是另一回事。它讀的資料放在每天自動建立的 collection 裡，一天約 270 萬筆。",
-            "每天建立 collection 的流程裡，沒有建索引這一步。所以每次查詢都是全集合掃描，慢查詢還引發重試，讓情況更糟。",
-            "手動補一個索引只救得了一天。我在 Lua Server 加了排程，提前為「今天」和「明天」的 collection 建好複合索引，午夜切換時就不會落在沒有索引的集合上。之後把同一套做法推廣到其他大型 collection。",
+          line: "我讓線上系統安全、穩定：出事先止血，搬動正式環境照劇本走。",
+          stories: [
+            {
+              scene: "tamper",
+              head: "資料被竄改的那條路，關上了。",
+              tldr: "服務存在 Redis 裡的狀態，被人從外部改動。加密和校驗都擋不住，所以我把資料搬到對方碰不到的地方。",
+              detail: [
+                { k: "situation", text: "為了讓斷線的連線能從中斷處接回去，服務把 session 狀態存在 Redis。" },
+                { k: "problem", text: "後來紀錄裡出現正常流程不可能產生的結果：Redis 裡的狀態在正常流程之外被改動了。我先加 checksum，再改用 AES 加密，都沒用——secret 一旦外露，任何應用層驗證攻擊者都能照做一份。" },
+                { k: "action", text: "所以我不再守著原地的資料，而是把它搬走。受影響服務的敏感狀態改存 process 記憶體，Redis client 碰不到；環境再用 Docker 隔離。" },
+                { k: "result", text: "狀態搬進 process 記憶體之後，這條竄改路徑就關上了，竄改停止。另外，我設計了防竄改架構（HMAC 簽章、狀態機、audit trail），做到可 demo 的 POC，沒有進正式環境。" },
+              ],
+              tags: ["資安", "Redis", "Docker"],
+            },
+            {
+              scene: "inject",
+              head: "清掉被注入執行中服務的程式碼，而且證據都留著。",
+              tldr: "有人把程式碼注入一個執行中的服務。我先建立監控、保留證據，再重啟服務把它清掉。",
+              detail: [
+                { k: "situation", text: "一個線上服務的紀錄裡，持續出現異常結果。" },
+                { k: "problem", text: "我追查到是有人透過 Skynet debug console 注入 Lua 程式碼，改掉了記憶體裡的服務邏輯。" },
+                { k: "action", text: "我先建立監控、保留證據，才重啟受影響的服務。" },
+                { k: "result", text: "重啟清掉了記憶體裡的注入程式碼；監控持續保留，用來檢查有沒有新的注入跡象。" },
+              ],
+              tags: ["事件處理", "Lua/Skynet"],
+            },
+            {
+              scene: "migrate",
+              head: "8 個平台搬進容器，沒有一次需要 rollback。",
+              tldr: "2026 年 6 月到 11 月，我把 8 個平台的正式環境從裸機切換到 Docker，每一個都在排定的維護時段內完成。",
+              detail: [
+                { k: "situation", text: "多個平台的服務與後台直接跑在裸機上，而 git 裡有部分設定早就和正式環境實際在跑的不一致。" },
+                { k: "problem", text: "這種搬遷，每個平台只有一次切換的機會。照著 git 直接上線，正式環境的設定會在沒人發現的情況下被改回舊值。" },
+                { k: "action", text: "我把正式環境的設定撈回來，和 git 逐 key 比對；寫了比對新舊環境 MySQL、Redis、MongoDB 的腳本；也寫了上線 cutover runbook：停寫、資料同步、開放流量，每一步都有完成判準。image 推到 Harbor 與 AWS ECR，以 git tag 觸發發版 pipeline。修正工具預設只預覽，明確指定才寫入，而且先備份原值。" },
+                { k: "result", text: "2026 年 6 月到 11 月，8 個平台切換到正式環境，每一個都在排定的維護時段內完成，沒有 rollback。" },
+              ],
+              tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
+            },
           ],
         },
         {
-          scene: "tamper", head: "secret 外露之後，把資料搬走。", tags: ["資安", "Redis", "Docker"],
-          body: [
-            "為了讓斷線的連線能從中斷處接回去，服務把 session 狀態存在 Redis。",
-            "後來紀錄裡出現正常流程不可能產生的結果：Redis 裡的狀態在正常流程之外被改動了。我先加 checksum，再改用 AES 加密，都沒用——secret 一旦外露，任何應用層驗證攻擊者都能照做一份。",
-            "所以我不再守著原地的資料，而是把它搬走。受影響服務的敏感狀態改存 process 記憶體，Redis client 碰不到；環境再用 Docker 隔離。我另外設計了防竄改架構（HMAC 簽章、狀態機、audit trail），這部分做到可 demo 的 POC，沒有進正式環境。",
-          ],
-        },
-        {
-          scene: "migrate", head: "搬動線上服務，不留意外。", tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
-          body: [
-            "多個平台的服務與後台直接跑在裸機上，而 git 裡有部分設定早就和正式環境實際在跑的不一致。",
-            "這種搬遷只有一次切換的機會。照著 git 直接上線，正式環境的設定會在沒人發現的情況下被改回舊值。",
-            "2026 年 7 月到 10 月，我把它們搬進 Docker 容器。image 推到 Harbor 與 AWS ECR，以 git tag 觸發發版 pipeline。我把正式環境的設定撈回來，和 git 逐 key 比對；寫了比對新舊環境 MySQL、Redis、MongoDB 的腳本；也寫了上線 cutover runbook：停寫、資料同步、開放流量，每一步都有完成判準。修正工具預設只預覽，明確指定才寫入，而且先備份原值。",
-          ],
-        },
-        {
-          scene: "poc", head: "知道什麼時候不該上線。", tags: ["Golang", "gRPC", "Protobuf"],
-          body: [
-            "三個平台各自長在不同的技術棧上：Go 配 .NET、Lua 配 PHP、Lua/Skynet 配 Java。服務器、後台、部署流程各一套。",
-            "資料竄改事件之後，我想要的是根治，不是再補一個 patch：一套後端，服務之間走 gRPC，資料完整性從設計之初就做進去。",
-            "我把它做到可 demo 的 POC。接著把「遷移」和「設計」分開評估，然後喊停：全面重寫對線上平台風險過高。沒有任何東西進正式環境。設計得好，不代表遷移就值得做。",
+          line: "我用 AI agent 交付，但決定和把關的人是我。",
+          stories: [
+            {
+              scene: "delegate",
+              head: "AI 負責寫程式，但不能自己驗收自己。",
+              tldr: "架構由我決定，一個 agent 實作，另一個獨立的 agent 驗收。為了讓這套流程每天都能運作，我做了兩個開源工具：memory-mcp 和 Jarvis。",
+              detail: [
+                { k: "situation", scene: "delegate", text: "日常開發以 Claude Code 為主 session：debug、調查、架構討論都在這裡進行，由我負責規劃與拍板。" },
+                { k: "problem", scene: "delegate", text: "讓 agent 審自己寫的程式，審查時帶著的是同一批盲點。session 一結束它還會全部忘光；工作分派給好幾個 agent 之後，光看對話也看不出每個 agent 在做什麼。" },
+                { k: "action", scene: "delegate", text: "我把位子分開：輕量模型負責檔案搜尋與雜事，worker 負責實作，再由另一個獨立的 verifier 驗收。模組邊界、通訊協議、安全模型這些架構決策留在我手上；AI 會漏掉的生產環境盲點，例如 logging 覆蓋率與安全加固，也由我補上。" },
+                { k: "action", scene: "guard", text: "harness 規則檔（CLAUDE.md / AGENTS.md）把 AI 的行為限制在專案規範內。我做了 memory-mcp，讓偏好、踩過的坑與未完成的工作延續到下一個 session；也做了 Jarvis，即時看每個 subagent 的任務、時間與成本。" },
+                { k: "result", scene: "guard", text: "這是我每天的工作方式。團隊現在讓 Claude Code 與 Codex 共用同一套規則；兩個工具都已開源：memory-mcp 用 Go 寫，Jarvis 用 TypeScript 寫、有 1,100+ 個測試。" },
+              ],
+              tags: ["Claude Code", "MCP", "memory-mcp", "Jarvis"],
+            },
           ],
         },
       ],
     },
     work: {
-      title: "這些事發生的地方",
+      title: "經歷",
       sub: "近 15 年，橫跨遊戲、支付與企業系統。",
-      role: "在 5–10 人團隊中負責架構規劃與技術決策：先評估一個改動該不該做、會動到哪裡、風險多高。上面五個故事都發生在這裡。還有兩個：",
-      chapters: [
-        {
-          scene: "hash", head: "一個 Hash，取代整片 keyspace 的掃描。",
-          body: [
-            "有些 Redis 資料是「每個 rid 一把 key」，要讀就得用 SCAN 掃過整片 keyspace。",
-            "我把結構改成單一 Hash、rid 當 field。查詢變成直接命中，大量的 SCAN 操作就消失了。",
-          ],
-        },
-        {
-          scene: "inject", head: "先存證，再重啟。",
-          body: [
-            "紀錄裡持續出現異常結果。我追查到是有人透過 Skynet debug console 注入 Lua 程式碼，改掉了記憶體裡的服務邏輯。",
-            "我先建立監控、保留證據，才重啟任何東西。重啟之後，記憶體裡的注入程式碼就被清掉了。",
-          ],
-        },
+      role: "在 5–10 人團隊中負責架構規劃與技術決策：先評估一個改動該不該做、會動到哪裡、風險多高。上面的案例都發生在這裡。",
+      notes: [
+        { scene: "poc", head: "知道什麼時候不該上線。", text: "三個平台各自長在不同的技術棧上。我規劃把後端整合成一套（微服務／gRPC，含 HMAC 簽章、狀態機、audit trail 的防竄改資料層），做到可 demo 的 POC。接著把「遷移」和「設計」分開評估，然後喊停：全面重寫對線上平台風險過高。沒有任何東西進正式環境。" },
+        { scene: "hash", head: "一個 Hash，取代整片 keyspace 的掃描。", text: "有些 Redis 資料是「每個 rid 一把 key」，要讀就得用 SCAN 掃過整片 keyspace。我把結構改成單一 Hash、rid 當 field，大量的 SCAN 操作就消失了。" },
       ],
       alsoTitle: "在大極還做了",
       also: [
@@ -113,14 +135,7 @@ export default {
       record: "完整紀錄",
       earlier: "在那之前",
     },
-    ai: {
-      title: "Agent 負責動手，我負責決定。",
-      quote: "寫的人不驗自己。",
-      steps: [
-        { scene: "delegate", head: "三個位子，絕不兼任。", body: ["輕量模型負責檔案搜尋與雜事，worker 負責實作，再由另一個獨立的 verifier 驗收。", "模組邊界、通訊協議、安全模型這些架構決策留在我手上；AI 會漏掉的生產環境盲點——logging 覆蓋率、安全加固——也由我補上。"] },
-        { scene: "guard", head: "一道圍欄，一份記憶。", body: ["harness 規則檔（CLAUDE.md / AGENTS.md）把 AI 的行為限制在專案規範內。", "自建的 memory-mcp 讓偏好、踩過的坑與未完成的工作，延續到下一個 session。"] },
-      ],
-    },
+    quote: "寫的人不驗自己。",
     oss: {
       title: "我放上 GitHub 的東西",
       freelance: "接案",
@@ -281,7 +296,7 @@ export default {
           "導入團隊共用知識庫與 AI agent 協作規則：以索引文件串起平台環境、程式碼結構、決策紀錄與操作手冊，規則分為常駐與依情境載入兩層，讓 Claude Code 與 Codex 共用同一套規範",
           "建立排查 playbook 與 runbook 的沉澱流程：每次排查與上線踩到的坑都回寫成文件，並整理跨平台重複問題對照表，讓下一次遷移能提前避開",
         ],
-        "容器化遷移（2026/07–2026/10）": [
+        "容器化遷移（2026/06–2026/11）": [
           "將多個遊戲平台的遊戲服務與後台從裸機遷移至 Docker 容器（Docker Compose、healthcheck、環境變數注入設定）",
           "image 推送至 Harbor／AWS ECR，以 git tag 觸發 GitLab tag pipeline 發版；修正 CI 規則缺漏導致 tag pipeline 不觸發的問題",
           "撰寫上線 cutover runbook，從停寫、資料同步到開放流量分步驟執行，每步定義完成判準",

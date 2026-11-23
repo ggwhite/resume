@@ -16,22 +16,22 @@
     </header>
 
     <main id="top">
-      <!-- Hero -->
+      <!-- Hero: who, what, proof, actions -->
       <section class="hero" data-stage-root data-scene="words">
         <div class="wrap hero-grid">
           <div class="hero-copy">
-            <p class="kicker"><span>{{ profile.position }}</span><span class="sep"></span><span>{{ s.hero.stack }}</span></p>
             <h1 class="name" :aria-label="s.hero.nameLines.join(' ')">
               <span v-for="(line, li) in nameChars" :key="li" class="name-line" :class="{ outline: li === 1 }" aria-hidden="true">
                 <span v-for="(c, ci) in line" :key="ci" class="ch" :style="{ '--i': li * 5 + ci }">{{ c }}</span>
               </span>
             </h1>
-            <p class="alt-name">{{ s.hero.altName }}</p>
-            <p class="lede">{{ s.hero.lede }}</p>
+            <p class="hero-role"><strong>{{ profile.position }}</strong><span class="alt-name">{{ s.hero.altName }}</span><span class="stack">{{ s.hero.stack }}</span></p>
+            <p class="lede">{{ s.hero.value }}</p>
+            <ul class="chips"><li v-for="c in s.hero.chips" :key="c">{{ c }}</li></ul>
             <div class="cta">
               <a class="btn btn-solid" :href="data.pdf" target="_blank" rel="noopener">{{ data.labels.download }} <span aria-hidden="true">↓</span></a>
               <a class="btn" :href="profile.github" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-              <a class="btn" :href="profile.linkedin" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a>
+              <a class="btn" href="#contact" @click.prevent="go('contact')">{{ s.hero.contact }}</a>
             </div>
           </div>
           <div class="hero-side">
@@ -44,37 +44,44 @@
             <div class="stage-slot hero-stage" aria-hidden="true"></div>
           </div>
         </div>
-        <div class="wrap">
-          <dl class="stats">
-            <div v-for="(st, i) in s.stats" :key="i" class="stat rv" :style="{ '--d': i * 90 + 'ms' }">
-              <dt><span class="stat-num" :data-count="st.num" :data-dec="st.decimals || 0">{{ st.prefix }}<b>{{ st.num }}</b>{{ st.suffix }}</span> <span class="stat-unit">{{ st.unit }}</span></dt>
-              <dd>{{ st.label }}</dd>
-            </div>
-          </dl>
-        </div>
       </section>
 
-      <!-- 01 · Problems -->
-      <section id="systems" class="sec">
+      <!-- 01 · What I bring: three strengths, each proved by a story in two layers -->
+      <section id="bring" class="sec">
         <div class="wrap">
           <header class="sec-head rv" data-scene="dust">
             <p class="idx">01</p>
-            <h2 :aria-label="s.systems.title"><span v-for="(w, i) in split(s.systems.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
-            <p class="sec-sub">{{ s.systems.sub }}</p>
+            <h2 :aria-label="s.bring.title"><span v-for="(w, i) in split(s.bring.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
+            <p class="sec-sub">{{ s.bring.sub }}</p>
           </header>
-          <div class="story story-arc" data-stage-root :data-scene="s.systems.steps[0].scene">
-            <ol class="steps">
-              <li v-for="(st, i) in s.systems.steps" :key="st.scene" class="step" :data-scene="st.scene">
-                <span class="step-n">{{ String(i + 1).padStart(2, '0') }} / {{ String(s.systems.steps.length).padStart(2, '0') }}</span>
-                <h3>{{ st.head }}</h3>
-                <p v-for="para in st.body" :key="para">{{ para }}</p>
-                <ul class="tags"><li v-for="t in st.tags" :key="t">{{ t }}</li></ul>
-              </li>
-            </ol>
-            <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
+          <div v-for="(st, si) in s.bring.strengths" :key="si" class="strength">
+            <p class="strength-line rv"><span class="strength-n">{{ si + 1 }}</span>{{ st.line }}</p>
+            <article v-for="story in st.stories" :key="story.scene" class="story" :class="{ 'story-flip': si === 2 }" data-stage-root :data-scene="story.scene">
+              <div class="step">
+                <h3>{{ story.head }}</h3>
+                <p class="tldr">{{ story.tldr }}</p>
+                <details class="deep">
+                  <summary><span>{{ s.labels.detail }}</span><i aria-hidden="true"></i></summary>
+                  <dl class="arc">
+                    <div v-for="(d, di) in story.detail" :key="di" :class="'arc-' + d.k" :data-scene="d.scene || story.scene">
+                      <dt>{{ s.labels[d.k] }}</dt>
+                      <dd>{{ d.text }}</dd>
+                    </div>
+                  </dl>
+                  <ul class="tags"><li v-for="t in story.tags" :key="t">{{ t }}</li></ul>
+                </details>
+              </div>
+              <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
+            </article>
           </div>
         </div>
       </section>
+
+      <!-- kinetic line -->
+      <div ref="bandEl" class="band" aria-hidden="true" data-scene="dust">
+        <p class="band-row"><span v-for="n in 4" :key="n">{{ s.quote }}</span></p>
+        <p class="band-row alt"><span v-for="n in 4" :key="n">{{ s.quote }}</span></p>
+      </div>
 
       <!-- 02 · Experience -->
       <section id="work" class="sec">
@@ -84,42 +91,34 @@
             <h2 :aria-label="s.work.title"><span v-for="(w, i) in split(s.work.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
             <p class="sec-sub">{{ s.work.sub }}</p>
           </header>
-
-          <header class="job-head lead rv">
-            <p class="job-date">{{ tyche.start }} — {{ tyche.end }}</p>
-            <h3>{{ tyche.company }}</h3>
-            <p class="job-pos">{{ tyche.position }}</p>
-            <p class="job-role">{{ s.work.role }}</p>
-          </header>
-
-          <div class="story" data-stage-root :data-scene="s.work.chapters[0].scene">
-            <ol class="steps">
-              <li v-for="(st, i) in s.work.chapters" :key="i" class="step" :data-scene="st.scene">
-                <span class="step-n">{{ st.when || String(i + 1).padStart(2, '0') + ' / ' + String(s.work.chapters.length).padStart(2, '0') }}</span>
-                <h3>{{ st.head }}</h3>
-                <p v-for="para in st.body" :key="para">{{ para }}</p>
-              </li>
-            </ol>
-            <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
-          </div>
-
-          <div class="also rv" data-scene="dust">
-            <h3 class="mini-head">{{ s.work.alsoTitle }}</h3>
-            <ul><li v-for="a in s.work.also" :key="a">{{ a }}</li></ul>
-            <details class="record">
-              <summary><span>{{ s.work.record }}</span><i aria-hidden="true"></i></summary>
-              <div class="tiles">
-                <section v-for="(items, title) in tyche.description" :key="title" class="tile glow">
-                  <h4>{{ title }}</h4>
-                  <ul v-if="Array.isArray(items)"><li v-for="it in items" :key="it">{{ it }}</li></ul>
-                </section>
-              </div>
-            </details>
-          </div>
-
-          <h3 class="mini-head before rv">{{ s.work.earlier }}</h3>
           <div class="story story-tl" data-stage-root data-scene="timeline">
             <div class="steps">
+              <article class="job lead">
+                <header class="job-head rv">
+                  <p class="job-date">{{ tyche.start }} — {{ tyche.end }}</p>
+                  <h3>{{ tyche.company }}</h3>
+                  <p class="job-pos">{{ tyche.position }}</p>
+                  <p class="job-role">{{ s.work.role }}</p>
+                </header>
+                <div v-for="n in s.work.notes" :key="n.scene" class="note rv" :data-scene="n.scene">
+                  <h4>{{ n.head }}</h4>
+                  <p>{{ n.text }}</p>
+                </div>
+                <div class="also rv" data-scene="timeline">
+                  <h4 class="mini-head">{{ s.work.alsoTitle }}</h4>
+                  <ul><li v-for="x in s.work.also" :key="x">{{ x }}</li></ul>
+                  <details class="record">
+                    <summary><span>{{ s.work.record }}</span><i aria-hidden="true"></i></summary>
+                    <div class="tiles">
+                      <section v-for="(items, title) in tyche.description" :key="title" class="tile glow">
+                        <h4>{{ title }}</h4>
+                        <ul v-if="Array.isArray(items)"><li v-for="it in items" :key="it">{{ it }}</li></ul>
+                      </section>
+                    </div>
+                  </details>
+                </div>
+              </article>
+              <h3 class="mini-head before rv">{{ s.work.earlier }}</h3>
               <article v-for="job in earlier" :key="job.id" class="job rv">
                 <header class="job-head">
                   <p class="job-date">{{ job.start }} — {{ job.end }}</p>
@@ -139,38 +138,11 @@
         </div>
       </section>
 
-      <!-- kinetic line between Experience and AI -->
-      <div ref="bandEl" class="band" aria-hidden="true" data-scene="dust">
-        <p class="band-row"><span v-for="n in 4" :key="n">{{ s.ai.quote }}</span></p>
-        <p class="band-row alt"><span v-for="n in 4" :key="n">{{ s.ai.quote }}</span></p>
-      </div>
-
-      <!-- 03 · AI workflow -->
-      <section id="ai" class="sec">
-        <div class="wrap">
-          <header class="sec-head rv">
-            <p class="idx">03</p>
-            <h2 :aria-label="s.ai.title"><span v-for="(w, i) in split(s.ai.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
-            <p class="sec-sub">{{ data.aiWorkflow.intro }}</p>
-          </header>
-          <div class="story story-flip" data-stage-root :data-scene="s.ai.steps[0].scene">
-            <ol class="steps">
-              <li v-for="(st, i) in s.ai.steps" :key="st.scene" class="step" :data-scene="st.scene">
-                <span class="step-n">{{ String(i + 1).padStart(2, '0') }} / {{ String(s.ai.steps.length).padStart(2, '0') }}</span>
-                <h3>{{ st.head }}</h3>
-                <p v-for="para in st.body" :key="para">{{ para }}</p>
-              </li>
-            </ol>
-            <div class="stage-col"><div class="stage-slot" aria-hidden="true"></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 04 · Open source -->
+      <!-- 03 · Open source -->
       <section id="oss" class="sec" data-scene="dust">
         <div class="wrap">
           <header class="sec-head rv">
-            <p class="idx">04</p>
+            <p class="idx">03</p>
             <h2 :aria-label="s.oss.title"><span v-for="(w, i) in split(s.oss.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
           </header>
           <article v-for="(p, i) in flagships" :key="p.id" class="flag glow rv" :class="{ flip: i % 2 }">
@@ -230,7 +202,7 @@
         </div>
         <div class="wrap">
           <header class="sec-head rv">
-            <p class="idx">05</p>
+            <p class="idx">04</p>
             <h2 :aria-label="s.skills.title"><span v-for="(w, i) in split(s.skills.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
             <p class="sec-sub">{{ s.skills.hint }}</p>
           </header>
@@ -261,7 +233,7 @@
       <section id="contact" class="sec contact" data-stage-root data-scene="handshake">
         <div class="wrap">
           <div class="stage-slot contact-stage" aria-hidden="true"></div>
-          <p class="idx rv">06</p>
+          <p class="idx rv">05</p>
           <h2 class="rv">{{ s.contact.title }}</h2>
           <a class="mail rv" :href="'mailto:' + profile.email">{{ profile.email }}</a>
           <ul class="contact-list rv">
@@ -293,7 +265,7 @@ const zh = computed(() => props.locale === 'zh-tw')
 const data = computed(() => (zh.value ? zhTw : en))
 const s = computed(() => data.value.site)
 const profile = computed(() => data.value.profile)
-const sectionIds = ['systems', 'work', 'ai', 'oss', 'skills', 'contact']
+const sectionIds = ['bring', 'work', 'oss', 'skills', 'contact']
 
 const nameChars = computed(() => s.value.hero.nameLines.map((l) => Array.from(l)))
 // headline → words (Latin) or characters (CJK) for the staggered reveal

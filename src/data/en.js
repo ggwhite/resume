@@ -21,87 +21,109 @@ export default {
   // stories, or the repos' READMEs. Headlines, hero and diagrams use neutral terms
   // (services, users, platforms); industry detail stays in the experience record.
   site: {
-    nav: { systems: "Problems", work: "Experience", ai: "AI workflow", oss: "Open source", skills: "Toolbox", contact: "Contact" },
+    nav: { bring: "What I bring", work: "Experience", oss: "Open source", skills: "Toolbox", contact: "Contact" },
     langSwitch: { label: "中文", to: "/zh-tw" },
     hero: {
       nameLines: ["White", "Chang"],
       altName: "張育誠",
+      value: "I keep high-traffic online systems correct, fast and steady through change, and I use AI agents to deliver faster.",
+      chips: ["~15 years of backend engineering", "Real-time, high-concurrency systems", "Open source: go-masker, 130+ GitHub stars"],
       stack: "Go · Java · Lua",
-      lede: "About 15 years of backend engineering, the last seven on high-concurrency, real-time platforms. I work on the parts that have to hold: data and performance, reliability and security, delivery. I build in Go, Java and Lua, and I run AI agents by one rule: whoever writes the code never verifies it.",
+      contact: "Contact",
       words: ["Go", "Java", "Lua", "Redis", "MongoDB", "MySQL", "gRPC", "Docker", "Kubernetes"],
       photoAlt: "Portrait of White Chang",
     },
-    stats: [
-      { prefix: "~", num: 15, suffix: "", unit: "years", label: "of software development" },
-      { prefix: "~", num: 2.7, decimals: 1, suffix: "M", unit: "records / day", label: "MongoDB collection whose full scans I diagnosed and indexed" },
-      { prefix: ">", num: 50, suffix: "%", unit: "shorter", label: "development cycle for new products, via a reusable Go framework" },
-      { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker, my open-source Go library" },
-    ],
-    systems: {
-      title: "Five problems, told from the cause",
-      sub: "The picture follows the text: the situation first, then what went wrong, then the fix.",
-      steps: [
+    labels: { situation: "Situation", problem: "Problem", action: "What I did", result: "Result", detail: "Engineering detail" },
+    bring: {
+      title: "What I bring to a team",
+      sub: "Three things, each with a real case behind it.",
+      strengths: [
         {
-          scene: "race", head: "Two requests, one check.", tags: ["Concurrency", "Redis"],
-          body: [
-            "A feature let each user claim something once a day. The server handled it in three steps: check that it had not been claimed yet, run a query to confirm the user qualified, then grant it.",
-            "Users reported that the button did nothing, so they tapped again. Every extra tap passed step one, because nothing had been granted yet, and queued behind the same slow query. When the query came back, each waiting request granted the item. One user, several grants: a bug that cost real money.",
-            "The hole was the gap between checking and granting. I closed it with a Redis marker: the first request to write the marker goes on, every later one is turned away, and the marker expires after a day.",
+          line: "When something breaks, I find the real cause, not the nearest one.",
+          stories: [
+            {
+              scene: "race",
+              head: "Duplicate claims stopped completely, and a query went from minutes to milliseconds.",
+              tldr: "A once-a-day feature was giving the same user the item several times. It looked like one bug. Underneath were two separate causes, and I found and fixed each one.",
+              detail: [
+                { k: "situation", scene: "race", text: "A feature let each user claim something once a day. The server handled it in three steps: check that it had not been claimed yet, run a query to confirm the user qualified, then grant it." },
+                { k: "problem", scene: "race", text: "Users reported that the button did nothing, so they tapped again. Every extra tap passed step one, because nothing had been granted yet, and queued behind the same slow query. When the query came back, each waiting request granted the item: one user, several grants, a bug that cost real money." },
+                { k: "action", scene: "race", text: "First cause: the gap between checking and granting. I closed it with a Redis marker. The first request to write the marker goes on, every later one is turned away, and the marker expires after a day." },
+                { k: "action", scene: "index", text: "Second cause: the query itself. The records it read go into a collection that is created automatically every day, about 2.7 million records a day, and nothing in that daily creation step built an index, so every query scanned the whole collection. I wrote a scheduler on the Lua server that builds the compound index ahead of time for today's and tomorrow's collections, then applied the same approach to the other large collections." },
+                { k: "result", scene: "index", text: "The duplicate claims stopped completely. The query went from several minutes down to a few hundred milliseconds." },
+              ],
+              tags: ["Concurrency", "Redis", "MongoDB", "Performance"],
+            },
           ],
         },
         {
-          scene: "index", head: "Why that query was slow enough to matter.", tags: ["MongoDB", "Performance"],
-          body: [
-            "The slow query was a second cause, and a separate one. The records it read live in a collection that is created automatically every day, about 2.7 million records a day.",
-            "Nothing in that daily creation step built an index. So every query scanned the whole collection, and the slow queries triggered retries that made it worse.",
-            "Adding an index by hand would have fixed one day. I wrote a scheduler on the Lua server that builds the compound index ahead of time, for today's and tomorrow's collections, so the midnight switch never lands on a bare one. Then I applied the same approach to the other large collections.",
+          line: "I keep live systems safe and steady: contain an incident first, and move production by a script.",
+          stories: [
+            {
+              scene: "tamper",
+              head: "The path used to tamper with the data was closed.",
+              tldr: "State that a service kept in Redis was being changed from outside. Encryption and checksums did not stop it, so I moved the data to where it could not be reached.",
+              detail: [
+                { k: "situation", text: "To let a dropped connection pick up where it left off, a service kept session state in Redis." },
+                { k: "problem", text: "Then the records started showing results the normal flow could not have produced. The state in Redis was being altered outside the normal flow. I added a checksum, then AES encryption. Neither held: once the secret is exposed, the attacker can reproduce any app-layer validation." },
+                { k: "action", text: "So I stopped guarding the data where it was and moved it. For the affected services, the sensitive state went into process memory, where a Redis client cannot reach it, and the environment was isolated with Docker." },
+                { k: "result", text: "With the state in process memory, that tampering path was closed and the tampering stopped. Separately, I designed a tamper-resistant architecture (HMAC signing, a state machine, an audit trail); it reached a working POC, not production." },
+              ],
+              tags: ["Security", "Redis", "Docker"],
+            },
+            {
+              scene: "inject",
+              head: "Injected code removed from a running service, with the evidence kept.",
+              tldr: "Someone injected code into a running service. I set up monitoring and preserved the evidence first, then restarted the service to clear it.",
+              detail: [
+                { k: "situation", text: "Abnormal results kept showing up in the records of a live service." },
+                { k: "problem", text: "I traced them to Lua code injected through the Skynet debug console, changing service logic in memory." },
+                { k: "action", text: "I set up monitoring and preserved the evidence before restarting anything, then restarted the affected services." },
+                { k: "result", text: "The restart cleared the injected code from memory, and the monitoring stays in place to check for signs of a new injection." },
+              ],
+              tags: ["Incident response", "Lua/Skynet"],
+            },
+            {
+              scene: "migrate",
+              head: "8 platforms moved into containers. None needed a rollback.",
+              tldr: "Between June and November 2026, I cut 8 platforms over from bare-metal servers to Docker in production, each one inside a scheduled maintenance window.",
+              detail: [
+                { k: "situation", text: "Services and back offices for several platforms ran directly on bare-metal hosts, and some of the settings in git no longer matched what was actually running in production." },
+                { k: "problem", text: "A move like that gets one cutover per platform. Deploy straight from git, and production settings roll back to old values without anyone noticing." },
+                { k: "action", text: "I pulled the production configs back and compared them with git key by key, wrote scripts that compare MySQL, Redis and MongoDB between old and new, and wrote the cutover runbook: freeze writes, sync data, reopen traffic, each step with its own completion criteria. Images go to Harbor and AWS ECR, and a git tag triggers the release pipeline. The fix-up tool only previews unless told to write, and backs up first." },
+                { k: "result", text: "8 platforms were cut over to production between June and November 2026, each in its scheduled maintenance window, with no rollback." },
+              ],
+              tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
+            },
           ],
         },
         {
-          scene: "tamper", head: "When the secret leaks, move the data.", tags: ["Security", "Redis", "Docker"],
-          body: [
-            "To let a dropped connection pick up where it left off, a service kept session state in Redis.",
-            "Then the records started showing results the normal flow could not have produced. The state in Redis was being altered outside the normal flow. I added a checksum, then AES encryption. Neither held: once the secret is exposed, the attacker can reproduce any app-layer validation.",
-            "So I stopped guarding the data where it was and moved it. For the affected services, the sensitive state went into process memory, where a Redis client cannot reach it, and the environment was isolated with Docker. I also designed a tamper-resistant architecture (HMAC signing, a state machine, an audit trail); that part reached a working POC, not production.",
-          ],
-        },
-        {
-          scene: "migrate", head: "Moving live services without a surprise.", tags: ["Docker", "GitLab CI/CD", "Harbor", "AWS ECR"],
-          body: [
-            "Services and back offices for several platforms ran directly on bare-metal hosts, and some of the settings in git no longer matched what was actually running in production.",
-            "A move like that gets one cutover. Deploy straight from git, and production settings roll back without anyone noticing.",
-            "Between July and October 2026 I moved them into Docker containers. Images go to Harbor and AWS ECR, and a git tag triggers the release pipeline. I pulled the production configs back and compared them with git key by key, wrote scripts that compare MySQL, Redis and MongoDB between old and new, and wrote the cutover runbook: freeze writes, sync data, reopen traffic, each step with its own completion criteria. The fix-up tool only previews unless told to write, and backs up first.",
-          ],
-        },
-        {
-          scene: "poc", head: "Knowing when not to ship.", tags: ["Golang", "gRPC", "Protobuf"],
-          body: [
-            "Three platforms had grown up on three different stacks: Go with .NET, Lua with PHP, Lua/Skynet with Java. Each had its own servers, back office and deployment pipeline.",
-            "After the tampering incident I wanted a root fix instead of another patch: one backend, services talking over gRPC, with data integrity designed in from the start.",
-            "I built it to a working POC. Then I evaluated the migration separately from the design, and stopped: a full rewrite was too risky for live platforms. Nothing from it went to production. A good design does not make a migration worth doing.",
+          line: "I deliver with AI agents, and I stay the one who decides and checks.",
+          stories: [
+            {
+              scene: "delegate",
+              head: "AI writes the code. It never signs off on its own work.",
+              tldr: "I make the architecture decisions, one agent implements, and a separate agent verifies. To make that workable every day, I built two open-source tools: memory-mcp and Jarvis.",
+              detail: [
+                { k: "situation", scene: "delegate", text: "Claude Code is my main session for day-to-day work: debugging, investigation and architecture discussions happen there, with me owning planning and final decisions." },
+                { k: "problem", scene: "delegate", text: "An agent that reviews its own code brings the same blind spots to the review. It also forgets everything when a session ends, and once work fans out to several agents, the chat alone does not show what each one is doing." },
+                { k: "action", scene: "delegate", text: "I split the seats: lightweight models take file search and chores, a worker implements, and a separate, independent verifier signs off. Architecture decisions (module boundaries, protocols, the security model) stay with me, and so do the production blind spots AI overlooks, such as logging coverage and security hardening." },
+                { k: "action", scene: "guard", text: "Harness rule files (CLAUDE.md / AGENTS.md) keep agents inside project conventions. I built memory-mcp so preferences, past pitfalls and unfinished work carry into the next session, and Jarvis to watch each subagent's task, time and cost live." },
+                { k: "result", scene: "guard", text: "This is how I work every day. The team now shares one set of rules across Claude Code and Codex, and both tools are open source: memory-mcp in Go, Jarvis in TypeScript with 1,100+ tests." },
+              ],
+              tags: ["Claude Code", "MCP", "memory-mcp", "Jarvis"],
+            },
           ],
         },
       ],
     },
     work: {
-      title: "Where it happened",
+      title: "Experience",
       sub: "Nearly 15 years across gaming, payment and enterprise systems.",
-      role: "Architecture planning and technical decisions in a 5–10 person team: weighing whether a change should be made at all, what it touches, and what it risks. The five stories above are from here. Two more:",
-      chapters: [
-        {
-          scene: "hash", head: "One Hash instead of a keyspace sweep.",
-          body: [
-            "Some Redis data was stored as one key per rid, so reading it meant running SCAN across the keyspace.",
-            "I refactored the structure into a single Hash with rid as the field. Lookups became direct, and the excessive SCAN operations went away.",
-          ],
-        },
-        {
-          scene: "inject", head: "Evidence first. Restart second.",
-          body: [
-            "Abnormal results kept showing up in the records. I traced them to Lua code injected through the Skynet debug console, changing service logic in memory.",
-            "I set up monitoring and preserved the evidence before restarting anything. The restart then cleared the injected code from memory.",
-          ],
-        },
+      role: "Architecture planning and technical decisions in a 5–10 person team: weighing whether a change should be made at all, what it touches, and what it risks. The cases above are from here.",
+      notes: [
+        { scene: "poc", head: "Knowing when not to ship.", text: "Three platforms had grown up on three different stacks. I planned a single backend for them (microservices over gRPC, with a tamper-resistant data layer: HMAC signing, a state machine, an audit trail) and built it to a working POC. Then I evaluated the migration separately from the design and stopped: a full rewrite was too risky for live platforms. Nothing from it went to production." },
+        { scene: "hash", head: "One Hash instead of a keyspace sweep.", text: "Some Redis data was stored as one key per rid, so reading it meant running SCAN across the keyspace. I refactored it into a single Hash with rid as the field, and the excessive SCAN operations went away." },
       ],
       alsoTitle: "Also at Tyche",
       also: [
@@ -114,14 +136,7 @@ export default {
       record: "Full record",
       earlier: "Before that",
     },
-    ai: {
-      title: "Agents do the typing. I do the deciding.",
-      quote: "Whoever writes the code never verifies it.",
-      steps: [
-        { scene: "delegate", head: "Three seats, never shared.", body: ["Lightweight models take file search and routine chores. A worker implements. A separate, independent verifier signs off.", "Architecture decisions — module boundaries, protocols, the security model — stay with me, and so do the production blind spots AI overlooks: logging coverage, security hardening."] },
-        { scene: "guard", head: "A fence, and a memory.", body: ["Harness rule files (CLAUDE.md / AGENTS.md) keep agents inside project conventions.", "memory-mcp, which I built, carries preferences, past pitfalls and unfinished work into the next session."] },
-      ],
-    },
+    quote: "Whoever writes the code never verifies it.",
     oss: {
       title: "Things I've put on GitHub",
       freelance: "Freelance",
@@ -283,7 +298,7 @@ export default {
           "Introduced the team's shared knowledge base and AI agent collaboration rules: an index document ties together platform environments, codebase structure, decision records, and runbooks; rules are split into always-loaded and on-demand layers so Claude Code and Codex share the same conventions",
           "Set up a feedback loop for troubleshooting playbooks and runbooks: every investigation and release pitfall is written back into the docs, with a cross-platform table of recurring issues so the next migration can avoid them up front",
         ],
-        "Containerization Migration (Jul. 2026 – Oct. 2026)": [
+        "Containerization Migration (Jun. 2026 – Nov. 2026)": [
           "Migrated game services and back-office systems for multiple platforms from bare metal to Docker containers (Docker Compose, healthchecks, environment-variable-based config injection)",
           "Pushed images to Harbor / AWS ECR and released via GitLab tag pipelines triggered by git tags; fixed a missing CI rule that prevented tag pipelines from running",
           "Wrote the production cutover runbook — step-by-step from write freeze and data sync to reopening traffic, with clear completion criteria for each step",

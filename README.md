@@ -36,18 +36,29 @@ npm run pdf      # regenerate both PDFs (see below)
 ### How a story step is wired
 
 ```html
-<div class="story" data-stage-root data-scene="race">
-  <ol class="steps">
-    <li class="step" data-scene="race">…text…</li>
-  </ol>
+<article class="story" data-stage-root data-scene="race">
+  <div class="step">
+    <h3>…result in plain words…</h3>
+    <p class="tldr">…one sentence…</p>
+    <details class="deep">
+      <dl class="arc"><div data-scene="race">…</div><div data-scene="index">…</div></dl>
+    </details>
+  </div>
   <div class="stage-col"><div class="stage-slot"></div></div>
-</div>
+</article>
 ```
 
 The engine finds the last `[data-scene]` element above the reading line, switches to
 that scene, and fits it into the `.stage-slot` of the nearest `[data-stage-root]`.
 To add a story: write the scene in `scenes.js`, add its labels and captions to
-`site.scenes.<key>` in both data files, and add a step with `data-scene="<key>"`.
+`site.scenes.<key>` in both data files, and add the story to `site.bring.strengths`.
+
+### Two reading layers
+
+Every story has a plain layer (`head` = the result in plain words, `tldr` = one
+sentence anyone can follow) and an engineering layer (`detail`: situation, problem,
+what I did, result) inside a native `<details>`. The stage plays beside both; opening
+the detail lets individual paragraphs switch the scene (`detail[].scene`).
 
 ### Motion and fallbacks
 

@@ -66,14 +66,16 @@ scripts/
 - 場景定義在 `gl/scenes.js`（節點、連線、`play(a, t)` 腳本）；標籤與字幕文字在兩個語言檔的 `site.scenes.<key>`。
 - 場景一律要「演出那一段寫的事」：標籤用畫面上那段文字裡的名詞，腳本只表現來源裡有的事實（例：POC 停在 POC、Redis 事件的結果是「敏感狀態改存 process 記憶體＋Docker 隔離」）。NEVER 放純裝飾、沒有意義的形狀。
 - 新增故事：`scenes.js` 加場景 → 兩個語言檔加 `site.scenes.<key>` → `Site.vue`（或資料的 steps／chapters）加一段 `data-scene`。
-- 目前場景：words（hero，粒子逐一拼出 `site.hero.words` 的技術名稱）、race／index／tamper／migrate／poc（五個問題）、hash／inject（大極）、timeline（先前經歷）、delegate／guard（AI 工作流程）、handshake（聯絡）、dust（無圖）。
+- 目前場景：words（hero，粒子逐一拼出 `site.hero.words` 的技術名稱）、race＋index（強項 1 的故事）、tamper／inject／migrate（強項 2）、delegate＋guard（強項 3）、timeline／poc／hash（經歷）、handshake（聯絡）、dust（無圖）。
 - 故事場景的腳本順序一律跟文字一樣：先演「原本的情況」，再演「出了什麼事」，最後演「怎麼解／結果」；字幕（`caps`）逐段對應。
 
 ## 資料維護原則
 - **履歷內容一律放 `src/data/`**；component 只負責渲染。
 - 英文版與中文版保持同步、內容對等。
 - `site` 的創意文案只能換說法（框架、節奏、標題、比喻），每一句都要對得上紀錄欄位、`~/ob/求職/面試故事/` 已核可的故事或 repo README 的事實；數字、職稱、日期、成果 NEVER 自行編造。
-- 「五個問題」的每個故事一律寫成外人看得懂的三段：原本的情況 → 出了什麼事 → 我怎麼做與結果；NEVER 一開頭就丟結論。
+- 網站訊息結構（`site`）：hero＝職稱＋一句白話價值＋3 個佐證 chip＋行動按鈕；`bring`＝三個強項，每個強項一句白話＋故事當佐證。
+- 每個故事一律兩層：白話層（`head`＝用白話寫的結果、`tldr`＝一句話，HR 與主管看得懂，NEVER 出現 collection／keyspace／SCAN 這類術語）＋工程細節層（`detail`：情況 → 問題 → 做法 → 結果，收在「工程細節」裡，可以用術語）。每個故事一定要有結果；結果只寫使用者確認過的事實。
+- NEVER 在標題或副標講頁面本身（「畫面會跟著文字演」這類）。
 - 標題、hero、圖上的標籤一律用中性詞（服務、使用者、平台、發放）；NEVER 出現 Lobby、玩家、獎勵、博弈這類產業色彩的詞。公司名稱與日期照實保留，遊戲相關細節只留在工作經歷紀錄（experience）裡。
 - NEVER 寫「帶領／主導團隊」、NEVER 提內部專案代號；微服務／gRPC 整合與 HMAC 防竄改架構一律寫「做到 POC」。
 - GitHub star 數以 `gh api repos/ggwhite/<repo>` 為準，改在 `shared.js` 的 `repos`；不到 10 顆的不顯示（memory-mcp、Jarvis 用測試數／功能當佐證）。
@@ -95,5 +97,7 @@ scripts/
 | `/#/pdf` `/#/pdf/zh-tw` | PDF 專用版面（不在導航列） |
 
 ## 注意事項
+- 容器化遷移的期間是 2026/06–2026/11（8 個平台切換到正式環境、各自在排定維護時段、沒有 rollback）；NEVER 寫平台名稱、主機，NEVER 寫「零事故」。
+- 允許的成果數字：重複領取完全停止；查詢從幾分鐘降到幾百毫秒；竄改路徑關上（NEVER 寫成系統整體變安全）。NEVER 自行換算倍數。
 - `photo.jpg`／`portrait.jpg` 是個人照片；照片一律全彩，畫面裡不可有其他人。未裁切的原始照片已從歷史移除，NEVER 再加回來。
 - `site.css` 會在 PDF 路由一起載入，PDF 版面的 class 名稱不可與它重複（例：`.contact` 曾撞名）。
