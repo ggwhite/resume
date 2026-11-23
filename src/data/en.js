@@ -18,9 +18,9 @@ export default {
   about: "Senior backend engineer with nearly 15 years of software development experience, specializing in high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: Claude Code runs as my main session for planning and final decisions, delegating file search, implementation, and verification to subagents on different models (whoever writes the code never verifies it); harness rule files keep AI behavior in check, and my self-built memory-mcp carries context across sessions. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
     {
-      title: "System Modernization & Multi-Tenancy",
-      description: "Solo-led full platform rewrite from Lua/PHP/Java to Go with config-driven multi-tenant architecture, replacing 13 per-platform release branch forks with a single codebase. Designed Proto2/Proto3 dual-compatible serialization layer for seamless legacy client migration.",
-      tech: "Golang, gRPC, Protobuf, Redis, MySQL, MongoDB",
+      title: "Architecture Evaluation & Modernization",
+      description: "Planned a microservice / gRPC unification of a multi-platform game backend and built it to a working POC, including a tamper-resistant data layer (HMAC signing, state machine, audit trail). Evaluated it and stopped the project: a full rewrite was too risky for live platforms.",
+      tech: "Golang, gRPC, Protobuf, Redis",
     },
     {
       title: "High-Concurrency Backend Architecture",
@@ -39,7 +39,7 @@ export default {
     },
     {
       title: "Security & Data Integrity",
-      description: "Investigated Redis data tampering incidents, analyzed full attack chains. Designed HMAC-SHA256 data signing mechanism to architecturally prevent direct Redis manipulation that bypasses application-layer validation.",
+      description: "Investigated Redis data tampering incidents and traced the full attack chain. After confirming app-layer validation was bypassed once the secret was exposed, moved sensitive state for the affected games into process memory and isolated the environment with Docker.",
     },
   ],
   aiWorkflow: {
@@ -80,12 +80,6 @@ export default {
       start: "Jan. 2021",
       end: "Present",
       description: {
-        "Platform Modernization (Solo Lead)": [
-          "Rewrote Lua/PHP/Java gaming platform in Go — TCP gateway, game engine, BI backend, payment services",
-          "Designed multi-tenant config-driven architecture: single codebase serving 13 platforms, replacing per-platform release branch forks",
-          "Designed Proto2/Proto3 dual-compatible serialization layer for seamless legacy Lua client migration to Go",
-          "Implemented Redis data HMAC-SHA256 signing to architecturally prevent data tampering attacks",
-        ],
         "Architecture Planning & Technical Decisions in a 5-10 Person Team": [
           "Planned multi-platform system architecture; assessed whether proposed changes should be made, along with their impact and risk, to inform technical decisions",
           "Platform C: Game Servers (Lua/Skynet), BI Backend (Java/Spring Boot/MyBatis), CI/CD (GitLab, SSH)",
@@ -109,8 +103,12 @@ export default {
           "Refactored key structure to Hash (rid as field), eliminated excessive SCAN operations",
         ],
         "Security Hardening": [
-          "Investigated Redis data tampering, traced full attack chain (game state forgery + transaction record tampering)",
-          "Designed three-layer defense: HMAC signing + state machine + audit trail",
+          "Investigated Redis data tampering, traced full attack chain (game state forgery + transaction record tampering); after confirming app-layer validation was bypassed once the secret was exposed, moved sensitive state for the affected games into process memory and isolated the environment with Docker",
+          "Designed a tamper-resistant architecture (HMAC signing, state machine, audit trail) and built it to a working POC",
+          "Handled a Lua code injection via the Skynet debug console: set up monitoring and preserved evidence first, then restarted affected services to clear the injected code from memory",
+        ],
+        "Platform Modernization POC": [
+          "Planned a microservice / gRPC unification of the platforms' game backends and built it to a working POC; evaluated it and stopped the project because a full rewrite was too risky for live platforms",
         ],
         "Message Queue": [
           "Implemented real-time push notification system using RabbitMQ for cross-service async messaging",
@@ -236,6 +234,16 @@ export default {
       end: "Aug. 2026",
       description: [
         "Open-source Go CLI (github.com/ggwhite/4x, 34 GitHub stars) that ran AI coding agents as isolated Design → Code → Review → Test roles with deterministic guardrails; archived once native subagents covered it, and its core rule — whoever writes the code never verifies it — lives on in my current workflow",
+      ],
+    },
+    {
+      id: "go-masker",
+      name: "go-masker — Sensitive Data Masking Library for Go (open source, personal)",
+      start: "Apr. 2019",
+      end: "Present",
+      pdf: false,
+      description: [
+        "Open-source Go library for masking sensitive fields (names, emails, phones, IDs, cards) in logs and API output via struct tags (github.com/ggwhite/go-masker, 130+ GitHub stars)",
       ],
     },
     {

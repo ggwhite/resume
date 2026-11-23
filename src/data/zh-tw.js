@@ -18,9 +18,9 @@ export default {
   about: "資深後端工程師，近 15 年軟體開發經驗，專精高併發分散式系統。我專注在解決問題——效能瓶頸、部署自動化、系統安全——而不是記住框架。實戰領域涵蓋即時遊戲平台（多服務器架構、多平台並行營運）、支付處理與企業 API。我的工作方式是 AI 增強：以 Claude Code 為主 session 負責規劃與拍板，依任務把檔案搜尋、實作、驗收分派給不同模型的 subagent（寫的人不驗自己），並用 harness 規則檔約束 AI 行為、用自建的 memory-mcp 延續跨 session 記憶。AI 會漏的——生產環境的可觀測性、安全加固、系統完整性——由我把關。",
   competencies: [
     {
-      title: "系統現代化與多租戶架構",
-      description: "獨立主導遊戲平台全面重寫：以 Go 多租戶 config-driven 架構取代 13 個平台各自 fork 的 release branch。設計 Proto2/Proto3 雙相容序列化層，讓舊 client 無縫接入新系統。",
-      tech: "Golang, gRPC, Protobuf, Redis, MySQL, MongoDB",
+      title: "架構評估與系統現代化",
+      description: "規劃多平台遊戲後端的微服務／gRPC 整合方案，做到可 demo 的 POC，包含 HMAC 簽章＋狀態機＋audit trail 的防竄改資料層。評估後停止專案：全面重寫對線上平台風險過高。",
+      tech: "Golang, gRPC, Protobuf, Redis",
     },
     {
       title: "高併發後端架構",
@@ -39,7 +39,7 @@ export default {
     },
     {
       title: "資安與資料完整性",
-      description: "調查 Redis 資料竄改事件，追蹤攻擊路徑並分析完整攻擊鏈。設計 HMAC-SHA256 資料簽章機制，從架構層阻斷直接修改 Redis 繞過應用層驗證的攻擊。",
+      description: "調查 Redis 資料竄改事件，追蹤攻擊路徑並分析完整攻擊鏈。確認 secret 外露時應用層驗證會被繞過後，將受影響遊戲的敏感狀態改存 process 記憶體，並以 Docker 隔離環境。",
     },
   ],
   aiWorkflow: {
@@ -79,12 +79,6 @@ export default {
       start: "2021/01",
       end: "現在",
       description: {
-        "平台現代化（獨立主導）": [
-          "以 Go 重寫 Lua/PHP/Java 混合遊戲平台，涵蓋 TCP gateway、遊戲引擎、BI 後台、支付服務",
-          "設計多租戶 config-driven 架構，單一 codebase 支援 13 個平台，取代各自 fork 的 release branch",
-          "設計 Proto2/Proto3 雙相容序列化層，舊 Lua client 無縫接入 Go 新系統",
-          "實作 Redis 資料 HMAC-SHA256 簽章機制，從架構層防禦資料竄改攻擊",
-        ],
         "在 5-10 人團隊中負責架構規劃與技術決策": [
           "規劃多平台系統架構，評估改動該不該做、影響範圍與風險，作為技術決策依據",
           "平台 C：遊戲服務器 (Lua/Skynet)、BI 後台 (Java/Spring Boot/MyBatis)、CI/CD (GitLab, SSH)",
@@ -108,8 +102,12 @@ export default {
           "將 key 結構改為 Hash（rid 作為 field），避免大量 SCAN 操作，提升查詢效率",
         ],
         "資安強化": [
-          "調查 Redis 資料竄改事件，追蹤完整攻擊鏈（遊戲狀態偽造 + 交易紀錄竄改）",
-          "設計 HMAC 簽章 + 狀態機 + audit trail 三層防護架構",
+          "調查 Redis 資料竄改事件，追蹤完整攻擊鏈（遊戲狀態偽造 + 交易紀錄竄改）；確認 secret 外露時應用層驗證會被繞過後，將受影響遊戲的敏感狀態改存 process 記憶體，並以 Docker 隔離環境",
+          "設計 HMAC 簽章＋狀態機＋audit trail 的防竄改架構，做到可 demo 的 POC",
+          "處理 Skynet debug console 遭注入 Lua 程式碼的事件：先建立監控、保留證據，再重啟受影響服務清除記憶體中的注入程式碼",
+        ],
+        "平台現代化 POC": [
+          "規劃各平台遊戲後端的微服務／gRPC 整合方案並做到可 demo 的 POC；評估後停止專案，因為全面重寫對線上平台風險過高",
         ],
         "訊息推播": [
           "使用 RabbitMQ 實作即時推播機制，處理跨服務非同步通知",
@@ -235,6 +233,16 @@ export default {
       end: "2026/08",
       description: [
         "開源 Go CLI（github.com/ggwhite/4x，GitHub 34 stars），讓 AI coding agent 以 Design → Code → Review → Test 彼此隔離的角色運作，並以確定性護欄把關；原生 subagent 功能成熟後封存，核心原則「寫的人不驗自己」延續到現在的工作流程",
+      ],
+    },
+    {
+      id: "go-masker",
+      name: "go-masker — Go 敏感資料遮罩函式庫（開源，個人專案）",
+      start: "2019/04",
+      end: "現在",
+      pdf: false,
+      description: [
+        "開源 Go 函式庫，以 struct tag 遮罩 log 與 API 輸出中的敏感欄位（姓名、email、電話、身分證、卡號）（github.com/ggwhite/go-masker，GitHub 130+ stars）",
       ],
     },
     {

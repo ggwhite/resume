@@ -103,14 +103,14 @@ import zhTw from '@/data/zh-tw'
 
 const highlights = {
   en: {
-    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Security incident investigation & AES encryption. CI/CD pipeline with Docker/Harbor/Helm. Handled containerization of multiple platforms, migrating from bare metal (Harbor/ECR releases, cutover runbooks, data verification scripts); introduced a shared team knowledge base and AI collaboration rules.",
+    Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Redis tampering investigation: moved sensitive state into process memory, Docker isolation; handled a Lua code injection via the Skynet debug console. CI/CD pipeline with Docker/Harbor/Helm. Handled containerization of multiple platforms, migrating from bare metal (Harbor/ECR releases, cutover runbooks, data verification scripts); introduced a shared team knowledge base and AI collaboration rules.",
     Terpro: "Built a reusable game mechanics framework, cutting new-game development time by over 50%. Kubernetes/Helm deployment.",
-    WistronITS: "Led 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
+    WistronITS: "Mentored 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
   },
   'zh-tw': {
-    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。資安事件調查與 AES 加密。Docker/Harbor/Helm CI/CD Pipeline。負責多平台從裸機容器化遷移（Harbor／ECR 發版、cutover runbook、資料比對腳本）；導入團隊共用知識庫與 AI 協作規則。",
+    Tyche: "3 個遊戲服務器專案（Lua/Skynet、Golang）。修復重複領獎 race condition、MongoDB 每日 270 萬筆資料效能優化。Redis 架構重構。Redis 竄改事件調查：敏感狀態改存 process 記憶體、Docker 隔離；處理 Skynet debug console 遭注入 Lua 程式碼事件。Docker/Harbor/Helm CI/CD Pipeline。負責多平台從裸機容器化遷移（Harbor／ECR 發版、cutover runbook、資料比對腳本）；導入團隊共用知識庫與 AI 協作規則。",
     Terpro: "建立可複用遊戲機制框架，新遊戲開發週期縮短超過 50%。Kubernetes/Helm 部署。",
-    WistronITS: "領導 2 名工程師。開發 5 個微服務（OpenId、Product、Payment、Stock、Kafka）。Jenkins/Nexus CI 工具鏈。",
+    WistronITS: "指導 2 名工程師上手。開發 5 個微服務（OpenId、Product、Payment、Stock、Kafka）。Jenkins/Nexus CI 工具鏈。",
   },
 }
 
@@ -132,7 +132,7 @@ export default {
         highlights: h[exp.id] || null,
       }))
     },
-    project() { return this.data.project },
+    project() { return this.data.project.filter(p => p.pdf !== false) },
     education() { return this.data.education },
   },
 }
