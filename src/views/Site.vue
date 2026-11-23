@@ -212,7 +212,7 @@
                 @pointerenter="lang0 = lang" @focus="lang0 = lang" @click="lang0 = lang">{{ lang }}</button>
             </div>
             <div class="kit-libs" aria-live="polite">
-              <p class="kit-big">{{ lang0 }}</p>
+              <p class="kit-big" aria-hidden="true">{{ lang0 }}</p>
               <ul :key="lang0"><li v-for="(l, i) in profile.programming[lang0]" :key="l" :style="{ '--i': i }">{{ l }}</li></ul>
             </div>
           </div>

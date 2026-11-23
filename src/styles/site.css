@@ -218,7 +218,7 @@ html:not(.is-pdf) body { margin: 0; }
 .deep[open] .arc { animation: fadeUp 0.6s var(--ease); }
 .arc { margin-top: 20px !important; }
 .arc > div { display: grid; grid-template-columns: 5.6em 1fr; gap: 12px; padding: 14px 0 14px 14px; border-top: 1px solid var(--line); border-left: 2px solid transparent; }
-.arc dt { font: 500 12px/2 var(--mono); color: var(--faint); }
+.arc dt { font: 500 12px/2 var(--mono); color: var(--ink); } /* stays >= 4.5:1 inside dimmed steps */
 .arc dd { color: #d9d6e2; font-size: 1rem; line-height: 1.7; text-wrap: pretty; }
 .arc-problem { border-left-color: rgba(255, 82, 102, 0.6) !important; }
 .arc-action { border-left-color: rgba(255, 184, 77, 0.6) !important; }

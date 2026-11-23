@@ -25,7 +25,7 @@ export default {
     hero: {
       nameLines: ["張育誠"],
       altName: "White Chang",
-      value: "我讓高流量的線上系統算得對、跑得快、改版上線穩得住，並用 AI agent 加快交付。",
+      value: "我讓高併發的線上系統算得對、跑得快、改版上線穩得住，並用 AI agent 加快交付。",
       chips: ["約 15 年後端開發", "即時、高併發的線上系統", "開源 go-masker：GitHub 130+ stars"],
       stack: "Go · Java · Lua",
       contact: "聯絡我",
@@ -61,7 +61,7 @@ export default {
             {
               scene: "tamper",
               head: "資料被竄改的那條路，關上了。",
-              tldr: "服務存在 Redis 裡的狀態，被人從外部改動。加密和校驗都擋不住，所以我把資料搬到對方碰不到的地方。",
+              tldr: "服務存在 Redis 裡的狀態，被人從外部改動。加密和校驗都擋不住，所以我把資料搬到 Redis client 碰不到的地方。",
               detail: [
                 { k: "situation", text: "為了讓斷線的連線能從中斷處接回去，服務把 session 狀態存在 Redis。" },
                 { k: "problem", text: "後來紀錄裡出現正常流程不可能產生的結果：Redis 裡的狀態在正常流程之外被改動了。我先加 checksum，再改用 AES 加密，都沒用——secret 一旦外露，任何應用層驗證攻擊者都能照做一份。" },

@@ -26,7 +26,7 @@ export default {
     hero: {
       nameLines: ["White", "Chang"],
       altName: "張育誠",
-      value: "I keep high-traffic online systems correct, fast and steady through change, and I use AI agents to deliver faster.",
+      value: "I keep high-concurrency online systems correct, fast and steady through change, and I use AI agents to deliver faster.",
       chips: ["~15 years of backend engineering", "Real-time, high-concurrency systems", "Open source: go-masker, 130+ GitHub stars"],
       stack: "Go · Java · Lua",
       contact: "Contact",
@@ -62,7 +62,7 @@ export default {
             {
               scene: "tamper",
               head: "The path used to tamper with the data was closed.",
-              tldr: "State that a service kept in Redis was being changed from outside. Encryption and checksums did not stop it, so I moved the data to where it could not be reached.",
+              tldr: "State that a service kept in Redis was being changed from outside. Encryption and checksums did not stop it, so I moved the data out of reach of any Redis client.",
               detail: [
                 { k: "situation", text: "To let a dropped connection pick up where it left off, a service kept session state in Redis." },
                 { k: "problem", text: "Then the records started showing results the normal flow could not have produced. The state in Redis was being altered outside the normal flow. I added a checksum, then AES encryption. Neither held: once the secret is exposed, the attacker can reproduce any app-layer validation." },
