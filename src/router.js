@@ -11,6 +11,8 @@ export default createRouter({
     { path: '/zh-tw', component: Site, props: { locale: 'zh-tw' } },
     { path: '/pdf', component: Pdf, props: { locale: 'en' }, meta: { pdf: true } },
     { path: '/pdf/zh-tw', component: Pdf, props: { locale: 'zh-tw' }, meta: { pdf: true } },
+    { path: '/legacy', redirect: '/' },
+    { path: '/legacy/zh-tw', redirect: '/zh-tw' },
     { path: '/:rest(.*)*', redirect: '/' },
   ],
   scrollBehavior: (to, from) => (to.path !== from.path ? { top: 0 } : undefined),

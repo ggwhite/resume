@@ -1,7 +1,8 @@
 # Resume
 
-White Chang's resume site: a scroll-driven WebGL page (Vue 3 + Vite + three.js) plus a
-one-page, machine-readable PDF in English and Traditional Chinese.
+White Chang's resume site: a scroll-driven page where a WebGL stage acts out each story
+as you read it (Vue 3 + Vite + three.js), plus a one-page, machine-readable PDF in
+English and Traditional Chinese.
 
 Live: [https://ggwhite.github.io/resume/](https://ggwhite.github.io/resume/)
 
@@ -19,27 +20,47 @@ npm run pdf      # regenerate both PDFs (see below)
 
 | Path | What |
 |---|---|
-| `src/data/en.js`, `src/data/zh-tw.js` | All resume content, one file per language. Keep the two in sync. |
+| `src/data/en.js`, `src/data/zh-tw.js` | All content, one file per language. `site` holds the site's voice (headlines, story steps, scene labels and captions); the rest is the plain record the PDF prints. Keep the two files in sync. |
 | `src/data/shared.js` | Contact details, programming skills, open-source repo links and star counts. |
 | `src/views/Site.vue` | The interactive site (`/#/` English, `/#/zh-tw` Chinese). Renders data only. |
+| `src/components/RepoDemo.vue` | Live demos in the open-source cards: typed terminal, HUD sketch, masking toggle, role loop. |
 | `src/styles/site.css` | Site styles: tokens, layout, motion, reduced-motion and no-WebGL fallbacks. |
-| `src/gl/field.js` | The three.js scene: one particle field that re-forms for each section as you scroll. |
-| `src/gl/shapes.js` | The particle target shapes (spiral, server layers, helix, agent graph, constellation, lattice, rings) and their staging. |
+| `src/gl/scenes.js` | The story scenes: each is a small diagram (nodes + edges) and a looping script that moves packets and changes node states. |
+| `src/gl/field.js` | The three.js engine: a particle field draws the active scene's diagram and re-forms on every step; packets, projected DOM labels and captions; fits the scene into its DOM slot. |
 | `src/gl/portrait.js` | The portrait as a WebGL plane (full-colour photo, slice-in reveal, pointer ripple). |
 | `src/views/ResumePdf.vue` | Plain one-page layout for the PDF (`/#/pdf`, `/#/pdf/zh-tw`). |
 | `scripts/generate-pdf.py` | Prints the PDF routes with Chromium and checks the result. |
 | `scripts/pdf-text.swift` | Extracts a PDF's text with PDFKit (used by the check). |
 | `public/portfolio/` | Static portfolio assets, copied to `docs/portfolio/` unchanged. |
 
+### How a story step is wired
+
+```html
+<div class="story" data-stage-root data-scene="race">
+  <ol class="steps">
+    <li class="step" data-scene="race">…text…</li>
+  </ol>
+  <div class="stage-col"><div class="stage-slot"></div></div>
+</div>
+```
+
+The engine finds the last `[data-scene]` element above the reading line, switches to
+that scene, and fits it into the `.stage-slot` of the nearest `[data-stage-root]`.
+To add a story: write the scene in `scenes.js`, add its labels and captions to
+`site.scenes.<key>` in both data files, and add a step with `data-scene="<key>"`.
+
 ### Motion and fallbacks
 
 - three.js is loaded with a dynamic import after first paint; the text never waits for it.
-- `prefers-reduced-motion`: no animation loop. The field is drawn as a still frame that
-  snaps to the current section, the portrait is a plain `<img>`, and CSS animations are off.
-- No WebGL: three.js is not downloaded; a CSS gradient background is used instead.
+- `prefers-reduced-motion`: no animation loop. Each scene is drawn once at its final
+  state, the portrait is a plain `<img>`, demos show their end state, CSS animation is off.
+- No WebGL: three.js is not downloaded and the stage column is hidden; every story is
+  complete in text.
 - Pixel ratio is capped (2 on desktop, 1.5 on phones) and lowered automatically if the
-  frame rate drops below about 42 fps. Phones get 7,000 particles instead of 18,000.
-- Rendering pauses while the tab is hidden; the portrait pauses when scrolled off screen.
+  frame rate drops below about 42 fps. Phones get 6,000 particles instead of 16,000.
+- On narrow screens the stage pins to the top of the viewport and the canvas is
+  clipped to it, so particles never run behind body text.
+- Rendering pauses while the tab is hidden; demos and the portrait pause off screen.
 
 ## PDF
 

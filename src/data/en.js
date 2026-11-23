@@ -15,16 +15,17 @@ export default {
     print: "Print / Save PDF",
     download: "Download PDF",
   },
-  // Presentation copy for the interactive site (hero, section headings, 3D labels)
-  // and the one-page PDF. Facts only — same sources as the rest of this file.
+  // Voice and staging for the interactive site: headlines, story steps, scene labels.
+  // Creative framing only — every claim restates a fact from the record below
+  // (competencies / aiWorkflow / experience / project) or from the repos' READMEs.
   site: {
-    nav: { systems: "Systems", work: "Experience", ai: "AI workflow", oss: "Open source", skills: "Toolbox", contact: "Contact" },
+    nav: { systems: "Problems", work: "Experience", ai: "AI workflow", oss: "Open source", skills: "Toolbox", contact: "Contact" },
     langSwitch: { label: "中文", to: "/zh-tw" },
     hero: {
       nameLines: ["White", "Chang"],
       altName: "張育誠",
       stack: "Go · Java · Lua",
-      lede: "Senior backend engineer with ~15 years of software development experience, the last seven on real-time game server platforms. I work mainly in Go, Java and Lua (Skynet), with Redis, MySQL, MongoDB, gRPC, RabbitMQ, Docker and Kubernetes.",
+      lede: "About 15 years of backend work — the last seven inside real-time game server platforms, where a race condition pays a reward twice and a tampered Redis record forges game state. I build in Go, Java and Lua (Skynet), and I run my AI agents by one rule: whoever writes the code never verifies it.",
       scroll: "Scroll",
       photoAlt: "Portrait of White Chang",
     },
@@ -34,30 +35,145 @@ export default {
       { prefix: ">", num: 50, suffix: "%", unit: "shorter", label: "new-title development cycle, via a reusable Go framework" },
       { prefix: "", num: 130, suffix: "+", unit: "GitHub stars", label: "go-masker, my open-source Go library" },
     ],
-    sections: {
-      systems: { title: "Architecture & systems", sub: "Real-time game platforms: multi-server architecture, data stores, delivery and security." },
-      work: { title: "Experience", sub: "Nearly 15 years across gaming, payment and enterprise systems." },
-      ai: { title: "AI-augmented development", quote: "Whoever writes the code never verifies it.", sub: "I own the architecture and key decisions." },
-      oss: { title: "Open source & side projects", freelance: "Freelance", archived: "archived", stars: "stars" },
-      skills: { title: "Toolbox" },
-      contact: { title: "Get in touch", sub: "Senior Backend Engineer · Go · Java · Lua" },
-    },
-    scene: {
-      systems: ["Gate", "Lobby", "Game"],
-      work: ["2011", "Now"],
-      ai: [
-        { name: "Main session", role: "I plan and decide" },
-        { name: "Lightweight model", role: "file search, chores" },
-        { name: "Worker", role: "implementation" },
-        { name: "Verifier", role: "independent sign-off" },
+    systems: {
+      title: "Five problems I keep solving",
+      sub: "Scroll. Each one plays out as you read it.",
+      steps: [
+        { scene: "poc", head: "Knowing when not to ship.", body: "I planned a microservice / gRPC unification of a multi-platform game backend and built it to a working POC — tamper-resistant data layer included: HMAC signing, a state machine, an audit trail. Then I evaluated it and stopped. A full rewrite was too risky for live platforms, so the POC stays a POC." },
+        { scene: "framework", head: "One framework, many titles.", body: "Multi-server systems — Gate, Lobby, Game — across 10+ repositories and multiple platforms. The shared mechanics went into a reusable framework, and new-title development cycles got more than 50% shorter." },
+        { scene: "index", head: "Stop reading every record.", body: "A collection taking in ~2.7M records a day was being scanned end to end. I diagnosed the full-collection scans and designed compound indexes. On the cache side, I restructured the Redis key architecture until the excessive SCANs were gone." },
+        { scene: "pipeline", head: "From a git tag to a running container.", body: "Docker images built automatically and pushed to Harbor. Helm charts for Kubernetes. GitLab Runners, and remote deployments over SSH. The release is a pipeline, not a ritual." },
+        { scene: "tamper", head: "Assume the secret has leaked.", body: "I traced a Redis tampering incident through its full attack chain. Once the secret was exposed, app-layer validation could be bypassed — so for the affected games, sensitive state moved out of Redis into process memory, and the environment was isolated with Docker." },
       ],
     },
-    repoLabel: "Repository",
+    work: {
+      title: "Where it happened",
+      sub: "Nearly 15 years across gaming, payment and enterprise systems.",
+      role: "Architecture planning and technical decisions in a 5–10 person team: weighing whether a change should be made at all, what it touches, and what it risks.",
+      chapters: [
+        { scene: "migrate", when: "Jul – Oct 2026", head: "A migration with a script for every step.", body: "Game services and back offices for multiple platforms moved from bare metal into Docker containers. The cutover followed a runbook I wrote — write freeze, data sync, reopen traffic — each step with its own completion criteria. Comparison scripts checked MySQL, Redis and MongoDB across old and new; the fix-up tool defaults to dry-run and backs up the original values before it writes." },
+        { scene: "race", head: "Two requests, one reward.", body: "Players were claiming the same event reward more than once — a bug that cost real money. The root cause was a race condition: concurrent requests passing the check at the same moment. The fix is a Redis-based dedup marker." },
+        { scene: "index", head: "~2.7M records a day, and the index gets there first.", body: "Queries were scanning the whole collection. I designed compound indexes, wrote a Lua scheduler that pre-builds each day's indexes automatically, and carried the fix over to other large collections." },
+        { scene: "hash", head: "One Hash instead of a keyspace sweep.", body: "Lookups had to SCAN across keys built around the rid. I refactored the structure into a Hash with rid as the field, and the excessive SCAN operations went away." },
+        { scene: "inject", head: "Evidence first. Restart second.", body: "Lua code was injected through the Skynet debug console. I set up monitoring and preserved the evidence before touching anything — then restarted the affected services, which cleared the injected code from memory." },
+      ],
+      alsoTitle: "Also at Tyche",
+      also: [
+        "A shared team knowledge base and AI-agent rules, so Claude Code and Codex follow the same conventions.",
+        "A playbook / runbook loop: every investigation and release pitfall gets written back into the docs.",
+        "Real-time push notifications over RabbitMQ.",
+        "GitLab CI/CD into Harbor, Helm charts, GitLab Runners.",
+        "New graduates onboarded through code review and pair programming.",
+      ],
+      record: "Full record",
+      earlier: "Before that",
+    },
+    ai: {
+      title: "Agents do the typing. I do the deciding.",
+      quote: "Whoever writes the code never verifies it.",
+      steps: [
+        { scene: "delegate", head: "Three seats, never shared.", body: "Lightweight models take file search and routine chores. A worker implements. A separate, independent verifier signs off. Architecture decisions — module boundaries, protocols, the security model — stay with me, and so do the production blind spots AI overlooks: logging coverage, security hardening." },
+        { scene: "guard", head: "A fence, and a memory.", body: "Harness rule files (CLAUDE.md / AGENTS.md) keep agents inside project conventions. memory-mcp, which I built, carries preferences, past pitfalls and unfinished work into the next session." },
+      ],
+    },
+    oss: {
+      title: "Things I've put on GitHub",
+      freelance: "Freelance",
+      archived: "archived",
+      stars: "stars",
+      lines: {
+        "memory-mcp": "AI agents forget everything when a session ends. This remembers.",
+        "jarvis": "A live HUD beside the chat: what every subagent is doing, and what it costs.",
+        "go-masker": "One struct tag between your logs and someone's phone number.",
+        "4x": "Archived on purpose. Its one rule still runs my workflow.",
+      },
+      labels: { problem: "Problem", how: "How it works", proof: "Proof", repo: "View on GitHub", more: "Also on GitHub" },
+      flag: {
+        "memory-mcp": {
+          problem: "AI coding agents forget everything when a session ends: yesterday's fix, the convention you corrected twice, the half-finished refactor. The next session starts from zero.",
+          how: "One Go binary and one SQLite file, reachable three ways: a CLI, an MCP server, and Claude Code hooks that inject relevant memories at session start and on every prompt, then write a summary at session end. Search is SQLite FTS5 with a trigram tokenizer, optionally fused with local Ollama embeddings through Reciprocal Rank Fusion.",
+          proof: ["7 MCP tools", "CJK full-text search", "macOS + Linux binaries", "MIT"],
+        },
+        "jarvis": {
+          problem: "Once work fans out to subagents, the chat alone does not show what each one is doing, what it costs, or whether it is stuck.",
+          how: "A Claude Code mod that opens a live HUD pane beside the chat: every subagent in flight with its task, elapsed time, tokens and estimated API cost; stuck and looping agents flagged as it happens; plus the files the session touched and every other session on the machine.",
+          proof: ["1,100+ tests", "Terminal + Claude Desktop", "English + 繁體中文 UI", "MIT"],
+        },
+        "go-masker": {
+          problem: "Names, emails, phone numbers and card numbers end up in logs and API output unless someone remembers to hide them.",
+          how: "Tag the struct field and the library masks it: built-in maskers for names, emails, phones, IDs and cards, dynamic tags such as mid-4-4, your own maskers through Register, and Sensitive[T] values that stay masked in fmt, JSON and slog until you call Reveal().",
+          proof: ["130+ GitHub stars", "Maintained since Apr. 2019", "v3 · Go 1.22+", "MIT"],
+        },
+      },
+      til: { label: "White's Tech Notes", line: "My TIL blog: backend notes on Go, Java, Lua, DevOps and AI-assisted development — pitfalls, root causes and fixes.", url: "https://ggwhite.github.io/ggwhite/" },
+      demo: {
+        termTitle: "quick start",
+        termNotes: ["one index line per memory; full content by id with `get`", "exposes the 7 MCP tools to Claude Code"],
+        jarvisNote: "Illustration of the Now tab — not live data",
+        jarvisCols: ["subagent", "status", "elapsed"],
+        jarvisStates: ["running", "done", "flagged: stuck"],
+        raw: "Raw",
+        masked: "Masked",
+        fourxFail: "Reviewer FAIL → amending",
+      },
+    },
+    skills: { title: "What's in the toolbox", hint: "Pick a language to see what I use with it." },
+    contact: { title: "Open a connection.", sub: "Senior Backend Engineer · Go · Java · Lua" },
+    scenes: {
+      cluster: { labels: { players: ["Players"], gate: ["Gate"], lobby: ["Lobby"], g1: ["Game"], g2: ["Game"], g3: ["Game"] }, caps: [] },
+      poc: {
+        labels: { a: ["Platform A"], b: ["Platform B"], c: ["Platform C"], poc: ["gRPC POC", "HMAC · state machine · audit trail"], live: ["Live platforms"] },
+        caps: ["Unification built to a working POC", "Evaluated, then stopped: a full rewrite is too risky for live platforms"],
+      },
+      framework: {
+        labels: { fw: ["Reusable framework", "shared game mechanics"], g1: ["New title"], g2: ["New title"], g3: ["New title"], g4: ["New title"] },
+        caps: ["Shared mechanics, written once", "New-title development cycle: over 50% shorter"],
+      },
+      index: {
+        labels: { query: ["Query"], idx: ["Compound index"], coll: ["Collection", "~2.7M records / day"] },
+        caps: ["Full-collection scan: every record gets read", "Compound index: straight to the matching records"],
+      },
+      pipeline: {
+        labels: { tag: ["git tag"], ci: ["GitLab CI/CD"], img: ["Docker image"], reg: ["Harbor"], dep: ["Helm / SSH"], run: ["Running"] },
+        caps: ["Tag → pipeline → image → registry → deploy"],
+      },
+      tamper: {
+        labels: { atk: ["Attacker"], redis: ["Redis", "sensitive state"], val: ["App-layer validation"], docker: ["Docker"], game: ["Game server"], mem: ["Process memory"] },
+        caps: ["Secret exposed: tampered data walks through app-layer validation", "Sensitive state moved into process memory, environment isolated with Docker"],
+      },
+      migrate: {
+        labels: { old: ["Bare metal"], s1: ["Game services"], s2: ["Back office"], neu: ["Docker"], c1: ["Game services"], c2: ["Back office"], f: ["1 · Write freeze"], sy: ["2 · Data sync"], op: ["3 · Reopen traffic"] },
+        caps: ["Runbook step 1: freeze writes", "Runbook step 2: sync data, compare old against new", "Runbook step 3: reopen traffic on the containers"],
+      },
+      race: {
+        labels: { r1: ["Request A"], r2: ["Request B"], chk: ["Check: claimed?"], rew: ["Reward"], mark: ["Redis marker"] },
+        caps: ["Race: both requests pass the check at the same moment", "With the Redis dedup marker, the duplicate is rejected"],
+      },
+      hash: {
+        labels: { keys: ["one key per rid"], q: ["Lookup"], hash: ["Hash", "field = rid"] },
+        caps: ["SCAN walks the keyspace to find one rid", "One Hash, rid as the field: a direct lookup"],
+      },
+      inject: {
+        labels: { atk: ["Attacker"], con: ["Skynet debug console"], svc: ["Game service", "in memory"], mon: ["Monitoring"], ev: ["Evidence"] },
+        caps: ["Lua code injected through the debug console", "First: monitoring on, evidence preserved", "Then: restart clears the injected code from memory"],
+      },
+      timeline: { labels: {}, caps: [] },
+      delegate: {
+        labels: { main: ["Main session", "I plan and decide"], light: ["Lightweight model", "file search, chores"], worker: ["Worker", "implementation"], ver: ["Verifier", "independent sign-off"] },
+        caps: ["Search and chores go to a lightweight model", "Implementation goes to the worker", "Sign-off comes from a separate verifier"],
+      },
+      guard: {
+        labels: { rules: ["Harness rules", "CLAUDE.md / AGENTS.md"], agent: ["AI agent"], mem: ["memory-mcp"] },
+        caps: ["Rule files keep the agent inside project conventions", "Session ends: what it learned is stored", "Next session starts: the memory comes back"],
+      },
+      handshake: { labels: { you: ["You"], me: ["White"] }, caps: [] },
+      dust: { labels: {}, caps: [] },
+    },
   },
   pdfHighlights: {
     Tyche: "3 game server projects (Lua/Skynet, Golang). Fixed reward-claim race condition, MongoDB optimization on 2.7M records/day. Redis architecture redesign. Redis tampering investigation: moved sensitive state into process memory, Docker isolation; handled a Lua code injection via the Skynet debug console. CI/CD pipeline with Docker/Harbor/Helm. Handled containerization of multiple platforms, migrating from bare metal (Harbor/ECR releases, cutover runbooks, data verification scripts); introduced a shared team knowledge base and AI collaboration rules.",
     Terpro: "Built a reusable game mechanics framework, cutting new-game development time by over 50%. Kubernetes/Helm deployment.",
-    WistronITS: "Mentored 2 engineers. Built 5 micro-services (OpenId, Product, Payment, Stock, Kafka). Jenkins/Nexus CI toolchain.",
+    WistronITS: "Mentored 2 engineers. Built the OpenId, Product, Payment and Stock services and a Kafka forwarder. Jenkins/Nexus CI toolchain.",
   },
   about: "Senior backend engineer with nearly 15 years of software development experience, specializing in high-concurrency distributed systems. I focus on solving problems — performance bottlenecks, deployment automation, system security — not memorizing frameworks. Domain experience spans real-time gaming platforms (multi-server architectures serving multiple concurrent titles), payment processing, and enterprise APIs. My workflow is AI-augmented: Claude Code runs as my main session for planning and final decisions, delegating file search, implementation, and verification to subagents on different models (whoever writes the code never verifies it); harness rule files keep AI behavior in check, and my self-built memory-mcp carries context across sessions. I catch what AI misses — production observability, security hardening, system integrity.",
   competencies: [
