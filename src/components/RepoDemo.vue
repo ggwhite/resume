@@ -26,11 +26,13 @@
           <source v-if="armed" :src="webm" type="video/webm" />
           <source v-if="armed" :src="mp4" type="video/mp4" />
         </video>
+      </div>
+      <figcaption class="reel-cap">
+        <span class="demo-note">{{ t.jarvisNote }}</span>
         <button type="button" class="reel-btn" :aria-pressed="playing" :aria-label="playing ? t.pause : t.play" @click="toggleReel">
           <span aria-hidden="true" :class="playing ? 'ico-pause' : 'ico-play'"></span>{{ playing ? t.pause : t.play }}
         </button>
-      </div>
-      <figcaption class="demo-note">{{ t.jarvisNote }}</figcaption>
+      </figcaption>
     </figure>
 
     <!-- go-masker: the README quick start, and what it prints -->

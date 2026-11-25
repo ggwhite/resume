@@ -47,7 +47,7 @@ src/
     Site.vue         # 互動網站（/#/、/#/zh-tw），只渲染資料
     ResumePdf.vue    # PDF 專用一頁式版面（/#/pdf、/#/pdf/zh-tw）
   components/
-    RepoDemo.vue     # 開源卡片裡的 demo：打字終端機、HUD 示意、遮罩切換、角色流程
+    RepoDemo.vue     # 開源卡片裡的 demo：打字終端機、Jarvis README 示範錄影、遮罩切換、角色流程
   gl/
     scenes.js        # 故事場景：每個場景是一張小圖（節點＋連線）加一段迴圈腳本
     field.js         # three.js 引擎：粒子畫出場景、封包、投影 DOM 標籤與字幕、對齊 DOM slot
@@ -79,7 +79,7 @@ scripts/
 - 標題、hero、圖上的標籤一律用中性詞（服務、使用者、平台、發放）；NEVER 出現 Lobby、玩家、獎勵、博弈這類產業色彩的詞。公司名稱與日期照實保留，遊戲相關細節只留在工作經歷紀錄（experience）裡。
 - NEVER 寫「帶領／主導團隊」、NEVER 提內部專案代號；微服務／gRPC 整合與 HMAC 防竄改架構一律寫「做到 POC」。
 - GitHub star 數以 `gh api repos/ggwhite/<repo>` 為準，改在 `shared.js` 的 `repos`；不到 10 顆的不顯示（memory-mcp、Jarvis 用測試數／功能當佐證）。
-- 開源 demo（`RepoDemo.vue`）的指令、範例值、分頁與角色名稱一律取自各 repo README；NEVER 編造輸出或數據。Jarvis 面板要保留「示意，非即時資料」字樣。
+- 開源 demo（`RepoDemo.vue`）的指令、範例值、分頁與角色名稱一律取自各 repo README；NEVER 編造輸出或數據。Jarvis 錄影只用 repo README 的示範 session，說明要保留「非即時資料」字樣。
 - 聯絡方式只用 `shared.js` 的 `contact`。
 
 ## 動態與效能規則
