@@ -1,37 +1,52 @@
 <!--
-  Small live demos inside the open-source cards. Everything shown comes from each
-  repo's README (commands, example values, tab and role names); the Jarvis pane is
-  labelled as an illustration because its timers are not real data.
+  The stage of each open-source exhibit. Nothing here is invented:
+  - memory-mcp: the real CLI output, captured from the binary against a throwaway
+    database (same commands as the repo's assets/demo-tour.tape).
+  - Jarvis: the demo-session recording published in the repo README
+    (docs/media/hero-tour.mp4, a scripted todo-api session), re-encoded smaller.
+  - go-masker: the README quick start and what it prints, before and after masking.
+  - 4x: role names from the README.
 -->
 <template>
   <div ref="root" class="demo" :class="'demo-' + kind">
-    <!-- memory-mcp: the README quick start, typed out -->
-    <div v-if="kind === 'memory-mcp'" class="term" aria-hidden="true">
-      <p class="term-bar"><i></i><i></i><i></i><span>{{ t.termTitle }}</span></p>
-      <pre><template v-for="(l, i) in shown" :key="i"><span :class="l.c">{{ l.text }}</span>{{ '\n' }}</template><span class="caret"></span></pre>
+    <!-- memory-mcp: one session stores, a later session gets it back -->
+    <div v-if="kind === 'memory-mcp'" class="mem" role="img" :aria-label="t.termAlt">
+      <div v-for="(w, wi) in wins" :key="wi" class="term" :class="'term-' + wi" aria-hidden="true">
+        <p class="term-bar"><i></i><i></i><i></i><span>{{ t.termTitles[wi] }}</span></p>
+        <pre><template v-for="(l, i) in w" :key="i"><span :class="[l.c, { off: l.n > shownN }]">{{ head(l) }}<span v-if="typing && l.n === shownN" class="caret"></span><span class="off">{{ l.text.slice(head(l).length) }}</span></span>{{ i < w.length - 1 ? '\n' : '' }}</template></pre>
+        <p v-if="wi === 0" class="mem-link" :class="{ on: shownN > split }"><i></i><span>{{ t.termDb }}</span><i></i></p>
+      </div>
     </div>
 
-    <!-- Jarvis: the Now tab, sketched -->
-    <div v-else-if="kind === 'jarvis'" class="hud" aria-hidden="true">
-      <p class="hud-tabs"><b>Now</b><span>Tasks</span><span>Changes</span><span>Stats</span><span>Lessons</span><span>Fleet</span></p>
-      <p class="hud-head"><span v-for="c in t.jarvisCols" :key="c">{{ c }}</span></p>
-      <p v-for="r in rows" :key="r.id" class="hud-row" :class="'s' + r.state">
-        <span><b>{{ r.id }}</b> Explore</span>
-        <span class="hud-state"><i></i>{{ t.jarvisStates[r.state] }}</span>
-        <span class="hud-time">{{ r.clock }}</span>
-      </p>
-      <p class="demo-note">{{ t.jarvisNote }}</p>
-    </div>
+    <!-- Jarvis: the recorded demo session from the README -->
+    <figure v-else-if="kind === 'jarvis'" class="reel">
+      <div class="reel-frame">
+        <video ref="video" muted loop playsinline preload="none" width="1200" height="702" :poster="poster" :aria-label="t.jarvisAlt"
+          @play="playing = true" @pause="playing = false">
+          <source v-if="armed" :src="webm" type="video/webm" />
+          <source v-if="armed" :src="mp4" type="video/mp4" />
+        </video>
+        <button type="button" class="reel-btn" :aria-pressed="playing" :aria-label="playing ? t.pause : t.play" @click="toggleReel">
+          <span aria-hidden="true" :class="playing ? 'ico-pause' : 'ico-play'"></span>{{ playing ? t.pause : t.play }}
+        </button>
+      </div>
+      <figcaption class="demo-note">{{ t.jarvisNote }}</figcaption>
+    </figure>
 
-    <!-- go-masker: the README's own example values -->
+    <!-- go-masker: the README quick start, and what it prints -->
     <div v-else-if="kind === 'go-masker'" class="mask">
-      <p v-for="(f, i) in fields" :key="f.tag" class="mask-row">
-        <code>mask:"{{ f.tag }}"</code>
-        <span class="mask-val" :class="{ on: masked }">{{ cells[i] }}</span>
-      </p>
-      <button type="button" class="mask-toggle" :aria-pressed="masked" @click="toggleMask(true)">
-        <span :class="{ on: !masked }">{{ t.raw }}</span><span :class="{ on: masked }">{{ t.masked }}</span>
-      </button>
+      <pre class="mask-code" aria-hidden="true"><span class="k">type</span> User <span class="k">struct</span> {
+<template v-for="f in fields" :key="f.tag">    {{ f.name.padEnd(8) }} <span class="k">string</span> <span class="tag">`mask:"{{ f.tag }}"`</span>{{ '\n' }}</template>}</pre>
+      <div class="mask-out">
+        <p v-for="(f, i) in fields" :key="f.tag" class="mask-row">
+          <code>mask:"{{ f.tag }}"</code>
+          <span class="mask-val" :class="{ on: masked }">{{ cells[i] }}</span>
+        </p>
+        <p class="mask-print" aria-hidden="true"><span>{{ masked ? 'fmt.Println(m.Format(u))' : 'fmt.Println(u)' }}</span>&amp;{{ '{' + cells.join(' ') + '}' }}</p>
+        <button type="button" class="mask-toggle" :aria-pressed="masked" @click="toggleMask(true)">
+          <span :class="{ on: !masked }">{{ t.raw }}</span><span :class="{ on: masked }">{{ t.masked }}</span>
+        </button>
+      </div>
     </div>
 
     <!-- 4x: four isolated roles, one FAIL sent back -->
@@ -48,7 +63,10 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import poster from '@/assets/oss/jarvis-tour.webp'
+import webm from '@/assets/oss/jarvis-tour.webm'
+import mp4 from '@/assets/oss/jarvis-tour.mp4'
 
 const props = defineProps({ kind: String, t: Object })
 const root = ref(null)
@@ -56,45 +74,61 @@ const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 let timer = 0, io = null, visible = false, alive = true
 const later = (fn, ms) => { clearTimeout(timer); timer = setTimeout(() => alive && visible && fn(), ms) }
 
-// ── memory-mcp terminal (commands from the README quick start) ──
-const script = [
-  { c: 'cmd', text: '$ go install github.com/ggwhite/memory-mcp@latest' },
-  { c: 'cmd', text: '$ memory-mcp store -t til "SQLite trigram tokenizer enables CJK full-text search"' },
-  { c: 'cmd', text: '$ memory-mcp search "trigram"' },
-  { c: 'note', text: '# ' + props.t.termNotes[0] },
-  { c: 'cmd', text: '$ claude mcp add memory -s user -- memory-mcp serve' },
-  { c: 'note', text: '# ' + props.t.termNotes[1] },
+// ── memory-mcp: real output from a throwaway database (commands follow assets/demo-tour.tape) ──
+const MEMO = 'EXPIRE resets the TTL on writes; SET ... KEEPTTL keeps it'
+const wins = [
+  [
+    { c: 'cmd', text: `$ memory-mcp store -t til --project my-app "${MEMO}"` },
+    { c: 'ok', text: 'Stored memory #1' },
+    { c: 'cmd', text: '$ memory-mcp store -t feedback --project global "Prefer table-driven tests for Go code"' },
+    { c: 'ok', text: 'Stored memory #2' },
+  ],
+  [
+    { c: 'cmd', text: '$ memory-mcp search --compact KEEPTTL' },
+    { c: 'out', text: `- #1 til my-app 2026-11-25 ${MEMO}` },
+    { c: 'cmd', text: '$ memory-mcp get 1' },
+    { c: 'out', text: '#1 [til] 2026-11-25  project:my-app' },
+    { c: 'out', text: `  ${MEMO}` },
+  ],
 ]
-const shown = ref(reduced ? script : [])
-function type(li = 0, ci = 0) {
-  if (li >= script.length) return later(() => { shown.value = []; type() }, 5200)
-  const l = script[li]
-  if (ci === 0) shown.value = [...shown.value, { c: l.c, text: '' }]
-  const step = l.c === 'note' ? l.text.length : ci + 2
-  shown.value[li].text = l.text.slice(0, step)
-  if (step >= l.text.length) later(() => type(li + 1, 0), l.c === 'note' ? 700 : 420)
-  else later(() => type(li, step), 26)
-}
-
-// ── Jarvis rows ──
-const rows = reactive([{ id: 'MK-1', state: 0, clock: '0:00', end: 9 }, { id: 'MK-2', state: 0, clock: '0:00', end: 14 }, { id: 'MK-3', state: 0, clock: '0:00', end: 99 }])
-let tick = 0
-function hud() {
-  tick = tick >= 24 ? 0 : tick + 1
-  for (const r of rows) {
-    const s = Math.min(tick, r.end)
-    r.clock = `0:${String(s).padStart(2, '0')}`
-    r.state = tick >= r.end ? 1 : r.end === 99 && tick >= 17 ? 2 : 0
+const lines = wins.flat()
+lines.forEach((l, i) => { l.n = i })
+const split = wins[0].length - 1
+const shownN = ref(reduced ? lines.length : -1), chars = ref(0), typing = ref(false)
+let typed = false
+const head = (l) => (l.n === shownN.value && l.c === 'cmd' ? l.text.slice(0, chars.value) : l.text)
+function type() { // plays once: commands are typed, their output lands whole
+  const n = shownN.value + 1
+  if (n >= lines.length) { shownN.value = lines.length; typing.value = false; return }
+  const l = lines[n]
+  shownN.value = n
+  if (l.c !== 'cmd') { typing.value = false; return later(type, 380) }
+  typing.value = true
+  chars.value = 2
+  const step = () => {
+    chars.value += 3
+    if (chars.value >= l.text.length) later(type, 460); else later(step, 24)
   }
-  later(hud, 1000)
+  later(step, n === wins[0].length ? 900 : 300)
 }
 
-// ── go-masker (values from the README quick start) ──
+// ── Jarvis recording ──
+const video = ref(null), armed = ref(false), playing = ref(false)
+let userPaused = false
+function play() {
+  if (!armed.value) { armed.value = true; requestAnimationFrame(() => { video.value?.load(); video.value?.play().catch(() => {}) }) }
+  else video.value?.play().catch(() => {})
+}
+function toggleReel() {
+  if (playing.value) { userPaused = true; video.value.pause() } else { userPaused = false; play() }
+}
+
+// ── go-masker (README quick start; both printed lines are the program's real output) ──
 const fields = [
-  { tag: 'name', raw: 'John Doe', out: 'J**n D**e' },
-  { tag: 'email', raw: 'john@gmail.com', out: 'joh****@gmail.com' },
-  { tag: 'password', raw: 'secret', out: '**************' },
-  { tag: 'mobile', raw: '0987654321', out: '0987***321' },
+  { name: 'Name', tag: 'name', raw: 'John Doe', out: 'J**n D**e' },
+  { name: 'Email', tag: 'email', raw: 'john@gmail.com', out: 'joh****@gmail.com' },
+  { name: 'Password', tag: 'password', raw: 'secret', out: '**************' },
+  { name: 'Mobile', tag: 'mobile', raw: '0987654321', out: '0987***321' },
 ]
 const masked = ref(reduced)
 const cells = ref(fields.map((f) => (reduced ? f.out : f.raw)))
@@ -127,8 +161,9 @@ function loop() {
 
 function begin() {
   if (reduced) return
-  if (props.kind === 'memory-mcp') { shown.value = []; type() }
-  if (props.kind === 'jarvis') hud()
+  if (props.kind === 'memory-mcp' && !typed) { typed = true; later(type, 500) }
+  if (props.kind === 'memory-mcp' && typed && shownN.value < lines.length) later(type, 300)
+  if (props.kind === 'jarvis' && !userPaused) play()
   if (props.kind === 'go-masker' && !userSet) later(() => toggleMask(false), 1200)
   if (props.kind === '4x') { role.value = -1; failed = false; fail.value = false; loop() }
 }
@@ -137,7 +172,8 @@ onMounted(() => {
   io = new IntersectionObserver(([e]) => {
     const was = visible
     visible = e.isIntersecting
-    if (visible && !was) begin(); else if (!visible) clearTimeout(timer)
+    if (visible && !was) begin()
+    else if (!visible) { clearTimeout(timer); video.value?.pause() }
   }, { threshold: 0.25 })
   io.observe(root.value)
 })

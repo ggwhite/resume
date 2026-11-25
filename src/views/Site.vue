@@ -145,23 +145,25 @@
             <p class="idx">03</p>
             <h2 :aria-label="s.oss.title"><span v-for="(w, i) in split(s.oss.title)" :key="i" class="w" aria-hidden="true"><i :style="{ '--i': i }">{{ w }}</i></span></h2>
           </header>
-          <article v-for="(p, i) in flagships" :key="p.id" class="flag glow rv" :class="{ flip: i % 2 }">
-            <div class="flag-copy">
+          <article v-for="(p, i) in flagships" :key="p.id" class="xb rv" :class="'xb-' + p.id">
+            <div class="xb-copy">
+              <p class="xb-no" aria-hidden="true">0{{ i + 1 }}</p>
               <p class="repo-meta">
                 <span>{{ p.repo.lang }}</span>
                 <span v-if="p.repo.stars" class="star">★ {{ p.repo.stars }} {{ s.oss.stars }}</span>
                 <span class="repo-date">{{ p.start }} — {{ p.end }}</span>
               </p>
               <h3><a :href="p.repo.url" target="_blank" rel="noopener">{{ p.title }}</a></h3>
-              <p class="repo-line">{{ s.oss.lines[p.id] }}</p>
-              <dl class="pitch">
-                <div><dt>{{ s.oss.labels.problem }}</dt><dd>{{ s.oss.flag[p.id].problem }}</dd></div>
-                <div><dt>{{ s.oss.labels.how }}</dt><dd>{{ s.oss.flag[p.id].how }}</dd></div>
-                <div><dt>{{ s.oss.labels.proof }}</dt><dd><ul class="tags"><li v-for="x in s.oss.flag[p.id].proof" :key="x">{{ x }}</li></ul></dd></div>
-              </dl>
-              <a class="btn" :href="p.repo.url" target="_blank" rel="noopener">{{ s.oss.labels.repo }} <span aria-hidden="true">↗</span></a>
+              <p class="xb-line">{{ s.oss.lines[p.id] }}</p>
+              <p class="xb-problem">{{ s.oss.flag[p.id].problem }}</p>
+              <details class="deep xb-how">
+                <summary><span>{{ s.oss.labels.how }}</span><i aria-hidden="true"></i></summary>
+                <p>{{ s.oss.flag[p.id].how }}</p>
+              </details>
+              <ul class="xb-proof" :aria-label="s.oss.labels.proof"><li v-for="x in s.oss.flag[p.id].proof" :key="x">{{ x }}</li></ul>
+              <a class="btn xb-btn" :href="p.repo.url" target="_blank" rel="noopener">{{ s.oss.labels.repo }} <span aria-hidden="true">↗</span></a>
             </div>
-            <RepoDemo :kind="p.id" :t="s.oss.demo" />
+            <RepoDemo class="xb-stage" :kind="p.id" :t="s.oss.demo" />
           </article>
 
           <h3 class="mini-head rv more-head">{{ s.oss.labels.more }}</h3>
@@ -175,9 +177,10 @@
               <h3><a :href="p.repo.url" target="_blank" rel="noopener">{{ p.title }}<span aria-hidden="true"> ↗</span></a></h3>
               <p class="repo-line">{{ s.oss.lines[p.id] }}</p>
               <RepoDemo :kind="p.id" :t="s.oss.demo" />
-              <ul><li v-for="d in p.description" :key="d">{{ d }}</li></ul>
+              <p v-for="d in p.description" :key="d" class="repo-desc">{{ d }}</p>
             </article>
             <a class="repo til glow rv" :href="s.oss.til.url" target="_blank" rel="noopener">
+              <span class="til-mark" aria-hidden="true">TIL</span>
               <p class="repo-meta"><span>TIL</span></p>
               <h3>{{ s.oss.til.label }}<span aria-hidden="true"> ↗</span></h3>
               <p class="repo-line">{{ s.oss.til.line }}</p>
@@ -185,8 +188,8 @@
             </a>
           </div>
           <h3 class="mini-head rv">{{ s.oss.freelance }}</h3>
-          <div class="gigs">
-            <article v-for="p in gigs" :key="p.id" class="gig rv">
+          <div class="ledger">
+            <article v-for="p in gigs" :key="p.id" class="ledger-row rv">
               <p class="job-date">{{ p.start }} — {{ p.end }}</p>
               <h4>{{ p.name }}</h4>
               <ul><li v-for="d in p.description" :key="d">{{ d }}</li></ul>
